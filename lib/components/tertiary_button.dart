@@ -1,15 +1,16 @@
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:flutter/material.dart';
 
-class TeritoryButton extends StatelessWidget {
+class TertiaryButton extends StatelessWidget {
   final String text;
+  final Function onPressed;
 
-  TeritoryButton({this.text});
+  TertiaryButton({this.text, this.onPressed});
   @override
   Widget build(BuildContext context) {
     return FlatButton(
       color: WHITE_COLOR,
-      onPressed: () {},
+      onPressed: onPressed,
       child: Text(
         "$text",
         style: TextStyle(

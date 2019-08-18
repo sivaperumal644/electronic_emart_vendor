@@ -25,7 +25,9 @@ class PrimaryButtonWidget extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
           if (icon != null) ...[
-            Container(margin: EdgeInsets.only(left: 9)),
+            Container(
+              margin: EdgeInsets.only(left: 9),
+            ),
             Icon(
               icon,
               color: WHITE_COLOR,

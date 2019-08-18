@@ -5,7 +5,13 @@ import 'package:flutter/material.dart';
 class FormProcessHeader extends StatelessWidget {
   final String title;
   final int currentScreen;
-  FormProcessHeader({this.title, this.currentScreen});
+  final bool secondIndicator;
+  final bool thirdIndicator;
+  FormProcessHeader(
+      {this.title,
+      this.currentScreen,
+      this.secondIndicator,
+      this.thirdIndicator});
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +44,12 @@ class FormProcessHeader extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: ScreenIndicator(
-                      color: PRIMARY_COLOR.withOpacity(0.25),
+                      color:
+                          PRIMARY_COLOR.withOpacity(secondIndicator ? 1 : 0.25),
                     ),
                   ),
                   ScreenIndicator(
-                    color: PRIMARY_COLOR.withOpacity(0.25),
+                    color: PRIMARY_COLOR.withOpacity(thirdIndicator ? 1 : 0.25),
                   ),
                 ],
               ),

@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
   final String labelText;
+  final String hintText;
   final ValueChanged<String> onChanged;
 
-  CustomTextField({this.labelText, this.onChanged});
+  CustomTextField({
+    this.labelText,
+    this.onChanged,
+    this.hintText,
+  });
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,13 +21,16 @@ class CustomTextField extends StatelessWidget {
       ),
       child: TextField(
         onChanged: onChanged,
+        style: TextStyle(fontWeight: FontWeight.bold),
         decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: "Search for items",
-            hintStyle: TextStyle(
-                color: PRIMARY_COLOR.withOpacity(0.35),
-                fontWeight: FontWeight.bold,
-                fontSize: 16)),
+          border: InputBorder.none,
+          hintText: hintText,
+          hintStyle: TextStyle(
+            color: PRIMARY_COLOR.withOpacity(0.35),
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
       ),
     );
   }

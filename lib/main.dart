@@ -1,14 +1,27 @@
-import 'package:electronic_emart_vendor/screens/home_screen.dart';
+import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/screens/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
 
-main() => runApp(MyApp());
+import 'app_state.dart';
+
+main() {
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(statusBarColor: PRIMARY_COLOR),
+  );
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(fontFamily: 'Quicksand'),
-      home: HomeScreen(),
+    return ChangeNotifierProvider<AppState>(
+      builder: (_) => AppState(),
+      child: MaterialApp(
+        theme: ThemeData(fontFamily: 'Quicksand'),
+        home: LoginScreen(),
+      ),
     );
   }
 }
