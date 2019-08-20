@@ -1,6 +1,6 @@
 import 'package:electronic_emart_vendor/components/persistent_bottom_bar.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/home_screen/home_screen.dart';
+import 'package:electronic_emart_vendor/screens/nav_screens.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -65,13 +65,13 @@ class WelcomeScreen extends StatelessWidget {
             child: PersistentBottomBar(
               tertiaryText: 'Skip',
               primaryText: 'Go to inventory',
-              tertiaryOnPressed: () {},
-              primaryOnPressed: () {
+              tertiaryOnPressed: () {
                 Navigator.push(
                   context,
-                  CupertinoPageRoute(builder: (context) => HomeScreen()),
+                  CupertinoPageRoute(builder: (context) => NavigateScreens()),
                 );
               },
+              primaryOnPressed: () {},
             ),
           )
         ],

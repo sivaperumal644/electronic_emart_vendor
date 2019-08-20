@@ -93,8 +93,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
     return Padding(
       padding: EdgeInsets.only(left: 24.0, right: 24.0, bottom: 0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: ListView(
         children: <Widget>[
           Container(margin: EdgeInsets.only(top: 40.0)),
           HeaderAndSubHeader(

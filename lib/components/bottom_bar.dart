@@ -21,6 +21,7 @@ class BottomBar extends StatelessWidget {
   Widget bottomBar() {
     return Container(
       height: 70,
+      color: WHITE_COLOR,
       child: Theme(
         data: ThemeData(
           splashColor: Colors.transparent,
@@ -29,6 +30,7 @@ class BottomBar extends StatelessWidget {
         child: BottomNavigationBar(
           elevation: 0,
           onTap: onTap,
+          backgroundColor: WHITE_COLOR,
           currentIndex: index,
           type: BottomNavigationBarType.fixed,
           items: iconData.map((icon) => barItem(icon)).toList(),
@@ -43,12 +45,13 @@ class BottomBar extends StatelessWidget {
         margin: EdgeInsets.only(top: 2),
         padding: EdgeInsets.all(7),
         child: Icon(iconData['value'],
-            color:
-                iconData['index'] == index ? PRIMARY_COLOR : PRIMARY_COLOR.withOpacity(0.03)),
+            color: iconData['index'] == index
+                ? PRIMARY_COLOR
+                : PRIMARY_COLOR.withOpacity(0.5)),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
+          borderRadius: BorderRadius.circular(9),
           color: iconData['index'] == index
-              ? PRIMARY_COLOR.withOpacity(0.03)
+              ? PRIMARY_COLOR.withOpacity(0.15)
               : null,
         ),
       ),

@@ -1,5 +1,6 @@
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/screens/login_screen/login_screen.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationApproval extends StatelessWidget {
@@ -56,7 +57,7 @@ class RegistrationApproval extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Container(margin: EdgeInsets.only(top: 16.0, bottom: 140.0)),
+                  Container(margin: EdgeInsets.only(top: 16.0, bottom: 90.0)),
                   contentText(
                       'You can access this information anytime by selecting ‘Contact Us’ from the login screen.'),
                 ],
@@ -80,7 +81,14 @@ class RegistrationApproval extends StatelessWidget {
                   children: <Widget>[
                     PrimaryButtonWidget(
                       buttonText: 'Got it',
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => LoginScreen(),
+                          ),
+                        );
+                      },
                     )
                   ],
                 ),
