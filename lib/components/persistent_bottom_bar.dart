@@ -6,10 +6,15 @@ import 'package:flutter/material.dart';
 class PersistentBottomBar extends StatelessWidget {
   final Function tertiaryOnPressed;
   final Function primaryOnPressed;
-  final bool isPrimaryClickable;
+  final String tertiaryText;
+  final String primaryText;
 
-  PersistentBottomBar(
-      {this.tertiaryOnPressed, this.primaryOnPressed, this.isPrimaryClickable});
+  PersistentBottomBar({
+    this.tertiaryOnPressed,
+    this.primaryOnPressed,
+    this.tertiaryText,
+    this.primaryText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +32,11 @@ class PersistentBottomBar extends StatelessWidget {
           children: <Widget>[
             TertiaryButton(
               onPressed: tertiaryOnPressed,
-              text: 'Back',
+              text: tertiaryText,
             ),
             PrimaryButtonWidget(
-              buttonText: 'Next',
-              onPressed: isPrimaryClickable ? primaryOnPressed : null,
+              buttonText: primaryText,
+              onPressed: primaryOnPressed,
             )
           ],
         ),

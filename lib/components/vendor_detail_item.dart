@@ -13,9 +13,7 @@ class VendorDetail extends StatelessWidget {
       padding: EdgeInsets.only(left: 10),
       child: Row(
         children: <Widget>[
-          Image.asset(
-            "assets/images/place_holder.png",
-          ),
+          Image.asset("assets/images/place_holder.png"),
           Container(
             padding: EdgeInsets.only(left: 10),
             child: Column(

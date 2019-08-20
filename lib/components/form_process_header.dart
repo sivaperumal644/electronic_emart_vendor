@@ -3,15 +3,17 @@ import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class FormProcessHeader extends StatelessWidget {
-  final String title;
-  final int currentScreen;
-  final bool secondIndicator;
-  final bool thirdIndicator;
-  FormProcessHeader(
-      {this.title,
-      this.currentScreen,
-      this.secondIndicator,
-      this.thirdIndicator});
+  final int activeIndicators, totalIndicators;
+  final List titleLists = [
+    'Account Credentials',
+    'Store Details',
+    'Upload Documents'
+  ];
+
+  FormProcessHeader({
+    this.activeIndicators,
+    this.totalIndicators,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,31 +35,22 @@ class FormProcessHeader extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 24.0),
-              child: Row(
-                children: <Widget>[
+              child: Row(children: <Widget>[
+                for (int i = 0; i < totalIndicators; i++)
                   Padding(
                     padding: const EdgeInsets.only(right: 8.0),
                     child: ScreenIndicator(
-                      color: PRIMARY_COLOR.withOpacity(1),
+                      color: activeIndicators + 1 > i
+                          ? PRIMARY_COLOR.withOpacity(1)
+                          : PRIMARY_COLOR.withOpacity(0.25),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: ScreenIndicator(
-                      color:
-                          PRIMARY_COLOR.withOpacity(secondIndicator ? 1 : 0.25),
-                    ),
-                  ),
-                  ScreenIndicator(
-                    color: PRIMARY_COLOR.withOpacity(thirdIndicator ? 1 : 0.25),
-                  ),
-                ],
-              ),
+              ]),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: Text(
-                'Step $currentScreen/3: $title',
+                'Step ${activeIndicators + 1}/$totalIndicators: ${titleLists[activeIndicators]}',
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   color: PRIMARY_COLOR,

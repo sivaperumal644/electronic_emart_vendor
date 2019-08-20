@@ -2,6 +2,7 @@ import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/screens/home_screen/welcome_screen.dart';
 import 'package:electronic_emart_vendor/screens/login_screen/registration_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -73,7 +74,12 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(right: 24.0, top: 6.0),
                 child: PrimaryButtonWidget(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                    );
+                  },
                   buttonText: 'Login',
                 ),
               ),
