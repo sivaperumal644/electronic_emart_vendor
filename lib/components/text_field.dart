@@ -17,7 +17,7 @@ class CustomTextField extends StatelessWidget {
       padding: EdgeInsets.only(left: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: PRIMARY_COLOR.withOpacity(0.03),
+        color: PRIMARY_COLOR.withOpacity(0.1),
       ),
       child: TextField(
         onChanged: onChanged,

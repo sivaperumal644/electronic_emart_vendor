@@ -19,9 +19,10 @@ class InvetoryListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(12.0),
+      margin: EdgeInsets.only(left: 24, right: 24, top: 10, bottom: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: PRIMARY_COLOR.withOpacity(0.08),
+        color: PRIMARY_COLOR.withOpacity(0.06),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
