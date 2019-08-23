@@ -25,6 +25,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   feather_icons_flutter: ^4.7.4
   provider: ^3.0.0+1
+  flutter_svg: 0.13.1
 
 dev_dependencies:
   flutter_test:
@@ -49,6 +50,7 @@ flutter:
 
   assets:
     - assets/images/place_holder.png
+    - assets/images/flutter_logo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -81,6 +83,10 @@ flutter:
       - asset: assets/fonts/Quicksand-Bold.ttf
       - asset: assets/fonts/Quicksand-Light.ttf
       - asset: assets/fonts/Quicksand-Regular.ttf
+    - family: IBMPlexMono
+      fonts:
+      - asset: assets/fonts/IBMPlexMono-Bold.ttf
+      - asset: assets/fonts/IBMPlexMono-Regular.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

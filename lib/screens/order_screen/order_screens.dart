@@ -59,7 +59,10 @@ class _OrderScreenState extends State<OrderScreen> {
                 ),
               );
             },
-            child: SettingsOption(title: 'Order History'),
+            child: SettingsOption(
+              title: 'Order History',
+              color: BLACK_COLOR,
+            ),
           ),
           Container(
             margin: EdgeInsets.only(top: 10),
@@ -67,6 +70,7 @@ class _OrderScreenState extends State<OrderScreen> {
               onTap: () {},
               child: SettingsOption(
                 title: 'Download your data',
+                color: BLACK_COLOR,
               ),
             ),
           )

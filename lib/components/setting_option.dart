@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class SettingsOption extends StatelessWidget {
   final String title;
+  final Color color;
 
-  SettingsOption({this.title});
+  SettingsOption({this.title, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -16,14 +17,14 @@ class SettingsOption extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              color: BLACK_COLOR,
+              color: color,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(Icons.arrow_forward_ios),
+            icon: Icon(Icons.arrow_forward_ios, color: color,),
           )
         ],
       ),

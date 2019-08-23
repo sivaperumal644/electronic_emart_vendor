@@ -123,12 +123,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ),
           Container(margin: EdgeInsets.only(top: 24.0)),
           CustomTextField(
-            hintText: storeDetails ? 'Street/Locality' : 'Password',
-          ),
+              hintText: storeDetails ? 'Street/Locality' : 'Password'),
           Container(margin: EdgeInsets.only(top: 24.0)),
-          CustomTextField(
-            hintText: storeDetails ? 'City' : 'Confirm Password',
-          ),
+          CustomTextField(hintText: storeDetails ? 'City' : 'Confirm Password'),
+          Container(margin: EdgeInsets.only(bottom: 40))
         ],
       ),
     );
