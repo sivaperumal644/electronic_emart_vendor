@@ -9,6 +9,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: ListView(
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(top: 20),

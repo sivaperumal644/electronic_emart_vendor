@@ -1,4 +1,3 @@
-import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class SettingsOption extends StatelessWidget {

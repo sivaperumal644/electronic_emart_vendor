@@ -6,7 +6,7 @@ class BottomBar extends StatelessWidget {
   final int index;
   List<Map<String, Object>> iconData;
 
-  BottomBar({this.onTap, this.index, List<IconData> icons}) {
+  BottomBar({this.onTap, this.index, List<IconData> icons, this.iconData}) {
     this.iconData = icons
         .asMap()
         .map((index, icon) => MapEntry(index, {"index": index, "value": icon}))

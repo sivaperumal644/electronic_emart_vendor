@@ -9,6 +9,7 @@ class OrderDetailsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: ListView(
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(left: 24, top: 24),

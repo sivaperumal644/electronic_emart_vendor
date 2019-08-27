@@ -15,6 +15,7 @@ class WelcomeScreen extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 24.0, right: 24.0),
             child: ListView(
+              physics: BouncingScrollPhysics(),
               children: <Widget>[
                 Container(margin: EdgeInsets.only(top: 32)),
                 Icon(

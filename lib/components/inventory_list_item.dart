@@ -8,44 +8,50 @@ class InvetoryListItem extends StatelessWidget {
   final String stock;
   final int stockAvailable;
   final String inventoryItem;
-  InvetoryListItem(
-      {this.currentPrice,
-      this.discountPrice,
-      this.stock,
-      this.stockAvailable,
-      this.inventoryItem});
+  final Function onTap;
+  InvetoryListItem({
+    this.currentPrice,
+    this.discountPrice,
+    this.stock,
+    this.stockAvailable,
+    this.inventoryItem,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(12.0),
-      margin: EdgeInsets.only(left: 24, right: 24, top: 10, bottom: 10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: PRIMARY_COLOR.withOpacity(0.06),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              inventoryListRow(context),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: stockRow(),
-              ),
-            ],
-          ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              FeatherIcons.edit,
-              size: 24,
-              color: PRIMARY_COLOR,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        padding: EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: PRIMARY_COLOR.withOpacity(0.06),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                inventoryListRow(context),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: stockRow(),
+                ),
+              ],
             ),
-          )
-        ],
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                FeatherIcons.edit,
+                size: 24,
+                color: PRIMARY_COLOR,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

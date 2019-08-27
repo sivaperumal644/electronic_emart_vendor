@@ -1,8 +1,8 @@
 import 'package:electronic_emart_vendor/components/setting_option.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/profile_screen/about_app.dart';
-import 'package:electronic_emart_vendor/screens/profile_screen/change_number.dart';
-import 'package:electronic_emart_vendor/screens/profile_screen/edit_address.dart';
+import 'package:electronic_emart_vendor/screens/about_app/about_app.dart';
+import 'package:electronic_emart_vendor/screens/change_number/change_number.dart';
+import 'package:electronic_emart_vendor/screens/edit_address/edit_address.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -16,6 +16,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: ListView(
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           Container(padding: EdgeInsets.only(top: 20)),
           textWidget('Profile', TextAlign.center, BLACK_COLOR, 16),

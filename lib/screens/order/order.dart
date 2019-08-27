@@ -1,7 +1,8 @@
 import 'package:electronic_emart_vendor/components/chips_component.dart';
 import 'package:electronic_emart_vendor/components/setting_option.dart';
+import 'package:electronic_emart_vendor/components/simple_line_chart.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/order_screen/order_expanded_screen.dart';
+import 'package:electronic_emart_vendor/screens/order_history/order_history.dart';
 import 'package:flutter/material.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -16,6 +17,7 @@ class _OrderScreenState extends State<OrderScreen> {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: ListView(
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           Container(padding: EdgeInsets.only(top: 25)),
           headerText('Order Stats', TextAlign.center),
@@ -23,9 +25,7 @@ class _OrderScreenState extends State<OrderScreen> {
             width: 360,
             height: 300,
             margin: EdgeInsets.all(24.0),
-            decoration: BoxDecoration(
-              border: Border.all(color: PRIMARY_COLOR.withOpacity(0.5)),
-            ),
+            child: SimpleLineChart.withSampleData(),
           ),
           Container(
             margin: EdgeInsets.only(left: 24, right: 24, bottom: 10),

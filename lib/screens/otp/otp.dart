@@ -27,39 +27,33 @@ class _OTPScreenState extends State<OTPScreen> {
         backButton(),
         Container(padding: EdgeInsets.only(top: 20)),
         text("Enter OTP", 30, PRIMARY_COLOR, false),
-        ListView(
-          padding: EdgeInsets.all(24),
-          shrinkWrap: true,
+        Container(
+          padding: EdgeInsets.only(left: 20, right: 20),
+          child: Text(
+              "OTP Sent to +91 8899889988. Please enter the OTP to continue.",
+              style: TextStyle(fontSize: 14, color: BLACK_COLOR),
+              textAlign: TextAlign.center),
+        ),
+        SizedBox(height: 20),
+        CustomTextField(
+          hintText: "OTP",
+          onChanged: (val) {},
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: Text(
-                  "OTP Sent to +91 8899889988. Please enter the OTP to continue.",
-                  style: TextStyle(fontSize: 14, color: BLACK_COLOR),
-                  textAlign: TextAlign.center),
-            ),
-            SizedBox(height: 20),
-            CustomTextField(
-              hintText: "OTP",
-              onChanged: (val) {},
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                TertiaryButton(text: "Resend OTP", onPressed: () {}),
-                PrimaryButtonWidget(
-                  buttonText: "Verify",
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NavigateScreens(),
-                      ),
-                    );
-                  },
-                )
-              ],
+            TertiaryButton(text: "Resend OTP", onPressed: () {}),
+            PrimaryButtonWidget(
+              buttonText: "Verify",
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NavigateScreens(),
+                  ),
+                );
+              },
             )
           ],
         )

@@ -1,5 +1,5 @@
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/login_screen/login_screen.dart';
+import 'package:electronic_emart_vendor/screens/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

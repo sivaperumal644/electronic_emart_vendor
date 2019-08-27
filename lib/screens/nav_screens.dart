@@ -1,10 +1,11 @@
 import 'package:electronic_emart_vendor/components/bottom_bar.dart';
-import 'package:electronic_emart_vendor/screens/home_screen/home_screen.dart';
-import 'package:electronic_emart_vendor/screens/inventory_screen/inventory_screen.dart';
-import 'package:electronic_emart_vendor/screens/order_screen/order_screens.dart';
-import 'package:electronic_emart_vendor/screens/profile_screen/profile_screen.dart';
+import 'package:electronic_emart_vendor/screens/profile/profile_screen.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
+
+import 'home/home.dart';
+import 'inventory/inventory.dart';
+import 'order/order.dart';
 
 class NavigateScreens extends StatefulWidget {
   @override

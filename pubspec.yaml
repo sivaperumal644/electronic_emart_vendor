@@ -26,6 +26,7 @@ dependencies:
   feather_icons_flutter: ^4.7.4
   provider: ^3.0.0+1
   flutter_svg: 0.13.1
+  charts_flutter: ^0.7.0
 
 dev_dependencies:
   flutter_test:

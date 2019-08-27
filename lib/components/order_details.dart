@@ -130,34 +130,37 @@ class OrderDetails extends StatelessWidget {
   }
 
   Widget orderItemsRow() {
-    return Row(
-      children: <Widget>[
-        Image.asset('assets/images/place_holder.png'),
-        Padding(
-          padding: const EdgeInsets.only(left: 16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Apple iPhone X - 64 GB, Rose Gold',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: BLACK_COLOR,
-                  fontSize: 14,
+    return Container(
+      padding: EdgeInsets.all(10),
+      child: Row(
+        children: <Widget>[
+          Image.asset('assets/images/place_holder.png'),
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Apple iPhone X - 64 GB, Rose Gold',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: BLACK_COLOR,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-              Text(
-                'Rs. 194,500',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: PRIMARY_COLOR,
-                ),
-              )
-            ],
-          ),
-        )
-      ],
+                Text(
+                  'Rs. 194,500',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: PRIMARY_COLOR,
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

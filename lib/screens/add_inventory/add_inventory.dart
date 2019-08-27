@@ -1,12 +1,17 @@
 import 'package:electronic_emart_vendor/components/chips_component.dart';
 import 'package:electronic_emart_vendor/components/header_and_subheader.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
+import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class AddInventoryScreen extends StatefulWidget {
+  final bool isNewInventory;
+
+  AddInventoryScreen({this.isNewInventory});
+
   @override
   _AddInventoryScreenState createState() => _AddInventoryScreenState();
 }
@@ -18,6 +23,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: ListView(
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           appBar(),
           headerText('Name and Category'),
@@ -66,16 +72,35 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             margin: EdgeInsets.only(left: 24.0, right: 24.0, bottom: 20.0),
             child: CustomTextField(hintText: 'Items in Stock'),
           ),
-          Container(
-            height: 45,
-            margin: EdgeInsets.only(left: 24, right: 24, bottom: 24),
-            child: PrimaryButtonWidget(
-              buttonText: 'Save Changes',
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ),
+          widget.isNewInventory
+              ? Container(
+                  height: 45,
+                  margin: EdgeInsets.only(left: 24, right: 24, bottom: 24),
+                  child: PrimaryButtonWidget(
+                    buttonText: 'Save Changes',
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+              : Container(
+                  padding: EdgeInsets.only(bottom: 16, left: 24, right: 24),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      TertiaryButton(
+                        text: 'Delete Item',
+                        onPressed: () {},
+                      ),
+                      PrimaryButtonWidget(
+                        buttonText: 'Save Changes',
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      )
+                    ],
+                  ),
+                )
         ],
       ),
     );
@@ -174,7 +199,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           ),
           Container(width: 20),
           Text(
-            'Add new item',
+            widget.isNewInventory ? 'Add new item' : 'Edit item',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

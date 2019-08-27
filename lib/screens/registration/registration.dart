@@ -5,8 +5,8 @@ import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/login_screen/login_screen.dart';
-import 'package:electronic_emart_vendor/screens/login_screen/registration_approval_screen.dart';
+import 'package:electronic_emart_vendor/screens/login/login.dart';
+import 'package:electronic_emart_vendor/screens/registration_sent/registration_sent.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +52,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => RegistrationApproval()),
+                            builder: (context) => RegistrationSent()),
                       );
                     }
                     pageController.nextPage(
@@ -94,6 +94,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Padding(
       padding: EdgeInsets.only(left: 24.0, right: 24.0, bottom: 0),
       child: ListView(
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           Container(margin: EdgeInsets.only(top: 40.0)),
           HeaderAndSubHeader(
@@ -104,7 +105,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 : 'We will use this information to contact you',
           ),
           Container(margin: EdgeInsets.only(top: 12.0)),
-          CustomTextField(hintText: storeDetails ? 'Phone Number' : 'Name'),
+          CustomTextField(hintText: storeDetails ? 'Name' : 'Phone Number'),
           if (!storeDetails)
             Padding(
               padding: const EdgeInsets.only(top: 24.0),
@@ -194,4 +195,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ],
     );
   }
+}
+
+class RegistrationApproval {
 }

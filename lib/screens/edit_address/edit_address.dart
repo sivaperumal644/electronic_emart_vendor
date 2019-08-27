@@ -20,6 +20,7 @@ class _EditAddressState extends State<EditAddress> {
 
   Widget layout() {
     return ListView(
+      physics: BouncingScrollPhysics(),      
       children: <Widget>[
         backButton(),
         texts(),

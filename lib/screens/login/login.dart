@@ -2,8 +2,8 @@ import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/home_screen/welcome_screen.dart';
-import 'package:electronic_emart_vendor/screens/login_screen/registration_screen.dart';
+import 'package:electronic_emart_vendor/screens/registration/registration.dart';
+import 'package:electronic_emart_vendor/screens/welcome/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,6 +17,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: ListView(
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           Container(
             height: 235,
@@ -62,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 36),
-            child: CustomTextField(hintText: "Username/Email"),
+            child: CustomTextField(hintText: "Phone Number"),
           ),
           Padding(
             padding: const EdgeInsets.all(24.0),

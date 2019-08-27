@@ -1,7 +1,7 @@
 import 'package:electronic_emart_vendor/components/chips_component.dart';
 import 'package:electronic_emart_vendor/components/screen_indicator.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/order_screen/order_details_screen.dart';
+import 'package:electronic_emart_vendor/screens/order_details/order_details.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +33,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
           ),
           Expanded(
             child: ListView(
+              physics: BouncingScrollPhysics(),
               children: <Widget>[
                 orderListWidget(),
                 orderListWidget(),

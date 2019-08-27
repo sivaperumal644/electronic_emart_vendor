@@ -1,7 +1,7 @@
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/profile_screen/otp.dart';
+import 'package:electronic_emart_vendor/screens/otp/otp.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +21,7 @@ class _ChangeNumber extends State<ChangeNumber> {
 
   Widget layout() {
     return ListView(
+      physics: BouncingScrollPhysics(),
       children: <Widget>[
         backButton(),
         texts(),

@@ -1,9 +1,9 @@
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/login_screen/login_screen.dart';
+import 'package:electronic_emart_vendor/screens/login/login.dart';
 import 'package:flutter/material.dart';
 
-class RegistrationApproval extends StatelessWidget {
+class RegistrationSent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,6 +15,7 @@ class RegistrationApproval extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 24.0, right: 24.0),
               child: ListView(
+                physics: BouncingScrollPhysics(),
                 children: <Widget>[
                   Container(margin: EdgeInsets.only(top: 50.0)),
                   Text(
@@ -32,7 +33,8 @@ class RegistrationApproval extends StatelessWidget {
                   ),
                   Container(margin: EdgeInsets.only(top: 16.0)),
                   contentText(
-                      'You will be contacted by the administrator shortly.'),
+                    'You will be contacted by the administrator shortly.',
+                  ),
                   Container(margin: EdgeInsets.only(top: 120.0)),
                   contentText('For any clarifications,'),
                   Container(margin: EdgeInsets.only(top: 12.0)),
