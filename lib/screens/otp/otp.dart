@@ -21,69 +21,63 @@ class _OTPScreenState extends State<OTPScreen> {
   }
 
   Widget layout() {
-    return Column(
-      children: <Widget>[
-        Container(padding: EdgeInsets.only(top: 20)),
-        backButton(),
-        Container(padding: EdgeInsets.only(top: 20)),
-        text("Enter OTP", 30, PRIMARY_COLOR, false),
-        Container(
-          padding: EdgeInsets.only(left: 20, right: 20),
-          child: Text(
-              "OTP Sent to +91 8899889988. Please enter the OTP to continue.",
-              style: TextStyle(fontSize: 14, color: BLACK_COLOR),
-              textAlign: TextAlign.center),
-        ),
-        SizedBox(height: 20),
-        CustomTextField(
-          hintText: "OTP",
-          onChanged: (val) {},
-        ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            TertiaryButton(text: "Resend OTP", onPressed: () {}),
-            PrimaryButtonWidget(
-              buttonText: "Verify",
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NavigateScreens(),
-                  ),
-                );
-              },
-            )
-          ],
-        )
-      ],
-    );
-  }
-
-  Widget text(String title, double size, Color color, bool isBold) {
-    return Text(
-      "$title",
-      style: TextStyle(
-          color: color,
-          fontSize: size,
-          fontWeight: isBold ? FontWeight.bold : null),
+    return Container(
+      padding: EdgeInsets.all(24),
+      child: Column(
+        children: <Widget>[
+          Container(padding: EdgeInsets.only(top: 20)),
+          backButton(),
+          Container(padding: EdgeInsets.only(top: 20)),
+          Text(
+            'ENTER OTP',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: PRIMARY_COLOR,
+              fontSize: 30,
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(left: 20, right: 20, top: 24),
+            child: Text(
+                "OTP Sent to +91 8899889988. Please enter the OTP to continue.",
+                style: TextStyle(fontSize: 14, color: BLACK_COLOR),
+                textAlign: TextAlign.center),
+          ),
+          SizedBox(height: 20),
+          CustomTextField(
+            hintText: "OTP",
+            onChanged: (val) {},
+          ),
+          SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              TertiaryButton(text: "Resend OTP", onPressed: () {}),
+              PrimaryButtonWidget(
+                buttonText: "Verify",
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NavigateScreens(),
+                    ),
+                  );
+                },
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 
   Widget backButton() {
-    return Row(
-      children: <Widget>[
-        Container(
-          padding: EdgeInsets.only(top: 24, left: 24),
-          child: InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Icon(FeatherIcons.arrowLeft, color: PRIMARY_COLOR),
-          ),
-        ),
-      ],
+    return Align(
+      alignment: Alignment.topLeft,
+      child: InkWell(
+        onTap: () => Navigator.pop(context),
+        child: Icon(FeatherIcons.arrowLeft, color: PRIMARY_COLOR),
+      ),
     );
   }
 }

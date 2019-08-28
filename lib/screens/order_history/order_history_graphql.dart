@@ -1,0 +1,39 @@
+String getVendorOrdersQuery = '''
+query GetVendorOrders{
+  getVendorOrders{
+    error{
+      path
+      message
+    }
+    orders{
+      id
+      orderNo
+      address
+      vendor{
+        id
+        phoneNumber
+        address
+        email
+        storeName
+        blocked
+        panCardPhotoUrls
+        shopPhotoUrl
+        admin
+      }
+      customer{
+        id
+        name
+        phoneNumber
+        address
+        email
+      }
+      cartItems 
+      status
+      datePlaced
+      updatedDate
+      totalPrice
+      paymentMode
+    }
+  }
+}
+''';

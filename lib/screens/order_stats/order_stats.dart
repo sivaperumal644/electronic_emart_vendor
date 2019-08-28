@@ -5,12 +5,12 @@ import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/order_history/order_history.dart';
 import 'package:flutter/material.dart';
 
-class OrderScreen extends StatefulWidget {
+class OrderStatScreen extends StatefulWidget {
   @override
-  _OrderScreenState createState() => _OrderScreenState();
+  _OrderStatScreenState createState() => _OrderStatScreenState();
 }
 
-class _OrderScreenState extends State<OrderScreen> {
+class _OrderStatScreenState extends State<OrderStatScreen> {
   String selectedChips = "";
   @override
   Widget build(BuildContext context) {

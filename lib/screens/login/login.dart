@@ -3,7 +3,7 @@ import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/registration/registration.dart';
-import 'package:electronic_emart_vendor/screens/welcome/welcome_screen.dart';
+import 'package:electronic_emart_vendor/screens/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,7 +17,6 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: ListView(
-        physics: BouncingScrollPhysics(),
         children: <Widget>[
           Container(
             height: 235,

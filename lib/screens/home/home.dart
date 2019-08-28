@@ -59,7 +59,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Container placeHolderContainer() {
+  Widget placeHolderContainer() {
     return Container(
       color: PRIMARY_COLOR.withOpacity(0.1),
       height: 120,
@@ -91,7 +91,7 @@ class HomeScreen extends StatelessWidget {
                 'Your inventory is empty!',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 20,
                   color: WHITE_COLOR,
                 ),
               ),
