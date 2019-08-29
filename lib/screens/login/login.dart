@@ -2,9 +2,11 @@ import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/screens/login/login_graphql.dart';
 import 'package:electronic_emart_vendor/screens/registration/registration.dart';
 import 'package:electronic_emart_vendor/screens/welcome/welcome.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,6 +14,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  Map inputFields = {"phoneNumber": "", "password": ""};
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,32 +66,48 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 36),
-            child: CustomTextField(hintText: "Phone Number"),
+            child: CustomTextField(
+              hintText: "Phone Number",
+              onChanged: (val) {
+                setState(() {
+                  inputFields['phoneNumber'] = val;
+                });
+              },
+            ),
           ),
           Padding(
             padding: const EdgeInsets.all(24.0),
-            child: CustomTextField(hintText: "Password"),
+            child: CustomTextField(
+              hintText: "Password",
+              onChanged: (val) {
+                inputFields['password'] = val;
+              },
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(right: 24.0, top: 6.0),
-                child: PrimaryButtonWidget(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => WelcomeScreen()),
-                    );
-                  },
-                  buttonText: 'Login',
-                ),
-              ),
-            ],
-          ),
+          vendorLoginMutationComponent(),
           registerContainer(),
         ],
       ),
+    );
+  }
+
+  Widget loginButton(RunMutation runMutation) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 24.0, top: 6.0),
+          child: PrimaryButtonWidget(
+            onPressed: () {
+              runMutation({
+                'phoneNumber': inputFields['phoneNumber'],
+                'password': inputFields['password']
+              });
+            },
+            buttonText: 'Login',
+          ),
+        ),
+      ],
     );
   }
 
@@ -184,6 +204,25 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         )
       ],
+    );
+  }
+
+  Widget vendorLoginMutationComponent() {
+    return Mutation(
+      options: MutationOptions(document: vendorLoginMutation),
+      builder: (runMutation, result) {
+        print(result.errors);
+        return loginButton(runMutation);
+      },
+      onCompleted: (dynamic resultData) {
+        print(resultData);
+        if (resultData != null && resultData['vendorLogin']['error'] == null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WelcomeScreen()),
+          );
+        }
+      },
     );
   }
 }

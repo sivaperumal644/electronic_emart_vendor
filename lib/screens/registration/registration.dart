@@ -6,9 +6,11 @@ import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
+import 'package:electronic_emart_vendor/screens/registration/register_graohql.dart';
 import 'package:electronic_emart_vendor/screens/registration_sent/registration_sent.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -20,6 +22,40 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       PageController(initialPage: 0, keepPage: true, viewportFraction: 1);
   List<String> uploadedFile = [];
   int currentPage = 0;
+  bool isPasswordCorrect = false;
+
+  Map inputFields = {
+    "phoneNumber": "",
+    "email": "",
+    "password": "",
+    "confirmPassword": "",
+    "storeName": "",
+    "address": "",
+    "city": "",
+  };
+
+  TextEditingController phoneNumberController,
+      emailController,
+      passwordController,
+      confirmPasswordController,
+      storeNameController,
+      addressController,
+      cityController;
+
+  @override
+  void initState() {
+    super.initState();
+    phoneNumberController =
+        TextEditingController(text: inputFields['phoneNumber']);
+    emailController = TextEditingController(text: inputFields['email']);
+    passwordController = TextEditingController(text: inputFields['password']);
+    confirmPasswordController =
+        TextEditingController(text: inputFields['confirmPassword']);
+    storeNameController = TextEditingController(text: inputFields['storeName']);
+    addressController = TextEditingController(text: inputFields['address']);
+    cityController = TextEditingController(text: inputFields['city']);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,37 +70,48 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             color: PRIMARY_COLOR.withOpacity(0.5),
           ),
           pageView(),
-          PersistentBottomBar(
-            tertiaryOnPressed: () {
-              if (currentPage == 0) {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()));
-              }
-              pageController.previousPage(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.fastLinearToSlowEaseIn,
-              );
-            },
-            primaryOnPressed: uploadedFile.length != 2 && currentPage == 2
-                ? null
-                : () {
-                    if (currentPage == 2) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RegistrationSent()),
-                      );
-                    }
-                    pageController.nextPage(
-                      duration: Duration(milliseconds: 300),
-                      curve: Curves.fastLinearToSlowEaseIn,
-                    );
-                  },
-            tertiaryText: 'Back',
-            primaryText: 'Next',
-          )
+          createVendorMutationComponent(),
         ],
       ),
+    );
+  }
+
+  Widget bottomBarButtons(RunMutation runMutation) {
+    return PersistentBottomBar(
+      tertiaryOnPressed: () {
+        if (currentPage == 0) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => LoginScreen()),
+          );
+        }
+        pageController.previousPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.fastLinearToSlowEaseIn,
+        );
+      },
+      primaryOnPressed: uploadedFile.length != 2 && currentPage == 2
+          ? null
+          : () {
+              if (currentPage == 2) {
+                runMutation({
+                  'phoneNumber': inputFields['phoneNumber'],
+                  'email': inputFields['email'],
+                  'password': inputFields['password'],
+                  'storeName': inputFields['storeName'],
+                  'address': {
+                    'addressLine': inputFields['address'],
+                    'city': inputFields['city'],
+                  }
+                });
+              } else
+                pageController.nextPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                );
+            },
+      tertiaryText: 'Back',
+      primaryText: 'Next',
     );
   }
 
@@ -105,12 +152,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 : 'We will use this information to contact you',
           ),
           Container(margin: EdgeInsets.only(top: 12.0)),
-          CustomTextField(hintText: storeDetails ? 'Name' : 'Phone Number'),
+          CustomTextField(
+            hintText: storeDetails ? 'Name' : 'Phone Number',
+            controller:
+                storeDetails ? storeNameController : phoneNumberController,
+            onChanged: (val) {
+              setState(() {
+                inputFields[storeDetails ? 'storeName' : 'phoneNumber'] = val;
+              });
+            },
+          ),
           if (!storeDetails)
             Padding(
               padding: const EdgeInsets.only(top: 24.0),
               child: CustomTextField(
                 hintText: 'Email Address',
+                controller: emailController,
+                onChanged: (val) {
+                  setState(() {
+                    inputFields['email'] = val;
+                  });
+                },
               ),
             ),
           Container(margin: EdgeInsets.only(top: 40.0)),
@@ -124,9 +186,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ),
           Container(margin: EdgeInsets.only(top: 24.0)),
           CustomTextField(
-              hintText: storeDetails ? 'Street/Locality' : 'Password'),
+            hintText: storeDetails ? 'Street/Locality' : 'Password',
+            controller: storeDetails ? addressController : passwordController,
+            onChanged: (val) {
+              setState(() {
+                inputFields[storeDetails ? 'address' : 'password'] = val;
+              });
+            },
+          ),
           Container(margin: EdgeInsets.only(top: 24.0)),
-          CustomTextField(hintText: storeDetails ? 'City' : 'Confirm Password'),
+          CustomTextField(
+            hintText: storeDetails ? 'City' : 'Confirm Password',
+            controller:
+                storeDetails ? cityController : confirmPasswordController,
+            onChanged: (val) {
+              setState(() {
+                inputFields[storeDetails ? 'city' : 'confirmPassword'] = val;
+              });
+            },
+          ),
           Container(margin: EdgeInsets.only(bottom: 40))
         ],
       ),
@@ -195,7 +273,21 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       ],
     );
   }
-}
 
-class RegistrationApproval {
+  Widget createVendorMutationComponent() {
+    return Mutation(
+      options: MutationOptions(document: createVendorMutation),
+      builder: (runMutation, result) {
+        return bottomBarButtons(runMutation);
+      },
+      onCompleted: (dynamic resultdata) {
+        if (resultdata != null && resultdata['createVendor']['error'] == null) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => RegistrationSent()),
+          );
+        }
+      },
+    );
+  }
 }

@@ -2,6 +2,7 @@ import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'app_state.dart';
@@ -16,11 +17,26 @@ main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<AppState>(
-      builder: (_) => AppState(),
-      child: MaterialApp(
-        theme: ThemeData(fontFamily: 'Quicksand'),
-        home: LoginScreen(),
+    final HttpLink httpLink =
+        HttpLink(uri: 'http://cezhop.herokuapp.com/graphql');
+
+    ValueNotifier<GraphQLClient> client = ValueNotifier(
+      GraphQLClient(
+        cache: InMemoryCache(),
+        link: httpLink,
+      ),
+    );
+
+    return GraphQLProvider(
+      client: client,
+      child: CacheProvider(
+        child: ChangeNotifierProvider<AppState>(
+          builder: (_) => AppState(),
+          child: MaterialApp(
+            theme: ThemeData(fontFamily: 'Quicksand'),
+            home: LoginScreen(),
+          ),
+        ),
       ),
     );
   }
