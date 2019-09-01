@@ -73,26 +73,31 @@ class _EditAddressState extends State<EditAddress> {
         children: <Widget>[
           CustomTextField(
             hintText: "Flat/Building",
+            obscureText: false,
             onChanged: (val) {},
           ),
           SizedBox(height: 20),
           CustomTextField(
             hintText: "Street/Locality",
+            obscureText: false,
             onChanged: (val) {},
           ),
           SizedBox(height: 20),
           CustomTextField(
             hintText: "Landmark",
+            obscureText: false,
             onChanged: (val) {},
           ),
           SizedBox(height: 20),
           CustomTextField(
             hintText: "City",
+            obscureText: false,
             onChanged: (val) {},
           ),
           SizedBox(height: 20),
           CustomTextField(
             hintText: "Phone Number",
+            obscureText: false,
             onChanged: (val) {},
           ),
           SizedBox(height: 50),

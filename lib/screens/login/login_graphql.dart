@@ -3,6 +3,7 @@ String vendorLoginMutation = '''
   vendorLogin(phoneNumber:\$phoneNumber, password: \$password){
     user{
       id
+      address
     }
     jwtToken
     error{

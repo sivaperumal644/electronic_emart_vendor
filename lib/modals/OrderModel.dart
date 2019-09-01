@@ -1,4 +1,4 @@
-import 'package:electronic_emart_vendor/modals/CartItemInput.dart';
+import 'package:electronic_emart_vendor/modals/CartItemInputModel.dart';
 import 'package:electronic_emart_vendor/modals/User.dart';
 
 class Order{
@@ -8,12 +8,13 @@ class Order{
   final User vendor;
   final User customer;
   final CartItemInput cartItems;
+  final String status;
   final String datePlaced;
   final String updatedDate;
   final double totalPrice;
   final String paymentMode;
 
-  Order({this.id, this.orderNo, this.address, this.vendor, this.customer, this.cartItems, this.datePlaced, this.updatedDate, this.totalPrice, this.paymentMode});
+  Order({this.id, this.orderNo, this.address, this.vendor, this.customer, this.cartItems, this.datePlaced, this.status, this.updatedDate, this.totalPrice, this.paymentMode});
 
   factory Order.fromJson(Map json){
     return Order(
@@ -23,6 +24,7 @@ class Order{
       vendor: User.fromJson(json['vendor']),
       customer: User.fromJson(json['customer']),
       cartItems: CartItemInput.fromJson(json['cartItems']),
+      status:json['status'],
       datePlaced: json['datePlaced'],
       updatedDate: json['updatedDate'],
       totalPrice: json['totalPrice'],

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class User {
   final String id;
   final String name;
@@ -8,8 +10,10 @@ class User {
   final String panCardPhotoUrls;
   final String shopPhotoUrl;
   final bool admin;
+  final Map addressType;
 
-  User({
+  User(
+    {
     this.id,
     this.name,
     this.phoneNumber,
@@ -19,9 +23,10 @@ class User {
     this.panCardPhotoUrls,
     this.shopPhotoUrl,
     this.admin,
+    this.addressType,
   });
 
- factory User.fromJson(Map json){
+  factory User.fromJson(Map json) {
     return User(
       id: json['id'],
       name: json['name'],
@@ -31,7 +36,8 @@ class User {
       blocked: json['blocked'],
       panCardPhotoUrls: json['panCardPhotoUrls'],
       shopPhotoUrl: json['shopPhotoUrl'],
-      admin: json['admin']
+      admin: json['admin'],
+      addressType: jsonDecode(json['address'])
     );
   }
 }

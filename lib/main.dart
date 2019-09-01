@@ -1,9 +1,11 @@
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
+import 'package:electronic_emart_vendor/screens/nav_screens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_state.dart';
 
@@ -14,7 +16,20 @@ main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  bool isAuthenticated = false;
+
+  @override
+  void initState() {
+    getPref();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final HttpLink httpLink =
@@ -23,7 +38,7 @@ class MyApp extends StatelessWidget {
     ValueNotifier<GraphQLClient> client = ValueNotifier(
       GraphQLClient(
         cache: InMemoryCache(),
-        link: httpLink,
+        link: httpLink as Link,
       ),
     );
 
@@ -34,10 +49,18 @@ class MyApp extends StatelessWidget {
           builder: (_) => AppState(),
           child: MaterialApp(
             theme: ThemeData(fontFamily: 'Quicksand'),
-            home: LoginScreen(),
+            home: isAuthenticated ? NavigateScreens() : LoginScreen(),
           ),
         ),
       ),
     );
+  }
+
+  getPref() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString('token');
+    setState(() {
+      isAuthenticated = token != null;
+    });
   }
 }

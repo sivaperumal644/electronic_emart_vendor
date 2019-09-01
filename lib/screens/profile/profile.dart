@@ -3,7 +3,9 @@ import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/about_app/about_app.dart';
 import 'package:electronic_emart_vendor/screens/change_number/change_number.dart';
 import 'package:electronic_emart_vendor/screens/edit_address/edit_address.dart';
+import 'package:electronic_emart_vendor/screens/login/login.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -52,9 +54,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           Container(padding: EdgeInsets.only(top: 10)),
-          SettingsOption(
-            title: 'Log Out',
-            color: BLACK_COLOR,
+          InkWell(
+            onTap: () async {
+              final prefs = await SharedPreferences.getInstance();
+              await prefs.clear();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
+                ),
+              );
+            },
+            child: SettingsOption(
+              title: 'Log Out',
+              color: BLACK_COLOR,
+            ),
           ),
           Container(padding: EdgeInsets.only(top: 10)),
           InkWell(

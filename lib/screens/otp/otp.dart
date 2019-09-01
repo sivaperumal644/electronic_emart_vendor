@@ -46,6 +46,7 @@ class _OTPScreenState extends State<OTPScreen> {
           SizedBox(height: 20),
           CustomTextField(
             hintText: "OTP",
+            obscureText: false,
             onChanged: (val) {},
           ),
           SizedBox(height: 20),

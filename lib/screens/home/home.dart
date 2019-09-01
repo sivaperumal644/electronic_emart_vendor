@@ -2,10 +2,19 @@ import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../../app_state.dart';
+
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: ListView(

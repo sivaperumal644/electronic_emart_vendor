@@ -1,5 +1,6 @@
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
   final String labelText;
@@ -7,6 +8,9 @@ class CustomTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final controller;
   final String errorText;
+  final TextInputType keyboardType;
+  final int maxLines;
+  final bool obscureText;
 
   CustomTextField({
     this.labelText,
@@ -14,6 +18,9 @@ class CustomTextField extends StatelessWidget {
     this.hintText,
     this.controller,
     this.errorText,
+    this.keyboardType,
+    this.maxLines,
+    this.obscureText,
   });
   @override
   Widget build(BuildContext context) {
@@ -26,6 +33,9 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         controller: controller,
         onChanged: onChanged,
+        keyboardType: keyboardType,
+        maxLines: maxLines,
+        obscureText: obscureText,
         style: TextStyle(fontWeight: FontWeight.bold),
         decoration: InputDecoration(
           border: InputBorder.none,

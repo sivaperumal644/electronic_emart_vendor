@@ -1,0 +1,32 @@
+String getAllInventoryQuery = '''
+query GetAllInventory{
+  getAllInventory{
+    inventory{
+      id
+      name
+      originalPrice
+      sellingPrice
+      description
+      category
+      inStock
+      imageUrl
+      vendor{
+        id
+        name
+        phoneNumber
+        address
+        email
+        storeName
+        blocked
+        panCardPhotoUrls
+        shopPhotoUrl
+        admin
+      }
+    }
+    error{
+      path
+      message
+    }
+  }
+}
+''';

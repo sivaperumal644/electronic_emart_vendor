@@ -154,6 +154,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           Container(margin: EdgeInsets.only(top: 12.0)),
           CustomTextField(
             hintText: storeDetails ? 'Name' : 'Phone Number',
+            obscureText: false,
             controller:
                 storeDetails ? storeNameController : phoneNumberController,
             onChanged: (val) {
@@ -168,6 +169,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               child: CustomTextField(
                 hintText: 'Email Address',
                 controller: emailController,
+                obscureText: false,
                 onChanged: (val) {
                   setState(() {
                     inputFields['email'] = val;
@@ -188,6 +190,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           CustomTextField(
             hintText: storeDetails ? 'Street/Locality' : 'Password',
             controller: storeDetails ? addressController : passwordController,
+            obscureText: storeDetails ? false : true,
             onChanged: (val) {
               setState(() {
                 inputFields[storeDetails ? 'address' : 'password'] = val;
@@ -199,6 +202,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             hintText: storeDetails ? 'City' : 'Confirm Password',
             controller:
                 storeDetails ? cityController : confirmPasswordController,
+            obscureText: storeDetails ? false : true,
             onChanged: (val) {
               setState(() {
                 inputFields[storeDetails ? 'city' : 'confirmPassword'] = val;

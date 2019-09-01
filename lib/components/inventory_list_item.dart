@@ -1,22 +1,12 @@
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class InvetoryListItem extends StatelessWidget {
-  final int currentPrice;
-  final int discountPrice;
-  final String stock;
-  final int stockAvailable;
-  final String inventoryItem;
+  final Inventory inventoryItem;
   final Function onTap;
-  InvetoryListItem({
-    this.currentPrice,
-    this.discountPrice,
-    this.stock,
-    this.stockAvailable,
-    this.inventoryItem,
-    this.onTap,
-  });
+  InvetoryListItem({this.inventoryItem, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +51,7 @@ class InvetoryListItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Text(
-          stock,
+          '${inventoryItem.category}',
           style: TextStyle(
             color: PRIMARY_COLOR,
             fontSize: 12,
@@ -78,7 +68,7 @@ class InvetoryListItem extends StatelessWidget {
           ),
         ),
         Text(
-          '$stockAvailable in stock',
+          '${inventoryItem.inStock} in stock',
           style: TextStyle(
             color: BLACK_COLOR,
             fontWeight: FontWeight.bold,
@@ -92,15 +82,15 @@ class InvetoryListItem extends StatelessWidget {
   Widget inventoryListRow(context) {
     return Row(
       children: <Widget>[
-        Image.asset('assets/images/place_holder.png'),
+        Image.network(inventoryItem.imageUrl, height: 80, width: 80),
         Container(margin: const EdgeInsets.only(left: 8.0)),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              width: MediaQuery.of(context).size.width / 2,
+              width: MediaQuery.of(context).size.width / 2.1,
               child: Text(
-                inventoryItem,
+                '${inventoryItem.name}',
                 style: TextStyle(
                   color: BLACK_COLOR,
                   fontSize: 14,
@@ -119,7 +109,7 @@ class InvetoryListItem extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          'Rs. $currentPrice',
+          'Rs. ${inventoryItem.originalPrice}',
           style: TextStyle(
             decoration: TextDecoration.lineThrough,
             color: PRIMARY_COLOR.withOpacity(0.5),
@@ -128,7 +118,7 @@ class InvetoryListItem extends StatelessWidget {
         ),
         Container(margin: EdgeInsets.only(left: 8.0)),
         Text(
-          'Rs. $discountPrice',
+          'Rs. ${inventoryItem.sellingPrice}',
           style: TextStyle(
             color: PRIMARY_COLOR,
             fontSize: 16,

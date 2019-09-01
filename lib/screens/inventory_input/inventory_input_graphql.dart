@@ -15,8 +15,8 @@ mutation AddNewInventory(\$name:String, \$description:String, \$originalPrice:Fl
 
 String updateInventoryMutation = '''
 mutation UpdateInventory(\$inventoryId:String,\$name:String,\$description:String,\$originalPrice:Float,\$sellingPrice:Float,\$category:String,\$inStock:Float,\$imageUrl:String ){
-  updateInventory(inventoryId\$inventoryId, name\$name,description\$description,originalPrice\$originalPrice,sellingPrice\$sellingPrice,category\$category,inStock\$inStock,
-  imageUrl\$imageUrl){
+  updateInventory(inventoryId:\$inventoryId, name:\$name,description:\$description,originalPrice:\$originalPrice,sellingPrice:\$sellingPrice,category:\$category,inStock:\$inStock,
+  imageUrl:\$imageUrl){
     error{
       path
       message

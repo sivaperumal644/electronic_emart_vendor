@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "302571742479",
+    "firebase_url": "https://electronic-mart.firebaseio.com",
+    "project_id": "electronic-mart",
+    "storage_bucket": "electronic-mart.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302571742479:android:e42e9a634a9b039f",
+        "android_client_info": {
+          "package_name": "com.example.elec_mart_customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302571742479-ofbss49q232jdgbsqc5jemrodr4s1bob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMCK3tzY0YVmKBQn6nTYvJOc0Uqg5sRhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302571742479-ofbss49q232jdgbsqc5jemrodr4s1bob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:302571742479:android:39ea77bdb9c861ef",
+        "android_client_info": {
+          "package_name": "com.example.electronic_emart_vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302571742479-ofbss49q232jdgbsqc5jemrodr4s1bob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMCK3tzY0YVmKBQn6nTYvJOc0Uqg5sRhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302571742479-ofbss49q232jdgbsqc5jemrodr4s1bob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

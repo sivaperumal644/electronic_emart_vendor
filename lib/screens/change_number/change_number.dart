@@ -69,6 +69,7 @@ class _ChangeNumber extends State<ChangeNumber> {
       padding: EdgeInsets.all(24),
       child: CustomTextField(
         hintText: "New Phone Number",
+        obscureText: false,
         onChanged: (val) {},
       ),
     );

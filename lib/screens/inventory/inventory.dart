@@ -2,9 +2,16 @@ import 'package:electronic_emart_vendor/components/drop_down_widget.dart';
 import 'package:electronic_emart_vendor/components/inventory_list_item.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
+import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
+
+import '../../app_state.dart';
 
 class InventoryScreen extends StatefulWidget {
   @override
@@ -32,7 +39,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => AddInventoryScreen(isNewInventory: true)),
+              builder: (context) => AddInventoryScreen(isNewInventory: true),
+            ),
           );
         },
       ),
@@ -44,89 +52,55 @@ class _InventoryScreenState extends State<InventoryScreen> {
             child: ListView(
               physics: BouncingScrollPhysics(),
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(left: 24, right: 24, bottom: 15),
-                  child: InvetoryListItem(
-                    currentPrice: 14000,
-                    discountPrice: 12000,
-                    stock: 'Mobile Phones',
-                    stockAvailable: 14,
-                    inventoryItem: 'Apple iPhone X - 64 GB / Rose Gold',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              AddInventoryScreen(isNewInventory: false),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 24, right: 24, bottom: 15),
-                  child: InvetoryListItem(
-                    currentPrice: 14000,
-                    discountPrice: 12000,
-                    stock: 'Mobile Phones',
-                    stockAvailable: 14,
-                    inventoryItem: 'Apple iPhone X - 64 GB / Rose Gold',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              AddInventoryScreen(isNewInventory: false),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 24, right: 24, bottom: 15),
-                  child: InvetoryListItem(
-                    currentPrice: 14000,
-                    discountPrice: 12000,
-                    stock: 'Mobile Phones',
-                    stockAvailable: 14,
-                    inventoryItem: 'Apple iPhone X - 64 GB / Rose Gold',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              AddInventoryScreen(isNewInventory: false),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(left: 24, right: 24, bottom: 15),
-                  child: InvetoryListItem(
-                    currentPrice: 14000,
-                    discountPrice: 12000,
-                    stock: 'Mobile Phones',
-                    stockAvailable: 14,
-                    inventoryItem: 'Apple iPhone X - 64 GB / Rose Gold',
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              AddInventoryScreen(isNewInventory: false),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Container(
-                  padding: EdgeInsets.only(bottom: 60),
-                )
+                getAllInventoryQueryComponent(),
+                Container(padding: EdgeInsets.only(bottom: 60))
               ],
             ),
           )
         ],
+      ),
+    );
+  }
+
+  Widget inventoryListWidget(List<Inventory> inventories) {
+    final appState = Provider.of<AppState>(context);
+    return ListView.builder(
+      physics: BouncingScrollPhysics(),
+      itemCount: inventories.length + 1,
+      itemBuilder: (context, index) {
+        if (inventories.length == 0) {
+          appState.setIsInventoryEmpty(true);
+          return Container(
+            height: MediaQuery.of(context).size.height / 2,
+            child: Center(
+              child: Text('No inventories found'),
+            ),
+          );
+        }
+        if (index == inventories.length) {
+          appState.setIsInventoryEmpty(false);
+          return Container(height: 320);
+        }
+        appState.setIsInventoryEmpty(false);
+        return inventoryItem(inventories[index]);
+      },
+    );
+  }
+
+  Widget inventoryItem(Inventory inventory) {
+    return Container(
+      padding: EdgeInsets.only(left: 24, right: 24, bottom: 15),
+      child: InvetoryListItem(
+        inventoryItem: inventory,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddInventoryScreen(
+                  inventory: inventory, isNewInventory: false),
+            ),
+          );
+        },
       ),
     );
   }
@@ -142,6 +116,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             width: MediaQuery.of(context).size.width / 1.28,
             child: CustomTextField(
               hintText: 'Search for items',
+              obscureText: false,
             ),
           ),
           Padding(
@@ -179,6 +154,36 @@ class _InventoryScreenState extends State<InventoryScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget getAllInventoryQueryComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Query(
+      options: QueryOptions(
+        document: getAllInventoryQuery,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+        pollInterval: 1,
+      ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.hasErrors)
+          return Center(child: Text("Oops something went wrong"));
+        if (result.data != null &&
+            result.data['getAllInventory']['inventory'] != null) {
+          List inventoryList = result.data['getAllInventory']['inventory'];
+          final inventories =
+              inventoryList.map((item) => Inventory.fromJson(item)).toList();
+          return Container(
+              height: MediaQuery.of(context).size.height,
+              child: inventoryListWidget(inventories));
+        }
+        return Container();
+      },
     );
   }
 }

@@ -1,12 +1,16 @@
+import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/modals/User.dart';
 import 'package:electronic_emart_vendor/screens/login/login_graphql.dart';
 import 'package:electronic_emart_vendor/screens/registration/registration.dart';
 import 'package:electronic_emart_vendor/screens/welcome/welcome.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -68,6 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 36),
             child: CustomTextField(
               hintText: "Phone Number",
+              obscureText: false,
               onChanged: (val) {
                 setState(() {
                   inputFields['phoneNumber'] = val;
@@ -79,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.all(24.0),
             child: CustomTextField(
               hintText: "Password",
+              obscureText: true,
               onChanged: (val) {
                 inputFields['password'] = val;
               },
@@ -211,12 +217,21 @@ class _LoginScreenState extends State<LoginScreen> {
     return Mutation(
       options: MutationOptions(document: vendorLoginMutation),
       builder: (runMutation, result) {
-        print(result.errors);
         return loginButton(runMutation);
       },
-      onCompleted: (dynamic resultData) {
-        print(resultData);
+      onCompleted: (dynamic resultData) async {
+        final prefs = await SharedPreferences.getInstance();
+        final appState = Provider.of<AppState>(context);
         if (resultData != null && resultData['vendorLogin']['error'] == null) {
+          final user = User.fromJson(resultData['vendorLogin']['user']);
+          if (user != null) {
+            await prefs.setString(
+                'token', resultData['vendorLogin']['jwtToken']);
+            await prefs.setString('vendorId', user.id);
+            appState.setJwtToken(resultData['vendorLogin']['jwtToken']);
+            appState.setVendorAddressLine(user.addressType['addressLine']);
+            appState.setVendorCity(user.addressType['city']);
+          }
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => WelcomeScreen()),

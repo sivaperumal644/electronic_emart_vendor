@@ -1,9 +1,15 @@
+import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/components/chips_component.dart';
 import 'package:electronic_emart_vendor/components/screen_indicator.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/modals/OrderModel.dart';
 import 'package:electronic_emart_vendor/screens/order_details/order_details.dart';
+import 'package:electronic_emart_vendor/screens/order_history/order_history_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
 
 class OrderExpandedScreen extends StatefulWidget {
   @override
@@ -31,19 +37,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
               },
             ),
           ),
-          Expanded(
-            child: ListView(
-              physics: BouncingScrollPhysics(),
-              children: <Widget>[
-                orderListWidget(),
-                orderListWidget(),
-                orderListWidget(),
-                orderListWidget(),
-                orderListWidget(),
-                orderListWidget(),
-              ],
-            ),
-          )
+          Expanded(child: getAllOrdersMutationComponent())
         ],
       ),
     );
@@ -77,7 +71,58 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
     );
   }
 
-  Widget orderListWidget() {
+  Widget orderListComponent(List<Order> orders) {
+    return ListView.builder(
+      itemCount: orders.length,
+      itemBuilder: (context, index) {
+        Container(
+          height: MediaQuery.of(context).size.height / 2,
+          child: Center(
+            child: Text('No orders found'),
+          ),
+        );
+        return OrderListWidget(orderItems: orders[index]);
+      },
+    );
+  }
+
+  Widget getAllOrdersMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Query(
+      options: QueryOptions(
+          document: getVendorOrdersQuery,
+          context: {
+            'headers': <String, String>{
+              'Authorization': 'Bearer ${appState.getJwtToken}',
+            },
+          },
+          pollInterval: 5),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        print(result.errors);
+        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.hasErrors)
+          return Center(child: Text("Oops something went wrong"));
+        if (result.data != null &&
+            result.data['getVendorOrders']['orders'] != null) {
+          List vendorOrderList = result.data['getVendorOrders']['orders'];
+          final orders =
+              vendorOrderList.map((item) => Order.fromJson(item)).toList();
+          return Container(
+              height: MediaQuery.of(context).size.height,
+              child: orderListComponent(orders));
+        }
+        return Container();
+      },
+    );
+  }
+}
+
+class OrderListWidget extends StatelessWidget {
+  final Order orderItems;
+  OrderListWidget({this.orderItems});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 15),
       child: InkWell(
@@ -100,14 +145,14 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Order ID. 3452',
+                    orderItems.id,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    'Rs. 3,45,560',
+                    orderItems.totalPrice.toString(),
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -116,7 +161,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
                 ],
               ),
               Text(
-                'Apple iPhone X, and 2 more items',
+                'apple iphone x',
                 style: TextStyle(fontSize: 16),
               ),
               Container(
@@ -148,7 +193,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
                   Text(
-                    'Delivered',
+                    orderItems.status,
                     style: TextStyle(
                       color: GREEN_COLOR,
                       fontSize: 14,
@@ -161,14 +206,14 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Cash on Delivery (Paid)',
+                    orderItems.paymentMode,
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
                         color: PRIMARY_COLOR),
                   ),
                   Text(
-                    'Order complete',
+                    orderItems.status,
                     style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
