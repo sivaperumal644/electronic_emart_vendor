@@ -1,10 +1,15 @@
+import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/components/setting_option.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/modals/User.dart';
 import 'package:electronic_emart_vendor/screens/about_app/about_app.dart';
 import 'package:electronic_emart_vendor/screens/change_number/change_number.dart';
 import 'package:electronic_emart_vendor/screens/edit_address/edit_address.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
+import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -17,74 +22,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
-      body: ListView(
-        physics: BouncingScrollPhysics(),
-        children: <Widget>[
-          Container(padding: EdgeInsets.only(top: 20)),
-          textWidget('Profile', TextAlign.center, BLACK_COLOR, 16),
-          Container(padding: EdgeInsets.only(top: 40)),
-          textWidget('Arthur Morgan', TextAlign.center, PRIMARY_COLOR, 24),
-          textWidget('+91 9988778899', TextAlign.center, BLACK_COLOR, 16),
-          Container(padding: EdgeInsets.only(top: 20)),
-          textWidget('Edit Name', TextAlign.center, PRIMARY_COLOR, 16),
-          addressContainer(),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditAddress()),
-              );
-            },
-            child: SettingsOption(
-              title: 'Edit your Address',
-              color: BLACK_COLOR,
-            ),
+      body: getVendorInfo(),
+    );
+  }
+
+  Widget mainList(
+      String storeName, String phoneNumber, String addressLine, String city) {
+    final appState = Provider.of<AppState>(context);
+    return ListView(
+      physics: BouncingScrollPhysics(),
+      children: <Widget>[
+        Container(padding: EdgeInsets.only(top: 20)),
+        textWidget('Profile', TextAlign.center, BLACK_COLOR, 16),
+        Container(padding: EdgeInsets.only(top: 40)),
+        textWidget(storeName, TextAlign.center, PRIMARY_COLOR, 24),
+        textWidget(phoneNumber, TextAlign.center, BLACK_COLOR, 16),
+        Container(padding: EdgeInsets.only(top: 20)),
+        textWidget('Edit Name', TextAlign.center, PRIMARY_COLOR, 16),
+        addressContainer(storeName, addressLine, city, phoneNumber),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => EditAddress()),
+            );
+          },
+          child: SettingsOption(
+            title: 'Edit your Address',
+            color: BLACK_COLOR,
           ),
-          Container(padding: EdgeInsets.only(top: 10)),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ChangeNumber()),
-              );
-            },
-            child: SettingsOption(
-              title: 'Change Phone Number',
-              color: BLACK_COLOR,
-            ),
+        ),
+        Container(padding: EdgeInsets.only(top: 10)),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChangeNumber()),
+            );
+          },
+          child: SettingsOption(
+            title: 'Change Phone Number',
+            color: BLACK_COLOR,
           ),
-          Container(padding: EdgeInsets.only(top: 10)),
-          InkWell(
-            onTap: () async {
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.clear();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => LoginScreen(),
-                ),
-              );
-            },
-            child: SettingsOption(
-              title: 'Log Out',
-              color: BLACK_COLOR,
-            ),
+        ),
+        Container(padding: EdgeInsets.only(top: 10)),
+        InkWell(
+          onTap: () async {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.clear();
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => LoginScreen(),
+              ),
+            );
+          },
+          child: SettingsOption(
+            title: 'Log Out',
+            color: BLACK_COLOR,
           ),
-          Container(padding: EdgeInsets.only(top: 10)),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AboutApp()),
-              );
-            },
-            child: SettingsOption(
-              title: 'About app',
-              color: PRIMARY_COLOR,
-            ),
-          )
-        ],
-      ),
+        ),
+        Container(padding: EdgeInsets.only(top: 10)),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AboutApp()),
+            );
+          },
+          child: SettingsOption(
+            title: 'About app',
+            color: PRIMARY_COLOR,
+          ),
+        )
+      ],
     );
   }
 
@@ -104,7 +115,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget addressContainer() {
+  Widget addressContainer(
+      String storeName, String phoneNumber, String addressLine, String city) {
+    final appState = Provider.of<AppState>(context);
     return Container(
       padding: EdgeInsets.all(24),
       margin: EdgeInsets.all(20),
@@ -114,16 +127,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         children: <Widget>[
           textWidget('Your Address', TextAlign.start, PRIMARY_COLOR, 18),
-          textWidget('This will be used for delivery', TextAlign.start,
-              PRIMARY_COLOR.withOpacity(0.35), 12),
           Container(margin: EdgeInsets.only(top: 20)),
-          textWidget('Mr. Vineesh', TextAlign.start, BLACK_COLOR, 16),
-          textWidget('10/45, ABC Street, Lorem Ipsum,', TextAlign.start,
-              BLACK_COLOR, 16),
-          textWidget('Coimbatore - 456067', TextAlign.start, BLACK_COLOR, 16),
-          textWidget('+91 8898896969', TextAlign.start, PRIMARY_COLOR, 16),
+          textWidget(storeName, TextAlign.start, BLACK_COLOR, 16),
+          textWidget(addressLine, TextAlign.start, BLACK_COLOR, 16),
+          textWidget(city, TextAlign.start, BLACK_COLOR, 16),
+          textWidget(phoneNumber, TextAlign.start, PRIMARY_COLOR, 16),
         ],
       ),
+    );
+  }
+
+  Widget getVendorInfo() {
+    final appState = Provider.of<AppState>(context);
+    return Query(
+      options: QueryOptions(
+        document: getVendorInfoQuery,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+      ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        if (result.data != null &&
+            result.data['getVendorInfo']['user'] != null) {
+          final user = User.fromJson(result.data['getVendorInfo']['user']);
+          return mainList(user.storeName, user.phoneNumber,
+              user.addressType['addressLine'], user.addressType['city']);
+        }
+        return Container();
+      },
     );
   }
 }

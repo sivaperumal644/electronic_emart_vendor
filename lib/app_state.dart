@@ -11,7 +11,6 @@ class AppState with ChangeNotifier {
   String jwtTokenHeader = "";
   String vendorAddressLine = "";
   String vendorCity = "";
-  bool isInventoryEmpty = false;
 
   Future getFromMemory() async {
     final pref = await SharedPreferences.getInstance();
@@ -19,11 +18,6 @@ class AppState with ChangeNotifier {
     final id = pref.getString("vendorId");
     vendorId = id;
     jwtToken = token;
-  }
-
-  void setIsInventoryEmpty(bool text) {
-    isInventoryEmpty = text;
-    notifyListeners();
   }
 
   void setVendorAddressLine(String text) {
@@ -44,5 +38,4 @@ class AppState with ChangeNotifier {
   get getJwtToken => jwtToken;
   get getVendorAddressLine => vendorAddressLine;
   get getVendorCity => vendorCity;
-  get getIsInventoryEmpty => isInventoryEmpty;
 }

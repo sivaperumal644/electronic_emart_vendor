@@ -1,6 +1,10 @@
-String getAllInventoryQuery = '''
-query GetAllInventory{
-  getAllInventory{
+String getVendorInventoryQuery = '''
+query GetVendorInventory{
+  getVendorInventory{
+    error{
+      path
+      message
+    }
     inventory{
       id
       name
@@ -10,22 +14,6 @@ query GetAllInventory{
       category
       inStock
       imageUrl
-      vendor{
-        id
-        name
-        phoneNumber
-        address
-        email
-        storeName
-        blocked
-        panCardPhotoUrls
-        shopPhotoUrl
-        admin
-      }
-    }
-    error{
-      path
-      message
     }
   }
 }

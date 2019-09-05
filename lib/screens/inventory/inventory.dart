@@ -63,13 +63,11 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   Widget inventoryListWidget(List<Inventory> inventories) {
-    final appState = Provider.of<AppState>(context);
     return ListView.builder(
       physics: BouncingScrollPhysics(),
       itemCount: inventories.length + 1,
       itemBuilder: (context, index) {
         if (inventories.length == 0) {
-          appState.setIsInventoryEmpty(true);
           return Container(
             height: MediaQuery.of(context).size.height / 2,
             child: Center(
@@ -78,10 +76,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
           );
         }
         if (index == inventories.length) {
-          appState.setIsInventoryEmpty(false);
           return Container(height: 320);
         }
-        appState.setIsInventoryEmpty(false);
         return inventoryItem(inventories[index]);
       },
     );
@@ -161,7 +157,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     final appState = Provider.of<AppState>(context);
     return Query(
       options: QueryOptions(
-        document: getAllInventoryQuery,
+        document: getVendorInventoryQuery,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',
@@ -174,8 +170,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null &&
-            result.data['getAllInventory']['inventory'] != null) {
-          List inventoryList = result.data['getAllInventory']['inventory'];
+            result.data['getVendorInventory']['inventory'] != null) {
+          List inventoryList = result.data['getVendorInventory']['inventory'];
           final inventories =
               inventoryList.map((item) => Inventory.fromJson(item)).toList();
           return Container(

@@ -1,7 +1,10 @@
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../../app_state.dart';
@@ -14,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final appState = Provider.of<AppState>(context);
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: ListView(
@@ -31,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          emptyInventoryContainer(),
+          isInventoryEmpty(),
           Padding(
             padding: const EdgeInsets.only(left: 24.0, right: 24.0),
             child: Row(
@@ -140,6 +142,28 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
       ),
+    );
+  }
+
+  Widget isInventoryEmpty() {
+    final appState = Provider.of<AppState>(context);
+    return Query(
+      options: QueryOptions(
+        document: getVendorInventoryQuery,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+        pollInterval: 1,
+      ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        if (result.data != null &&
+                result.data['getVendorInventory']['inventory'] == null) {
+          return emptyInventoryContainer();
+        }
+        return Container();
+      },
     );
   }
 }

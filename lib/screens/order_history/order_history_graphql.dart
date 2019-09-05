@@ -9,17 +9,6 @@ query GetVendorOrders{
       id
       orderNo
       address
-      vendor{
-        id
-        phoneNumber
-        address
-        email
-        storeName
-        blocked
-        panCardPhotoUrls
-        shopPhotoUrl
-        admin
-      }
       customer{
         id
         name
@@ -27,7 +16,27 @@ query GetVendorOrders{
         address
         email
       }
-      cartItems 
+      cartItems{
+        id
+        name 
+        category
+        originalPrice
+        sellingPrice
+        description
+        inStock
+        imageUrl
+        vendor{
+          id
+          phoneNumber
+          address
+          email
+          storeName
+          blocked
+          panCardPhotoUrls
+          shopPhotoUrl
+          admin
+        }
+      } 
       status
       datePlaced
       updatedDate

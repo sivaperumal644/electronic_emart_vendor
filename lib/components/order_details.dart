@@ -1,8 +1,14 @@
 import 'package:electronic_emart_vendor/components/screen_indicator.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/modals/CartItemInputModel.dart';
+import 'package:electronic_emart_vendor/modals/OrderModel.dart';
 import 'package:flutter/material.dart';
 
 class OrderDetails extends StatelessWidget {
+  final List<CartItemInput> cartItemInput;
+  final Order order;
+  OrderDetails({this.cartItemInput, this.order});
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -13,7 +19,7 @@ class OrderDetails extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Text(
-              'Cash on Delivery',
+              order.paymentMode,
               style: TextStyle(
                   color: PRIMARY_COLOR,
                   fontSize: 14,
@@ -70,15 +76,7 @@ class OrderDetails extends StatelessWidget {
             ),
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(top: 16.0),
-          child: orderItemsRow(),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-          child: orderItemsRow(),
-        ),
-        orderItemsRow(),
+        displayOrderItems(),
         Padding(
           padding: const EdgeInsets.only(top: 44.0),
           child: Text(
@@ -93,7 +91,7 @@ class OrderDetails extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: Text(
-            'Mr. Vineesh',
+            'Mr. ' + order.address['name'],
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: BLACK_COLOR,
@@ -102,7 +100,7 @@ class OrderDetails extends StatelessWidget {
           ),
         ),
         Text(
-          '10/45, ABC Street, Lorem Ipsum,',
+          order.address['addressLine'],
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: BLACK_COLOR,
@@ -110,7 +108,7 @@ class OrderDetails extends StatelessWidget {
           ),
         ),
         Text(
-          'Coimbatore - 456067',
+          order.address['landmark'],
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: BLACK_COLOR,
@@ -118,7 +116,15 @@ class OrderDetails extends StatelessWidget {
           ),
         ),
         Text(
-          '+91 8898896969',
+          order.address['city'],
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: BLACK_COLOR,
+            fontSize: 14,
+          ),
+        ),
+        Text(
+          order.address['phoneNumber'],
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: PRIMARY_COLOR,
@@ -129,19 +135,34 @@ class OrderDetails extends StatelessWidget {
     );
   }
 
-  Widget orderItemsRow() {
+  Widget displayOrderItems() {
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: ScrollPhysics(),
+      itemCount: cartItemInput.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 16.0),
+          child: orderItemsRow(cartItemInput[index]),
+        );
+      },
+    );
+  }
+
+  Widget orderItemsRow(CartItemInput cartItemInputDetails) {
     return Container(
       padding: EdgeInsets.all(10),
       child: Row(
         children: <Widget>[
-          Image.asset('assets/images/place_holder.png'),
+          Image.network(cartItemInputDetails.imageUrl,
+              fit: BoxFit.cover, width: 55, height: 55),
           Padding(
             padding: const EdgeInsets.only(left: 16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Apple iPhone X - 64 GB, Rose Gold',
+                  cartItemInputDetails.name,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     color: BLACK_COLOR,
@@ -149,7 +170,7 @@ class OrderDetails extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Rs. 194,500',
+                  'Rs. ' + cartItemInputDetails.sellingPrice.toString(),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -163,57 +184,57 @@ class OrderDetails extends StatelessWidget {
       ),
     );
   }
-}
 
-Widget itemHeaderText() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: <Widget>[
-      Text(
-        'Order ID. 3456',
-        style: TextStyle(
-          color: BLACK_COLOR,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
+  Widget itemHeaderText() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        Text(
+          'Order ID. ' + order.orderNo,
+          style: TextStyle(
+            color: BLACK_COLOR,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-      ),
-      Text(
-        'Rs. 3,45,670',
-        style: TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-          color: PRIMARY_COLOR,
-        ),
-      )
-    ],
-  );
-}
+        Text(
+          'Rs. ' + order.totalPrice.toString(),
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: PRIMARY_COLOR,
+          ),
+        )
+      ],
+    );
+  }
 
-Widget screenIndicatorRow() {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.end,
-    children: <Widget>[
-      Padding(
-        padding: const EdgeInsets.only(right: 4.0),
-        child: ScreenIndicator(
-          color: PRIMARY_COLOR,
+  Widget screenIndicatorRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: ScreenIndicator(
+            color: PRIMARY_COLOR,
+          ),
         ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(right: 4.0),
-        child: ScreenIndicator(
+        Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: ScreenIndicator(
+            color: PRIMARY_COLOR.withOpacity(0.25),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 4.0),
+          child: ScreenIndicator(
+            color: PRIMARY_COLOR.withOpacity(0.25),
+          ),
+        ),
+        ScreenIndicator(
           color: PRIMARY_COLOR.withOpacity(0.25),
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(right: 4.0),
-        child: ScreenIndicator(
-          color: PRIMARY_COLOR.withOpacity(0.25),
-        ),
-      ),
-      ScreenIndicator(
-        color: PRIMARY_COLOR.withOpacity(0.25),
-      )
-    ],
-  );
+        )
+      ],
+    );
+  }
 }

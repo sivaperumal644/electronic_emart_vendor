@@ -351,14 +351,12 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         },
       ),
       builder: (runMutation, result) {
-        print(result.errors);
         return addItemButton(runMutation);
       },
       update: (Cache cache, QueryResult result) {
         return cache;
       },
       onCompleted: (dynamic resultData) {
-        print(resultData);
         if (resultData != null &&
             resultData['addNewInventory']['error'] == null) {
           Navigator.pop(context);
@@ -379,15 +377,12 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         },
       ),
       builder: (runMutation, result) {
-        print(result.errors);
-        print(result.data);
         return saveChangesButton(runMutation);
       },
       update: (Cache cache, QueryResult result) {
         return cache;
       },
       onCompleted: (dynamic resultData) {
-        print(resultData);
         if (resultData != null &&
             resultData['updateInventory']['error'] == null) {
           Navigator.pop(context);
@@ -408,7 +403,6 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         },
       ),
       builder: (runMutaion, result) {
-        print(result.errors);
         return deleteInventoryButton(runMutaion);
       },
       update: (Cache cache, QueryResult result) {

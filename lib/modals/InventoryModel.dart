@@ -33,7 +33,6 @@ class Inventory {
       category: json['category'],
       inStock: json['inStock'].toDouble(),
       imageUrl: json['imageUrl'],
-      vendor: User.fromJson(json['vendor']),
     );
   }
 }
