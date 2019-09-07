@@ -170,13 +170,16 @@ class _InventoryScreenState extends State<InventoryScreen> {
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null &&
-            result.data['getVendorInventory']['inventory'] != null) {
+            (result.data['getVendorInventory']['inventory'] != null ||
+                result.data['getVendorInventory']['inventory'] != [])) {
           List inventoryList = result.data['getVendorInventory']['inventory'];
-          final inventories =
-              inventoryList.map((item) => Inventory.fromJson(item)).toList();
-          return Container(
-              height: MediaQuery.of(context).size.height,
-              child: inventoryListWidget(inventories));
+          if (inventoryList != [] && inventoryList != null) {
+            final inventories =
+                inventoryList.map((item) => Inventory.fromJson(item)).toList();
+            return Container(
+                height: MediaQuery.of(context).size.height,
+                child: inventoryListWidget(inventories));
+          }
         }
         return Container();
       },

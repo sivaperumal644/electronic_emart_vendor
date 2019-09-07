@@ -11,6 +11,10 @@ class AppState with ChangeNotifier {
   String jwtTokenHeader = "";
   String vendorAddressLine = "";
   String vendorCity = "";
+  String panFrontUrl = "";
+  String panBackUrl = "";
+  String shopPhotoUrl = "";
+  String combinedPanImagesUrl = "";
 
   Future getFromMemory() async {
     final pref = await SharedPreferences.getInstance();
@@ -35,7 +39,31 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
+  void setPanFrontUrl(String text) {
+    panFrontUrl = text;
+    notifyListeners();
+  }
+
+  void setPanBackUrl(String text) {
+    panBackUrl = text;
+    notifyListeners();
+  }
+
+  void setShopPhotoUrl(String text) {
+    shopPhotoUrl = text;
+    notifyListeners();
+  }
+
+  void setCombinedPanImagesUrl(String text) {
+    combinedPanImagesUrl = text;
+    notifyListeners();
+  }
+
   get getJwtToken => jwtToken;
   get getVendorAddressLine => vendorAddressLine;
   get getVendorCity => vendorCity;
+  get getPanFrontUrl => panFrontUrl;
+  get getPanBackUrl => panBackUrl;
+  get getShopPhotoUrl => shopPhotoUrl;
+  get getCombinedPanImagesUrl => combinedPanImagesUrl;
 }

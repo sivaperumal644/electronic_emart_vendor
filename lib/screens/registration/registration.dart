@@ -1,16 +1,18 @@
+import 'dart:convert';
+
+import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/components/form_process_header.dart';
 import 'package:electronic_emart_vendor/components/header_and_subheader.dart';
+import 'package:electronic_emart_vendor/components/imageSelectionWidget.dart';
 import 'package:electronic_emart_vendor/components/persistent_bottom_bar.dart';
-import 'package:electronic_emart_vendor/components/primary_button.dart';
-import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/login/login.dart';
 import 'package:electronic_emart_vendor/screens/registration/register_graohql.dart';
 import 'package:electronic_emart_vendor/screens/registration_sent/registration_sent.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -21,8 +23,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final pageController =
       PageController(initialPage: 0, keepPage: true, viewportFraction: 1);
   List<String> uploadedFile = [];
+  List<String> panCardUrls = [];
   int currentPage = 0;
   bool isPasswordCorrect = false;
+  String panImagesUrl;
 
   Map inputFields = {
     "phoneNumber": "",
@@ -77,28 +81,36 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   Widget bottomBarButtons(RunMutation runMutation) {
+    final appState = Provider.of<AppState>(context);
     return PersistentBottomBar(
       tertiaryOnPressed: () {
         if (currentPage == 0) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-          );
+          Navigator.pop(context);
         }
         pageController.previousPage(
           duration: Duration(milliseconds: 300),
           curve: Curves.fastLinearToSlowEaseIn,
         );
       },
-      primaryOnPressed: uploadedFile.length != 2 && currentPage == 2
+      primaryOnPressed: uploadedFile.length < 3 && currentPage == 2
           ? null
           : () {
               if (currentPage == 2) {
+                setState(() {
+                  panCardUrls.add(appState.getPanFrontUrl);
+                  panCardUrls.add(appState.getPanBackUrl);
+                  appState.setCombinedPanImagesUrl(jsonEncode(panCardUrls));
+                  //print(appState.getCombinedPanImagesUrl);
+                  panImagesUrl = '["${appState.getPanFrontUrl}","${appState.getPanBackUrl}"]';
+                  print(panImagesUrl);
+                });
                 runMutation({
                   'phoneNumber': inputFields['phoneNumber'],
                   'email': inputFields['email'],
                   'password': inputFields['password'],
                   'storeName': inputFields['storeName'],
+                  'pancardPhotoUrls': panImagesUrl,
+                  'shopPhotoUrl': appState.getShopPhotoUrl,
                   'address': {
                     'addressLine': inputFields['address'],
                     'city': inputFields['city'],
@@ -216,31 +228,40 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   Widget registrationUpload() {
-    return Padding(
-      padding: EdgeInsets.all(24.0),
-      child: Column(
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 24.0),
+      child: ListView(
+        physics: BouncingScrollPhysics(),
         children: <Widget>[
           uploadDocuments(
-              'PAN Card Front and Back',
-              'Submit scanned images of your PAN Card',
-              'Upload PAN Card',
-              'PANCARD'),
+            'PAN Card Front and Back',
+            'Submit scanned images of your PAN Card',
+            'PANCARD_FRONT',
+            'PANCARD_BACK',
+            true,
+          ),
           Container(margin: EdgeInsets.only(top: 30)),
           uploadDocuments(
             'Photograph of your shop',
             'Submit photo of your shop',
-            'Upload Shop Photo',
             'STOREPHOTO',
+            null,
+            false,
           ),
+          Container(height: 16),
         ],
       ),
     );
   }
 
-  Widget uploadDocuments(headerText, subHeaderText, buttonText, uploadFile) {
-    final isUploaded = uploadedFile.contains(uploadFile);
+  Widget uploadDocuments(
+      headerText, subHeaderText, uploadFile1, uploadFile2, isTwo) {
+    final isUploaded = isTwo
+        ? uploadedFile.contains(uploadFile1) &&
+            uploadedFile.contains(uploadFile2)
+        : uploadedFile.contains(uploadFile1);
+    final appState = Provider.of<AppState>(context);
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -256,24 +277,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               )
           ],
         ),
-        Container(margin: EdgeInsets.only(top: 10)),
-        isUploaded
-            ? TertiaryButton(
-                text: 'Remove',
-                onPressed: () {
-                  setState(() {
-                    uploadedFile.remove(uploadFile);
-                  });
-                },
-              )
-            : PrimaryButtonWidget(
-                buttonText: buttonText,
-                onPressed: () {
-                  setState(() {
-                    uploadedFile.add(uploadFile);
-                  });
-                },
-              )
+        Container(height: 24),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Container(),
+            ImageSelectionWidget(
+              // existingUrl: isTwo
+              //     ? appState.getPanFrontUrl()
+              //     : appState.getShopPhotoUrl(),
+              onUserImageSet: (url) {
+                setState(() {
+                  isTwo
+                      ? appState.setPanFrontUrl(url)
+                      : appState.setShopPhotoUrl(url);
+                  uploadedFile.add(uploadFile1);
+                });
+              },
+            ),
+            isTwo
+                ? ImageSelectionWidget(
+                    //existingUrl: appState.getPanBackUrl,
+                    onUserImageSet: (url) {
+                      setState(() {
+                        appState.setPanBackUrl(url);
+                        uploadedFile.add(uploadFile2);
+                      });
+                    },
+                  )
+                : Container(),
+          ],
+        )
       ],
     );
   }
@@ -282,9 +316,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Mutation(
       options: MutationOptions(document: createVendorMutation),
       builder: (runMutation, result) {
+        print(result.errors);
+        print(result.data);
         return bottomBarButtons(runMutation);
       },
       onCompleted: (dynamic resultdata) {
+        print(resultdata);
         if (resultdata != null && resultdata['createVendor']['error'] == null) {
           Navigator.push(
             context,

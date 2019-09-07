@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:math';
-
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,13 +35,13 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
     return Column(
       children: <Widget>[
         ClipRRect(
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(20),
           child: Container(
-            height: 100,
-            width: 100,
+            height: 120,
+            width: 120,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(50),
-                border: Border.all(color: Colors.grey.shade300, width: 1.3)),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: PRIMARY_COLOR.withOpacity(0.1), width: 1.3)),
             child: !isImageSet
                 ? Image.network(
                     inventoryImgUrl,

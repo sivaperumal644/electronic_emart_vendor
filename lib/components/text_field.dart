@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CustomTextField extends StatelessWidget {
-  final String labelText;
   final String hintText;
   final ValueChanged<String> onChanged;
   final controller;
@@ -13,7 +12,6 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
 
   CustomTextField({
-    this.labelText,
     this.onChanged,
     this.hintText,
     this.controller,
@@ -25,7 +23,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 8),
+      padding: EdgeInsets.only(left: 8, bottom: 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: PRIMARY_COLOR.withOpacity(0.1),
@@ -39,7 +37,6 @@ class CustomTextField extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold),
         decoration: InputDecoration(
           border: InputBorder.none,
-          labelText: labelText,
           hintText: hintText,
           errorText: errorText,
           hintStyle: TextStyle(

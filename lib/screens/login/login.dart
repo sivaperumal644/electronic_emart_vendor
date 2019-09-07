@@ -7,6 +7,7 @@ import 'package:electronic_emart_vendor/modals/User.dart';
 import 'package:electronic_emart_vendor/screens/login/login_graphql.dart';
 import 'package:electronic_emart_vendor/screens/registration/registration.dart';
 import 'package:electronic_emart_vendor/screens/welcome/welcome.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +20,9 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   Map inputFields = {"phoneNumber": "", "password": ""};
+  String errorText = "";
+  bool isErrorExist = false;
+  bool isButtonPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: CustomTextField(
               hintText: "Phone Number",
               obscureText: false,
+              maxLines: 1,
               onChanged: (val) {
                 setState(() {
                   inputFields['phoneNumber'] = val;
@@ -84,6 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.all(24.0),
             child: CustomTextField(
               hintText: "Password",
+              errorText: isErrorExist ? errorText : null,
               obscureText: true,
               onChanged: (val) {
                 inputFields['password'] = val;
@@ -101,18 +107,26 @@ class _LoginScreenState extends State<LoginScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(right: 24.0, top: 6.0),
-          child: PrimaryButtonWidget(
-            onPressed: () {
-              runMutation({
-                'phoneNumber': inputFields['phoneNumber'],
-                'password': inputFields['password']
-              });
-            },
-            buttonText: 'Login',
-          ),
-        ),
+        isButtonPressed
+            ? Padding(
+                padding: const EdgeInsets.only(right: 50.0, top: 6.0),
+                child: CupertinoActivityIndicator(),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(right: 24.0, top: 6.0),
+                child: PrimaryButtonWidget(
+                  onPressed: () {
+                    setState(() {
+                      isButtonPressed = true;
+                    });
+                    runMutation({
+                      'phoneNumber': inputFields['phoneNumber'],
+                      'password': inputFields['password']
+                    });
+                  },
+                  buttonText: 'Login',
+                ),
+              ),
       ],
     );
   }
@@ -220,11 +234,21 @@ class _LoginScreenState extends State<LoginScreen> {
         return loginButton(runMutation);
       },
       onCompleted: (dynamic resultData) async {
+        if (resultData['vendorLogin']['error'] != null) {
+          setState(() {
+            isErrorExist = true;
+            isButtonPressed = false;
+            errorText = resultData['vendorLogin']['error']['message'];
+          });
+        }
         final prefs = await SharedPreferences.getInstance();
         final appState = Provider.of<AppState>(context);
         if (resultData != null && resultData['vendorLogin']['error'] == null) {
           final user = User.fromJson(resultData['vendorLogin']['user']);
           if (user != null) {
+            setState(() {
+              isErrorExist = false;
+            });
             await prefs.setString(
                 'token', resultData['vendorLogin']['jwtToken']);
             await prefs.setString('vendorId', user.id);
