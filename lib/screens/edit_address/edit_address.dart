@@ -20,7 +20,7 @@ class _EditAddressState extends State<EditAddress> {
 
   Widget layout() {
     return ListView(
-      physics: BouncingScrollPhysics(),      
+      physics: BouncingScrollPhysics(),
       children: <Widget>[
         backButton(),
         texts(),
@@ -50,13 +50,13 @@ class _EditAddressState extends State<EditAddress> {
 
   Widget texts() {
     return Container(
-      padding: EdgeInsets.fromLTRB(24, 0, 24, 24),
+      padding: EdgeInsets.fromLTRB(24, 0, 24, 10),
       child: Column(
         children: <Widget>[
           text("Edit your Address", 30, PRIMARY_COLOR, false),
-          Container(padding: EdgeInsets.only(top: 24)),
+          Container(padding: EdgeInsets.only(top: 16)),
           text(
-            "Please enter your details carefully. The phone number you provide here will be used for contacting you.",
+            "Please enter your details carefully.",
             14,
             BLACK_COLOR,
             false,
@@ -72,19 +72,7 @@ class _EditAddressState extends State<EditAddress> {
       child: Column(
         children: <Widget>[
           CustomTextField(
-            hintText: "Flat/Building",
-            obscureText: false,
-            onChanged: (val) {},
-          ),
-          SizedBox(height: 20),
-          CustomTextField(
-            hintText: "Street/Locality",
-            obscureText: false,
-            onChanged: (val) {},
-          ),
-          SizedBox(height: 20),
-          CustomTextField(
-            hintText: "Landmark",
+            hintText: "Address",
             obscureText: false,
             onChanged: (val) {},
           ),
@@ -95,15 +83,8 @@ class _EditAddressState extends State<EditAddress> {
             onChanged: (val) {},
           ),
           SizedBox(height: 20),
-          CustomTextField(
-            hintText: "Phone Number",
-            obscureText: false,
-            onChanged: (val) {},
-          ),
-          SizedBox(height: 50),
           Container(
-            height: 50,
-            width: 360,
+            width: MediaQuery.of(context).size.width,
             child: PrimaryButtonWidget(
               buttonText: "Save Changes",
               onPressed: () {},

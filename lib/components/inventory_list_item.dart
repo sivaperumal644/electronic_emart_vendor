@@ -1,7 +1,9 @@
+import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class InvetoryListItem extends StatelessWidget {
   final Inventory inventoryItem;
@@ -10,6 +12,12 @@ class InvetoryListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
+    if (!inventoryItem.name
+        .toLowerCase()
+        .contains(appState.getSearchText.toLowerCase())) {
+      return Container();
+    }
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
@@ -32,12 +40,14 @@ class InvetoryListItem extends StatelessWidget {
                 ),
               ],
             ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                FeatherIcons.edit,
-                size: 24,
-                color: PRIMARY_COLOR,
+            Expanded(
+              child: IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  FeatherIcons.edit,
+                  size: 24,
+                  color: PRIMARY_COLOR,
+                ),
               ),
             )
           ],

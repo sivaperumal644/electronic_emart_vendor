@@ -11,10 +11,11 @@ class AppState with ChangeNotifier {
   String jwtTokenHeader = "";
   String vendorAddressLine = "";
   String vendorCity = "";
-  String panFrontUrl = "";
-  String panBackUrl = "";
-  String shopPhotoUrl = "";
+  String panFrontUrl;
+  String panBackUrl;
+  String shopPhotoUrl;
   String combinedPanImagesUrl = "";
+  String searchText = "";
 
   Future getFromMemory() async {
     final pref = await SharedPreferences.getInstance();
@@ -59,6 +60,11 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
+  void setSearchText(String text){
+    searchText = text;
+    notifyListeners();
+  }
+
   get getJwtToken => jwtToken;
   get getVendorAddressLine => vendorAddressLine;
   get getVendorCity => vendorCity;
@@ -66,4 +72,5 @@ class AppState with ChangeNotifier {
   get getPanBackUrl => panBackUrl;
   get getShopPhotoUrl => shopPhotoUrl;
   get getCombinedPanImagesUrl => combinedPanImagesUrl;
+  get getSearchText => searchText;
 }

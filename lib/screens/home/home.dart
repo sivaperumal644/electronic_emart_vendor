@@ -1,6 +1,8 @@
+import 'package:electronic_emart_vendor/components/statistics_list_widget.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
+import 'package:electronic_emart_vendor/screens/order_history/order_history.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -43,16 +45,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   'Quick Statastics',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
-                TertiaryButton(text: 'View more')
+                TertiaryButton(
+                  text: 'View more',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderExpandedScreen(),
+                      ),
+                    );
+                  },
+                )
               ],
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
-              placeHolderContainer(),
-              placeHolderContainer(),
-              placeHolderContainer()
+              StatisticsListWidget(),
+              StatisticsListWidget(),
+              StatisticsListWidget(),
             ],
           ),
           Container(
@@ -63,7 +75,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           shortCutWidgets(FeatherIcons.shoppingCart, 'Manage your inventory'),
-          shortCutWidgets(FeatherIcons.box, 'Manage your inventory'),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => OrderExpandedScreen()),
+              );
+            },
+            child: shortCutWidgets(FeatherIcons.box, 'View your order history'),
+          ),
           shortCutWidgets(FeatherIcons.userCheck, 'Contact Support'),
         ],
       ),
@@ -125,8 +145,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget shortCutWidgets(icon, text) {
     return Container(
-      padding: EdgeInsets.only(left: 24.0, right: 24.0, bottom: 20.0),
+      padding:
+          EdgeInsets.only(left: 24.0, right: 24.0, bottom: 10.0, top: 10.0),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Icon(icon, color: PRIMARY_COLOR.withOpacity(0.5)),
           Padding(
@@ -159,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.data != null &&
-                result.data['getVendorInventory']['inventory'] == null) {
+            result.data['getVendorInventory']['inventory'] == null) {
           return emptyInventoryContainer();
         }
         return Container();

@@ -31,20 +31,23 @@ class _LoginScreenState extends State<LoginScreen> {
       body: ListView(
         children: <Widget>[
           Container(
-            height: 235,
+            height: 240,
             color: PRIMARY_COLOR,
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: <Widget>[
                   nameAndLogoWidget(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 35.0),
-                    child: Text(
-                      'Supercharge your business with us!',
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: WHITE_COLOR,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 35.0),
+                      child: Text(
+                        'Supercharge your business with us!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: WHITE_COLOR,
+                        ),
                       ),
                     ),
                   ),
@@ -78,6 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
               hintText: "Phone Number",
               obscureText: false,
               maxLines: 1,
+              keyboardType: TextInputType.number,
               onChanged: (val) {
                 setState(() {
                   inputFields['phoneNumber'] = val;
@@ -200,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
           fit: BoxFit.cover,
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 30.0),
+          padding: const EdgeInsets.only(left: 20.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

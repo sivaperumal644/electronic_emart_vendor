@@ -152,6 +152,7 @@ class OrderDetails extends StatelessWidget {
   Widget orderItemsRow(CartItemInput cartItemInputDetails) {
     return Container(
       padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: GREY_COLOR.withOpacity(0.15)),
       child: Row(
         children: <Widget>[
           Image.network(cartItemInputDetails.imageUrl,

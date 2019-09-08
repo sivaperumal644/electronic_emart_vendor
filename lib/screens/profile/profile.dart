@@ -1,5 +1,6 @@
 import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/components/setting_option.dart';
+import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/User.dart';
 import 'package:electronic_emart_vendor/screens/about_app/about_app.dart';
@@ -38,7 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         textWidget(storeName, TextAlign.center, PRIMARY_COLOR, 24),
         textWidget(phoneNumber, TextAlign.center, BLACK_COLOR, 16),
         Container(padding: EdgeInsets.only(top: 20)),
-        textWidget('Edit Name', TextAlign.center, PRIMARY_COLOR, 16),
+        TertiaryButton(text: 'Edit Name'),
         addressContainer(storeName, addressLine, city, phoneNumber),
         InkWell(
           onTap: () {
@@ -116,8 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget addressContainer(
-      String storeName, String phoneNumber, String addressLine, String city) {
-    final appState = Provider.of<AppState>(context);
+      String storeName, String addressLine, String city, String phoneNumber) {
     return Container(
       padding: EdgeInsets.all(24),
       margin: EdgeInsets.all(20),

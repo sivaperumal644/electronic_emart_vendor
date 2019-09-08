@@ -10,6 +10,7 @@ import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/registration/register_graohql.dart';
 import 'package:electronic_emart_vendor/screens/registration_sent/registration_sent.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
@@ -25,7 +26,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   List<String> uploadedFile = [];
   List<String> panCardUrls = [];
   int currentPage = 0;
-  bool isPasswordCorrect = false;
+  bool isRequiredFieldsFilled = true;
+  bool isConfirmedPasswordWrong = false;
+  bool isRegisterButtonClicked = false;
   String panImagesUrl;
 
   Map inputFields = {
@@ -82,49 +85,91 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   Widget bottomBarButtons(RunMutation runMutation) {
     final appState = Provider.of<AppState>(context);
-    return PersistentBottomBar(
-      tertiaryOnPressed: () {
-        if (currentPage == 0) {
-          Navigator.pop(context);
-        }
-        pageController.previousPage(
-          duration: Duration(milliseconds: 300),
-          curve: Curves.fastLinearToSlowEaseIn,
-        );
-      },
-      primaryOnPressed: uploadedFile.length < 3 && currentPage == 2
-          ? null
-          : () {
-              if (currentPage == 2) {
-                setState(() {
-                  panCardUrls.add(appState.getPanFrontUrl);
-                  panCardUrls.add(appState.getPanBackUrl);
-                  appState.setCombinedPanImagesUrl(jsonEncode(panCardUrls));
-                  //print(appState.getCombinedPanImagesUrl);
-                  panImagesUrl = '["${appState.getPanFrontUrl}","${appState.getPanBackUrl}"]';
-                  print(panImagesUrl);
-                });
-                runMutation({
-                  'phoneNumber': inputFields['phoneNumber'],
-                  'email': inputFields['email'],
-                  'password': inputFields['password'],
-                  'storeName': inputFields['storeName'],
-                  'pancardPhotoUrls': panImagesUrl,
-                  'shopPhotoUrl': appState.getShopPhotoUrl,
-                  'address': {
-                    'addressLine': inputFields['address'],
-                    'city': inputFields['city'],
-                  }
-                });
-              } else
-                pageController.nextPage(
-                  duration: Duration(milliseconds: 300),
-                  curve: Curves.fastLinearToSlowEaseIn,
-                );
+    return isRegisterButtonClicked
+        ? Container(
+            height: 60,
+            child: CupertinoActivityIndicator(),
+          )
+        : PersistentBottomBar(
+            tertiaryOnPressed: () {
+              if (currentPage == 0) {
+                Navigator.pop(context);
+              }
+              pageController.previousPage(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.fastLinearToSlowEaseIn,
+              );
             },
-      tertiaryText: 'Back',
-      primaryText: 'Next',
-    );
+            primaryOnPressed: uploadedFile.length < 3 && currentPage == 2
+                ? null
+                : () {
+                    if (currentPage == 2) {
+                      setState(() {
+                        isRegisterButtonClicked = true;
+                        panCardUrls.add(appState.getPanFrontUrl);
+                        panCardUrls.add(appState.getPanBackUrl);
+                        appState
+                            .setCombinedPanImagesUrl(jsonEncode(panCardUrls));
+                        panImagesUrl =
+                            '["${appState.getPanFrontUrl}","${appState.getPanBackUrl}"]';
+                        print(panImagesUrl);
+                      });
+                      runMutation({
+                        'phoneNumber': inputFields['phoneNumber'],
+                        'email': inputFields['email'],
+                        'password': inputFields['password'],
+                        'storeName': inputFields['storeName'],
+                        'pancardPhotoUrls': panImagesUrl,
+                        'shopPhotoUrl': appState.getShopPhotoUrl,
+                        'address': {
+                          'addressLine': inputFields['address'],
+                          'city': inputFields['city'],
+                        }
+                      });
+                    } else if (currentPage == 0) {
+                      if (inputFields['phoneNumber'] == "" ||
+                          inputFields['email'] == "" ||
+                          inputFields['password'] == "" ||
+                          inputFields['confirmPassword'] == "") {
+                        setState(() {
+                          isRequiredFieldsFilled = false;
+                        });
+                      } else if (inputFields['password'] ==
+                          inputFields['confirmPassword']) {
+                        setState(() {
+                          isRequiredFieldsFilled = true;
+                          isConfirmedPasswordWrong = false;
+                        });
+                        pageController.nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.fastLinearToSlowEaseIn,
+                        );
+                      } else {
+                        setState(() {
+                          isConfirmedPasswordWrong = true;
+                        });
+                      }
+                    } else if (currentPage == 1) {
+                      if (inputFields['storeName'] == "" ||
+                          inputFields['address'] == "" ||
+                          inputFields['city'] == "") {
+                        setState(() {
+                          isRequiredFieldsFilled = false;
+                        });
+                      } else {
+                        setState(() {
+                          isRequiredFieldsFilled = true;
+                        });
+                        pageController.nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.fastLinearToSlowEaseIn,
+                        );
+                      }
+                    }
+                  },
+            tertiaryText: 'Back',
+            primaryText: 'Next',
+          );
   }
 
   Widget pageView() {
@@ -155,7 +200,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       child: ListView(
         physics: BouncingScrollPhysics(),
         children: <Widget>[
-          Container(margin: EdgeInsets.only(top: 40.0)),
+          Container(margin: EdgeInsets.only(top: 10.0)),
           HeaderAndSubHeader(
             headerText:
                 storeDetails ? 'Name of the store' : 'Contact Information',
@@ -165,6 +210,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           ),
           Container(margin: EdgeInsets.only(top: 12.0)),
           CustomTextField(
+            keyboardType:
+                storeDetails ? TextInputType.text : TextInputType.number,
             hintText: storeDetails ? 'Name' : 'Phone Number',
             obscureText: false,
             controller:
@@ -212,6 +259,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           Container(margin: EdgeInsets.only(top: 24.0)),
           CustomTextField(
             hintText: storeDetails ? 'City' : 'Confirm Password',
+            errorText: storeDetails
+                ? null
+                : isConfirmedPasswordWrong
+                    ? 'Confirm password mismatch password'
+                    : null,
             controller:
                 storeDetails ? cityController : confirmPasswordController,
             obscureText: storeDetails ? false : true,
@@ -221,6 +273,17 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               });
             },
           ),
+          Container(margin: EdgeInsets.only(top: 8.0)),
+          isRequiredFieldsFilled
+              ? Container()
+              : Text(
+                  'Enter all above fields',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: PALE_RED_COLOR,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
           Container(margin: EdgeInsets.only(bottom: 40))
         ],
       ),
@@ -283,9 +346,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           children: <Widget>[
             Container(),
             ImageSelectionWidget(
-              // existingUrl: isTwo
-              //     ? appState.getPanFrontUrl()
-              //     : appState.getShopPhotoUrl(),
+              existingUrl:
+                  isTwo ? appState.getPanFrontUrl : appState.getShopPhotoUrl,
               onUserImageSet: (url) {
                 setState(() {
                   isTwo
@@ -297,7 +359,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
             isTwo
                 ? ImageSelectionWidget(
-                    //existingUrl: appState.getPanBackUrl,
+                    existingUrl: appState.getPanBackUrl,
                     onUserImageSet: (url) {
                       setState(() {
                         appState.setPanBackUrl(url);

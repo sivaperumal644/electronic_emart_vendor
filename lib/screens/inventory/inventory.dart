@@ -52,7 +52,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             child: ListView(
               physics: BouncingScrollPhysics(),
               children: <Widget>[
-                getAllInventoryQueryComponent(),
+                getAllVendorQueryComponent(),
                 Container(padding: EdgeInsets.only(bottom: 60))
               ],
             ),
@@ -102,6 +102,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
   }
 
   Widget searchBar() {
+    final appState = Provider.of<AppState>(context);
     return Container(
       padding: EdgeInsets.only(left: 24, right: 24.0),
       child: Row(
@@ -113,6 +114,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
             child: CustomTextField(
               hintText: 'Search for items',
               obscureText: false,
+              onChanged: (text) {
+                appState.setSearchText(text);
+              },
             ),
           ),
           Padding(
@@ -146,14 +150,19 @@ class _InventoryScreenState extends State<InventoryScreen> {
               });
             },
             hint: 'Name (A-Z)',
-            itemList: ['first', 'second', 'third'],
+            itemList: [
+              'Name (A-Z)',
+              'Name (Z-A)',
+              'Price (low to high)',
+              'Price (high to low)',
+            ],
           ),
         ],
       ),
     );
   }
 
-  Widget getAllInventoryQueryComponent() {
+  Widget getAllVendorQueryComponent() {
     final appState = Provider.of<AppState>(context);
     return Query(
       options: QueryOptions(
@@ -170,12 +179,20 @@ class _InventoryScreenState extends State<InventoryScreen> {
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null &&
-            (result.data['getVendorInventory']['inventory'] != null ||
-                result.data['getVendorInventory']['inventory'] != [])) {
+            result.data['getVendorInventory']['inventory'] != null) {
           List inventoryList = result.data['getVendorInventory']['inventory'];
           if (inventoryList != [] && inventoryList != null) {
             final inventories =
                 inventoryList.map((item) => Inventory.fromJson(item)).toList();
+            inventories.sort((a, b) => a.name.compareTo(b.name));
+            if (itemValue == 'Name (A-Z)')
+              inventories.sort((a, b) => a.name.compareTo(b.name));
+            else if(itemValue == 'Name (Z-A)')  
+              inventories.sort((a, b) => b.name.compareTo(a.name));
+            else if(itemValue == 'Price (low to high)') 
+              inventories.sort((a,b) => a.sellingPrice.compareTo(b.sellingPrice));
+            else if(itemValue == 'Price (high to low)')   
+              inventories.sort((a,b) => b.sellingPrice.compareTo(a.sellingPrice));
             return Container(
                 height: MediaQuery.of(context).size.height,
                 child: inventoryListWidget(inventories));
