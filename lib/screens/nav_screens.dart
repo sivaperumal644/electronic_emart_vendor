@@ -8,12 +8,20 @@ import 'home/home.dart';
 import 'inventory/inventory.dart';
 
 class NavigateScreens extends StatefulWidget {
+  final int selectedIndex;
+
+  const NavigateScreens({this.selectedIndex = 0});
   @override
   _NavigateScreensState createState() => _NavigateScreensState();
 }
 
 class _NavigateScreensState extends State<NavigateScreens> {
   int selectedIndex = 0;
+  @override
+  void initState() {
+    selectedIndex = widget.selectedIndex;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

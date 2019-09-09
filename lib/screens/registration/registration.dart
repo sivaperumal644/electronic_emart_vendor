@@ -1,12 +1,12 @@
-import 'dart:convert';
-
 import 'package:electronic_emart_vendor/app_state.dart';
+import 'package:electronic_emart_vendor/components/dialog_style.dart';
 import 'package:electronic_emart_vendor/components/form_process_header.dart';
 import 'package:electronic_emart_vendor/components/header_and_subheader.dart';
 import 'package:electronic_emart_vendor/components/imageSelectionWidget.dart';
 import 'package:electronic_emart_vendor/components/persistent_bottom_bar.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/constants/strings.dart';
 import 'package:electronic_emart_vendor/screens/registration/register_graohql.dart';
 import 'package:electronic_emart_vendor/screens/registration_sent/registration_sent.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
@@ -30,6 +30,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool isConfirmedPasswordWrong = false;
   bool isRegisterButtonClicked = false;
   String panImagesUrl;
+  String errorMessage = "";
 
   Map inputFields = {
     "phoneNumber": "",
@@ -108,11 +109,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         isRegisterButtonClicked = true;
                         panCardUrls.add(appState.getPanFrontUrl);
                         panCardUrls.add(appState.getPanBackUrl);
-                        appState
-                            .setCombinedPanImagesUrl(jsonEncode(panCardUrls));
+                        // appState
+                        //     .setCombinedPanImagesUrl(jsonEncode(panCardUrls));
                         panImagesUrl =
                             '["${appState.getPanFrontUrl}","${appState.getPanBackUrl}"]';
-                        print(panImagesUrl);
                       });
                       runMutation({
                         'phoneNumber': inputFields['phoneNumber'],
@@ -378,12 +378,44 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Mutation(
       options: MutationOptions(document: createVendorMutation),
       builder: (runMutation, result) {
-        print(result.errors);
-        print(result.data);
         return bottomBarButtons(runMutation);
       },
       onCompleted: (dynamic resultdata) {
-        print(resultdata);
+        if (resultdata != null && resultdata['createVendor']['error'] != null) {
+          setState(() {
+            errorMessage =
+                resultdata['createVendor']['error']['message'].toString();
+            isRegisterButtonClicked = false;
+          });
+          if (errorMessage == ErrorStatus.PHONE_NUMBER_EXISTS) {
+            return showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return DialogStyle(
+                    titleMessage: 'Phone Number already exists.',
+                    contentMessage:
+                        'The phone number you entered already exists. Please use a different number to register.',
+                    isRegister: false,
+                  );
+                });
+          }
+          if (errorMessage == ErrorStatus.EMAIL_EXISTS) {
+            return showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return DialogStyle(
+                    titleMessage: 'Email Id already exists.',
+                    contentMessage:
+                        'The Email Id you entered already exists. Please use a different Email Id to register.',
+                    isRegister: false,
+                  );
+                });
+          }
+          // Toast.show(errorMessage, context,
+          //     duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
+        }
         if (resultdata != null && resultdata['createVendor']['error'] == null) {
           Navigator.push(
             context,

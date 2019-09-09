@@ -31,10 +31,6 @@ query GetVendorOrders{
           address
           email
           storeName
-          blocked
-          panCardPhotoUrls
-          shopPhotoUrl
-          admin
         }
       } 
       status

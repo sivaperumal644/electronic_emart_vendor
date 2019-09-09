@@ -72,7 +72,14 @@ class WelcomeScreen extends StatelessWidget {
                   CupertinoPageRoute(builder: (context) => NavigateScreens()),
                 );
               },
-              primaryOnPressed: () {},
+              primaryOnPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => NavigateScreens(selectedIndex: 1),
+                  ),
+                );
+              },
             ),
           )
         ],

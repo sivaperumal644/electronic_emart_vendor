@@ -71,7 +71,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           return Container(
             height: MediaQuery.of(context).size.height / 2,
             child: Center(
-              child: Text('No inventories found'),
+              child: Text('No inventories found.'),
             ),
           );
         }
@@ -93,7 +93,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
             context,
             MaterialPageRoute(
               builder: (context) => AddInventoryScreen(
-                  inventory: inventory, isNewInventory: false),
+                inventory: inventory,
+                isNewInventory: false,
+              ),
             ),
           );
         },
@@ -179,24 +181,25 @@ class _InventoryScreenState extends State<InventoryScreen> {
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null &&
+            result.data['getVendorInventory'] != null &&
             result.data['getVendorInventory']['inventory'] != null) {
           List inventoryList = result.data['getVendorInventory']['inventory'];
-          if (inventoryList != [] && inventoryList != null) {
-            final inventories =
-                inventoryList.map((item) => Inventory.fromJson(item)).toList();
+          final inventories =
+              inventoryList.map((item) => Inventory.fromJson(item)).toList();
+          inventories.sort((a, b) => a.name.compareTo(b.name));
+          if (itemValue == 'Name (A-Z)')
             inventories.sort((a, b) => a.name.compareTo(b.name));
-            if (itemValue == 'Name (A-Z)')
-              inventories.sort((a, b) => a.name.compareTo(b.name));
-            else if(itemValue == 'Name (Z-A)')  
-              inventories.sort((a, b) => b.name.compareTo(a.name));
-            else if(itemValue == 'Price (low to high)') 
-              inventories.sort((a,b) => a.sellingPrice.compareTo(b.sellingPrice));
-            else if(itemValue == 'Price (high to low)')   
-              inventories.sort((a,b) => b.sellingPrice.compareTo(a.sellingPrice));
-            return Container(
-                height: MediaQuery.of(context).size.height,
-                child: inventoryListWidget(inventories));
-          }
+          else if (itemValue == 'Name (Z-A)')
+            inventories.sort((a, b) => b.name.compareTo(a.name));
+          else if (itemValue == 'Price (low to high)')
+            inventories
+                .sort((a, b) => a.sellingPrice.compareTo(b.sellingPrice));
+          else if (itemValue == 'Price (high to low)')
+            inventories
+                .sort((a, b) => b.sellingPrice.compareTo(a.sellingPrice));
+          return Container(
+              height: MediaQuery.of(context).size.height,
+              child: inventoryListWidget(inventories));
         }
         return Container();
       },

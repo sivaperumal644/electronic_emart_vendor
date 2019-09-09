@@ -2,12 +2,14 @@ import 'package:electronic_emart_vendor/components/statistics_list_widget.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
+import 'package:electronic_emart_vendor/screens/nav_screens.dart';
 import 'package:electronic_emart_vendor/screens/order_history/order_history.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../app_state.dart';
 
@@ -74,7 +76,20 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
-          shortCutWidgets(FeatherIcons.shoppingCart, 'Manage your inventory'),
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NavigateScreens(
+                    selectedIndex: 1,
+                  ),
+                ),
+              );
+            },
+            child: shortCutWidgets(
+                FeatherIcons.shoppingCart, 'Manage your inventory'),
+          ),
           InkWell(
             onTap: () {
               Navigator.push(
@@ -84,7 +99,12 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: shortCutWidgets(FeatherIcons.box, 'View your order history'),
           ),
-          shortCutWidgets(FeatherIcons.userCheck, 'Contact Support'),
+          InkWell(
+            onTap: () {
+              launch("tel:9442843180");
+            },
+            child: shortCutWidgets(FeatherIcons.phoneCall, 'Contact Support'),
+          ),
         ],
       ),
     );
@@ -180,8 +200,10 @@ class _HomeScreenState extends State<HomeScreen> {
         pollInterval: 1,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        if (result.data != null &&
-            result.data['getVendorInventory']['inventory'] == null) {
+        if (result.data == null ||
+            result.data['getVendorInventory'] == null ||
+            result.data['getVendorInventory']['inventory'] == null ||
+            result.data['getVendorInventory']['inventory'].length == 0) {
           return emptyInventoryContainer();
         }
         return Container();

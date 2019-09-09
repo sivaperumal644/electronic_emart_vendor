@@ -75,14 +75,6 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
       physics: BouncingScrollPhysics(),
       itemCount: orders.length,
       itemBuilder: (context, index) {
-        if (orders.length == 0) {
-          return Container(
-            height: MediaQuery.of(context).size.height / 2,
-            child: Center(
-              child: Text('No orders found'),
-            ),
-          );
-        }
         return OrderListWidget(
             orders: orders[index], cartItemInput: orders[index].cartItems);
       },
@@ -93,27 +85,32 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
     final appState = Provider.of<AppState>(context);
     return Query(
       options: QueryOptions(
-          document: getVendorOrdersQuery,
-          context: {
-            'headers': <String, String>{
-              'Authorization': 'Bearer ${appState.getJwtToken}',
-            },
+        document: getVendorOrdersQuery,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
           },
-          pollInterval: 5),
+        },
+        pollInterval: 1,
+      ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.loading) return Center(child: CupertinoActivityIndicator());
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null &&
-            result.data['getVendorOrders']['orders'] != null) {
+            result.data['getVendorOrders']['orders'] != null &&
+            result.data['getVendorOrders']['orders'].length != 0) {
           List vendorOrderList = result.data['getVendorOrders']['orders'];
           final orders =
               vendorOrderList.map((item) => Order.fromJson(item)).toList();
           return Container(
-              height: MediaQuery.of(context).size.height,
-              child: orderListComponent(orders));
+            height: MediaQuery.of(context).size.height,
+            child: orderListComponent(orders),
+          );
         }
-        return Container();
+        return Container(
+          child: Center(child: Text('No orders found.')),
+        );
       },
     );
   }

@@ -6,6 +6,7 @@ import 'package:electronic_emart_vendor/modals/User.dart';
 import 'package:electronic_emart_vendor/screens/about_app/about_app.dart';
 import 'package:electronic_emart_vendor/screens/change_number/change_number.dart';
 import 'package:electronic_emart_vendor/screens/edit_address/edit_address.dart';
+import 'package:electronic_emart_vendor/screens/edit_name/edit_name.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
 import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget mainList(
       String storeName, String phoneNumber, String addressLine, String city) {
-    final appState = Provider.of<AppState>(context);
     return ListView(
       physics: BouncingScrollPhysics(),
       children: <Widget>[
@@ -39,7 +39,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
         textWidget(storeName, TextAlign.center, PRIMARY_COLOR, 24),
         textWidget(phoneNumber, TextAlign.center, BLACK_COLOR, 16),
         Container(padding: EdgeInsets.only(top: 20)),
-        TertiaryButton(text: 'Edit Name'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TertiaryButton(
+              text: 'Edit Name',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditName()),
+                );
+              },
+            ),
+          ],
+        ),
         addressContainer(storeName, addressLine, city, phoneNumber),
         InkWell(
           onTap: () {

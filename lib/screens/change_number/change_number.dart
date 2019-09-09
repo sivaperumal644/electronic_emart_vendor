@@ -1,9 +1,13 @@
+import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/otp/otp.dart';
+import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
 
 class ChangeNumber extends StatefulWidget {
   @override
@@ -11,6 +15,10 @@ class ChangeNumber extends StatefulWidget {
 }
 
 class _ChangeNumber extends State<ChangeNumber> {
+  String phoneNumber = "";
+  bool isEmpty = false;
+  bool isButtonClicked = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +34,9 @@ class _ChangeNumber extends State<ChangeNumber> {
         backButton(),
         texts(),
         textFields(),
-        continueButton(),
+        isButtonClicked
+            ? CupertinoActivityIndicator()
+            : changePhoneNumberMutationComponent(),
       ],
     );
   }
@@ -55,10 +65,11 @@ class _ChangeNumber extends State<ChangeNumber> {
           text("Change your Number", 30, PRIMARY_COLOR, false),
           Container(padding: EdgeInsets.only(top: 24)),
           text(
-              "Enter your new phone number to use for login purposes. This will not be used for delivery.",
-              14,
-              BLACK_COLOR,
-              false),
+            "Enter your new phone number to use for login purposes. This will not be used for delivery.",
+            14,
+            BLACK_COLOR,
+            false,
+          ),
         ],
       ),
     );
@@ -69,13 +80,16 @@ class _ChangeNumber extends State<ChangeNumber> {
       padding: EdgeInsets.all(24),
       child: CustomTextField(
         hintText: "New Phone Number",
+        errorText: isEmpty ? 'Enter phone number' : null,
         obscureText: false,
-        onChanged: (val) {},
+        onChanged: (val) {
+          phoneNumber = val;
+        },
       ),
     );
   }
 
-  Widget continueButton() {
+  Widget continueButton(RunMutation runMutation) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
@@ -84,10 +98,16 @@ class _ChangeNumber extends State<ChangeNumber> {
           child: PrimaryButtonWidget(
             buttonText: "Continue",
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => OTPScreen()),
-              );
+              if (phoneNumber == "") {
+                setState(() {
+                  isEmpty = true;
+                });
+              } else {
+                setState(() {
+                  isButtonClicked = true;
+                });
+                runMutation({"phoneNumber": phoneNumber});
+              }
             },
           ),
         )
@@ -103,6 +123,32 @@ class _ChangeNumber extends State<ChangeNumber> {
           fontSize: size,
           fontWeight: isBold ? FontWeight.bold : null),
       textAlign: TextAlign.center,
+    );
+  }
+
+  Widget changePhoneNumberMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(
+        document: updateVendorAccountMutation,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+      ),
+      builder: (runMutation, result) {
+        return continueButton(runMutation);
+      },
+      update: (Cache cache, QueryResult result) {
+        return cache;
+      },
+      onCompleted: (dynamic resultData) {
+        if (resultData != null &&
+            resultData['updateVendorAccount']['error'] == null) {
+          Navigator.pop(context);
+        }
+      },
     );
   }
 }

@@ -32,6 +32,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       descriptionController,
       quantityController;
   String inventoryImageUrl;
+  bool isAddOrEditClicked = false;
+  bool isRemoveButtonClicked = false;
 
   Map inputFields = {
     "name": "",
@@ -150,15 +152,27 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
               ? Container(
                   height: 45,
                   margin: EdgeInsets.only(left: 24, right: 24, bottom: 24),
-                  child: addInventoryMutationComponent(),
+                  child: isAddOrEditClicked
+                      ? CupertinoActivityIndicator()
+                      : addInventoryMutationComponent(),
                 )
               : Container(
                   padding: EdgeInsets.only(bottom: 16, left: 24, right: 24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      deleteInventoryMutationComponent(),
-                      updateInventoryMutationComponent(),
+                      isRemoveButtonClicked
+                          ? Container(
+                              margin: EdgeInsets.only(left: 32.0),
+                              child: CupertinoActivityIndicator(),
+                            )
+                          : deleteInventoryMutationComponent(),
+                      isAddOrEditClicked
+                          ? Container(
+                              margin: EdgeInsets.only(right: 32.0),
+                              child: CupertinoActivityIndicator(),
+                            )
+                          : updateInventoryMutationComponent(),
                     ],
                   ),
                 ),
@@ -171,6 +185,9 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     return TertiaryButton(
       text: 'Delete Item',
       onPressed: () {
+        setState(() {
+          isRemoveButtonClicked = true;
+        });
         runMutation({
           "inventoryId": widget.inventory.id,
         });
@@ -183,6 +200,9 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     return PrimaryButtonWidget(
       buttonText: 'Add Item',
       onPressed: () {
+        setState(() {
+          isAddOrEditClicked = true;
+        });
         runMutation(
           {
             "name": nameController.text,
@@ -207,6 +227,9 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     return PrimaryButtonWidget(
       buttonText: 'Save Changes',
       onPressed: () {
+        setState(() {
+          isAddOrEditClicked = true;
+        });
         runMutation({
           "inventoryId": widget.inventory.id,
           "name": nameController.text,
@@ -238,6 +261,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 width: MediaQuery.of(context).size.width / 2,
                 child: CustomTextField(
                   hintText: 'Original Price (MRP)',
+                  keyboardType: TextInputType.number,
                   controller: originalPriceController,
                   obscureText: false,
                   onChanged: (val) {
@@ -250,6 +274,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 width: MediaQuery.of(context).size.width / 2,
                 child: CustomTextField(
                   hintText: 'Selling Price (for sale)',
+                  keyboardType: TextInputType.number,
                   controller: sellingPriceController,
                   obscureText: false,
                   onChanged: (val) {

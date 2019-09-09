@@ -9,14 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 
-class EditAddress extends StatefulWidget {
+class EditName extends StatefulWidget {
   @override
-  _EditAddressState createState() => _EditAddressState();
+  _EditName createState() => _EditName();
 }
 
-class _EditAddressState extends State<EditAddress> {
-  String addressText = "";
-  String cityText = "";
+class _EditName extends State<EditName> {
+  String storeName = "";
   bool isEmpty = false;
   bool isButtonClicked = false;
 
@@ -35,6 +34,7 @@ class _EditAddressState extends State<EditAddress> {
         backButton(),
         texts(),
         textFields(),
+        updateNameMutationComponent()
       ],
     );
   }
@@ -43,15 +43,12 @@ class _EditAddressState extends State<EditAddress> {
     return Row(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(left: 24, top: 24, bottom: 16),
+          padding: EdgeInsets.only(top: 24, left: 24),
           child: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(
-              FeatherIcons.arrowLeft,
-              color: PRIMARY_COLOR,
-            ),
+            child: Icon(FeatherIcons.arrowLeft, color: PRIMARY_COLOR),
           ),
         ),
       ],
@@ -60,27 +57,17 @@ class _EditAddressState extends State<EditAddress> {
 
   Widget texts() {
     return Container(
-      padding: EdgeInsets.fromLTRB(24, 0, 24, 10),
+      padding: EdgeInsets.only(top: 20, left: 24, right: 24),
       child: Column(
         children: <Widget>[
-          text("Edit your Address", 30, PRIMARY_COLOR, false),
-          Container(padding: EdgeInsets.only(top: 16)),
+          text("Change your Store Name", 30, PRIMARY_COLOR, false),
+          Container(padding: EdgeInsets.only(top: 24)),
           text(
-            "Please enter your details carefully.",
+            "Enter your new Store name. This name will be shown to customer and admin.",
             14,
             BLACK_COLOR,
             false,
           ),
-          isEmpty
-              ? Text(
-                  'Enter All the fields below',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: PALE_RED_COLOR,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              : Container()
         ],
       ),
     );
@@ -89,52 +76,45 @@ class _EditAddressState extends State<EditAddress> {
   Widget textFields() {
     return Container(
       padding: EdgeInsets.all(24),
-      child: Column(
-        children: <Widget>[
-          CustomTextField(
-            hintText: "Address",
-            obscureText: false,
-            onChanged: (val) {
-              addressText = val;
-            },
-          ),
-          SizedBox(height: 20),
-          CustomTextField(
-            hintText: "City",
-            obscureText: false,
-            onChanged: (val) {
-              cityText = val;
-            },
-          ),
-          SizedBox(height: 20),
-          isButtonClicked
-              ? CupertinoActivityIndicator()
-              : changeAddressMutationComponent(),
-        ],
+      child: CustomTextField(
+        hintText: "New Store name",
+        obscureText: false,
+        errorText: isEmpty ? 'Enter a name' : null,
+        onChanged: (val) {
+          storeName = val;
+        },
       ),
     );
   }
 
-  Widget saveChangesButton(RunMutation runMutation) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: PrimaryButtonWidget(
-        buttonText: "Save Changes",
-        onPressed: () {
-          if (addressText == "" || cityText == "") {
-            setState(() {
-              isEmpty = true;
-            });
-          } else {
-            setState(() {
-              isButtonClicked = true;
-            });
-            runMutation({
-              'address': {'addressLine': addressText, 'city': cityText}
-            });
-          }
-        },
-      ),
+  Widget continueButton(RunMutation runMutation) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        isButtonClicked
+            ? Container(
+                margin: EdgeInsets.only(right: 50),
+                child: CupertinoActivityIndicator(),
+              )
+            : Container(
+                padding: EdgeInsets.only(right: 24.0),
+                child: PrimaryButtonWidget(
+                  buttonText: "Continue",
+                  onPressed: () {
+                    if (storeName == "") {
+                      setState(() {
+                        isEmpty = true;
+                      });
+                    } else {
+                      setState(() {
+                        isButtonClicked = true;
+                      });
+                      runMutation({'storeName': storeName});
+                    }
+                  },
+                ),
+              )
+      ],
     );
   }
 
@@ -142,15 +122,14 @@ class _EditAddressState extends State<EditAddress> {
     return Text(
       "$title",
       style: TextStyle(
-        color: color,
-        fontSize: size,
-        fontWeight: isBold ? FontWeight.bold : null,
-      ),
+          color: color,
+          fontSize: size,
+          fontWeight: isBold ? FontWeight.bold : null),
       textAlign: TextAlign.center,
     );
   }
 
-  Widget changeAddressMutationComponent() {
+  Widget updateNameMutationComponent() {
     final appState = Provider.of<AppState>(context);
     return Mutation(
       options: MutationOptions(
@@ -162,7 +141,7 @@ class _EditAddressState extends State<EditAddress> {
         },
       ),
       builder: (runMutation, result) {
-        return saveChangesButton(runMutation);
+        return continueButton(runMutation);
       },
       update: (Cache cache, QueryResult result) {
         return cache;

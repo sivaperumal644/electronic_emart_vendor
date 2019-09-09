@@ -8,7 +8,6 @@ class AppState with ChangeNotifier {
 
   String jwtToken = "";
   String vendorId = "";
-  String jwtTokenHeader = "";
   String vendorAddressLine = "";
   String vendorCity = "";
   String panFrontUrl;
@@ -36,7 +35,7 @@ class AppState with ChangeNotifier {
   }
 
   void setJwtToken(String text) {
-    jwtTokenHeader = text;
+    jwtToken = text;
     notifyListeners();
   }
 
@@ -60,7 +59,7 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
-  void setSearchText(String text){
+  void setSearchText(String text) {
     searchText = text;
     notifyListeners();
   }

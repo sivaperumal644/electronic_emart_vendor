@@ -1,8 +1,10 @@
 import 'package:electronic_emart_vendor/app_state.dart';
+import 'package:electronic_emart_vendor/components/dialog_style.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/constants/strings.dart';
 import 'package:electronic_emart_vendor/modals/User.dart';
 import 'package:electronic_emart_vendor/screens/login/login_graphql.dart';
 import 'package:electronic_emart_vendor/screens/registration/registration.dart';
@@ -93,7 +95,6 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.all(24.0),
             child: CustomTextField(
               hintText: "Password",
-              errorText: isErrorExist ? errorText : null,
               obscureText: true,
               onChanged: (val) {
                 inputFields['password'] = val;
@@ -245,6 +246,53 @@ class _LoginScreenState extends State<LoginScreen> {
             errorText = resultData['vendorLogin']['error']['message'];
           });
         }
+        else{
+          setState(() {
+            errorText = "";
+          });
+        }
+        if (errorText == ErrorStatus.USER_NOT_FOUND) {
+          return showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return DialogStyle(
+                titleMessage: 'Account does not exist',
+                contentMessage:
+                    'There is no account registered with your details. If you’re new, register your account before signing in.',
+                isRegister: true,
+              );
+            },
+          );
+        }
+        if (errorText == ErrorStatus.PASSWORD_INVALID) {
+          return showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return DialogStyle(
+                titleMessage: 'Password incorrect',
+                contentMessage:
+                    'The password you entered is incorrect. Please enter the correct password.',
+                isRegister: false,
+              );
+            },
+          );
+        }
+        if (errorText == ErrorStatus.NOT_APPROVED) {
+          return showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return DialogStyle(
+                titleMessage: 'Approval pending',
+                contentMessage:
+                    'Your account is waiting for admin approval, and can only be accessed once it is complete.',
+                isRegister: false,
+              );
+            },
+          );
+        }
         final prefs = await SharedPreferences.getInstance();
         final appState = Provider.of<AppState>(context);
         if (resultData != null && resultData['vendorLogin']['error'] == null) {
@@ -252,6 +300,7 @@ class _LoginScreenState extends State<LoginScreen> {
           if (user != null) {
             setState(() {
               isErrorExist = false;
+              errorText = "";
             });
             await prefs.setString(
                 'token', resultData['vendorLogin']['jwtToken']);
@@ -260,6 +309,8 @@ class _LoginScreenState extends State<LoginScreen> {
             appState.setVendorAddressLine(user.addressType['addressLine']);
             appState.setVendorCity(user.addressType['city']);
           }
+        }
+        if (errorText == "") {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => WelcomeScreen()),

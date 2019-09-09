@@ -89,7 +89,7 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
     StorageReference imageReference =
         storageReference.child('item$imgUrl/image.jpg');
     StorageUploadTask storageUploadTask = imageReference.putFile(item);
-    String url = await (await storageUploadTask.onComplete)
+    await (await storageUploadTask.onComplete)
         .ref
         .getDownloadURL()
         .then((url) {

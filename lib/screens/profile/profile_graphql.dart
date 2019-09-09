@@ -1,6 +1,6 @@
 String updateVendorAccountMutation = '''
-mutation UpdateVendorAccount(\$storeName:String, \$phoneNumber:String, \$email:String, \$pancardPhotoUrls:String, \$shopPhotoUrl:String, \$vendorId:String){
-  updateVendorAccount(storeName:\$storeName, phoneNumber:\$phoneNumber, email:\$email, pancardPhotoUrls:\$pancardPhotoUrls, shopPhotoUrl:\$shopPhotoUrl, vendorId:\$vendorId){
+mutation UpdateVendorAccount(\$storeName:String, \$phoneNumber:String, \$email:String, \$pancardPhotoUrls:String, \$shopPhotoUrl:String, \$vendorId:String, \$address: AddressType){
+  updateVendorAccount(storeName:\$storeName, phoneNumber:\$phoneNumber, email:\$email, pancardPhotoUrls:\$pancardPhotoUrls, shopPhotoUrl:\$shopPhotoUrl, vendorId:\$vendorId, address:\$address){
     error{
       path
       message
@@ -23,7 +23,7 @@ query GetVendorInfo{
       email
       storeName
       blocked
-      panCardPhotoUrls
+      pancardPhotoUrls
       shopPhotoUrl
       admin
     }

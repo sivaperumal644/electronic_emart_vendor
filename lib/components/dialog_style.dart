@@ -1,17 +1,23 @@
 import 'package:electronic_emart_vendor/components/primary_button.dart';
+import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/screens/registration/registration.dart';
 import 'package:flutter/material.dart';
 
 class DialogStyle extends StatelessWidget {
+  final String titleMessage;
+  final String contentMessage;
+  final bool isRegister;
+
+  const DialogStyle({this.titleMessage, this.contentMessage, this.isRegister});
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(24)
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       title: Center(
         child: Text(
-          'Approval pending',
+          titleMessage,
+          textAlign: TextAlign.center,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -23,7 +29,7 @@ class DialogStyle extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Text(
-            'Your account is waiting for admin approval, and can only be accessed once it is complete.',
+            contentMessage,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 14,
@@ -31,13 +37,35 @@ class DialogStyle extends StatelessWidget {
               color: BLACK_COLOR,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 32.0),
-            child: PrimaryButtonWidget(
-              buttonText: 'Got it',
-              onPressed: () {},
+          Container(
+            margin: EdgeInsets.only(top: 32),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                if (isRegister)
+                  TertiaryButton(
+                    text: 'Register',
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RegistrationScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                Container(),
+                PrimaryButtonWidget(
+                  buttonText: 'Got it',
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                Container()
+              ],
             ),
-          )
+          ),
         ],
       ),
     );
