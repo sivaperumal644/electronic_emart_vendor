@@ -1,16 +1,27 @@
 import 'package:electronic_emart_vendor/components/screen_indicator.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/constants/strings.dart';
 import 'package:electronic_emart_vendor/modals/CartItemInputModel.dart';
 import 'package:electronic_emart_vendor/modals/OrderModel.dart';
 import 'package:flutter/material.dart';
 
-class OrderDetails extends StatelessWidget {
+class OrderDetails extends StatefulWidget {
   final List<CartItemInput> cartItemInput;
   final Order order;
   OrderDetails({this.cartItemInput, this.order});
 
   @override
+  _OrderDetailsState createState() => _OrderDetailsState();
+}
+
+class _OrderDetailsState extends State<OrderDetails> {
+  @override
   Widget build(BuildContext context) {
+    String statusTitle =
+        StringResolver.getTextForOrderStatus(status: widget.order.status);
+    String statusMessage =
+        StringResolver.getMessageForOrderStatus(status: widget.order.status);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -19,7 +30,7 @@ class OrderDetails extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           children: <Widget>[
             Text(
-              order.paymentMode,
+              widget.order.paymentMode,
               style: TextStyle(
                   color: PRIMARY_COLOR,
                   fontSize: 14,
@@ -47,7 +58,7 @@ class OrderDetails extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 22.0),
           child: Text(
-            'Waiting for store confirmation',
+            statusTitle,
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -58,7 +69,7 @@ class OrderDetails extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
-            'We’re waiting for the store to confirm your order. Once confirmed, your order will be packaged and shipped.',
+            statusMessage,
             style: TextStyle(
               fontSize: 14,
               color: BLACK_COLOR,
@@ -91,7 +102,7 @@ class OrderDetails extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: Text(
-            'Mr. ' + order.address['name'],
+            'Mr. ' + widget.order.address['name'],
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: BLACK_COLOR,
@@ -100,7 +111,7 @@ class OrderDetails extends StatelessWidget {
           ),
         ),
         Text(
-          order.address['addressLine'],
+          widget.order.address['addressLine'],
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: BLACK_COLOR,
@@ -108,7 +119,7 @@ class OrderDetails extends StatelessWidget {
           ),
         ),
         Text(
-          order.address['landmark'],
+          widget.order.address['landmark'],
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: BLACK_COLOR,
@@ -116,7 +127,7 @@ class OrderDetails extends StatelessWidget {
           ),
         ),
         Text(
-          order.address['city'],
+          widget.order.address['city'],
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: BLACK_COLOR,
@@ -124,7 +135,7 @@ class OrderDetails extends StatelessWidget {
           ),
         ),
         Text(
-          order.address['phoneNumber'],
+          widget.order.address['phoneNumber'],
           style: TextStyle(
             fontWeight: FontWeight.bold,
             color: PRIMARY_COLOR,
@@ -139,11 +150,11 @@ class OrderDetails extends StatelessWidget {
     return ListView.builder(
       shrinkWrap: true,
       physics: ScrollPhysics(),
-      itemCount: cartItemInput.length,
+      itemCount: widget.cartItemInput.length,
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.only(top: 16.0),
-          child: orderItemsRow(cartItemInput[index]),
+          child: orderItemsRow(widget.cartItemInput[index]),
         );
       },
     );
@@ -152,7 +163,9 @@ class OrderDetails extends StatelessWidget {
   Widget orderItemsRow(CartItemInput cartItemInputDetails) {
     return Container(
       padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: GREY_COLOR.withOpacity(0.15)),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: GREY_COLOR.withOpacity(0.15)),
       child: Row(
         children: <Widget>[
           Image.network(cartItemInputDetails.imageUrl,
@@ -191,7 +204,7 @@ class OrderDetails extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          'Order ID. ' + order.orderNo,
+          'Order ID. ' + widget.order.orderNo,
           style: TextStyle(
             color: BLACK_COLOR,
             fontSize: 16,
@@ -199,7 +212,7 @@ class OrderDetails extends StatelessWidget {
           ),
         ),
         Text(
-          'Rs. ' + order.totalPrice.toString(),
+          'Rs. ' + widget.order.totalPrice.toString(),
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
@@ -214,27 +227,19 @@ class OrderDetails extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-        Padding(
+        Container(
           padding: const EdgeInsets.only(right: 4.0),
-          child: ScreenIndicator(
-            color: PRIMARY_COLOR,
-          ),
+          child: ScreenIndicator(color: PRIMARY_COLOR),
         ),
-        Padding(
+        Container(
           padding: const EdgeInsets.only(right: 4.0),
-          child: ScreenIndicator(
-            color: PRIMARY_COLOR.withOpacity(0.25),
-          ),
+          child: ScreenIndicator(color: PRIMARY_COLOR.withOpacity(0.25)),
         ),
-        Padding(
+        Container(
           padding: const EdgeInsets.only(right: 4.0),
-          child: ScreenIndicator(
-            color: PRIMARY_COLOR.withOpacity(0.25),
-          ),
+          child: ScreenIndicator(color: PRIMARY_COLOR.withOpacity(0.25)),
         ),
-        ScreenIndicator(
-          color: PRIMARY_COLOR.withOpacity(0.25),
-        )
+        ScreenIndicator(color: PRIMARY_COLOR.withOpacity(0.25))
       ],
     );
   }
