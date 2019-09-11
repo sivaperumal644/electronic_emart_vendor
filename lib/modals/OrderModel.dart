@@ -15,17 +15,18 @@ class Order {
   final double totalPrice;
   final String paymentMode;
 
-  Order(
-      {this.id,
-      this.orderNo,
-      this.address,
-      this.customer,
-      this.cartItems,
-      this.datePlaced,
-      this.status,
-      this.updatedDate,
-      this.totalPrice,
-      this.paymentMode,});
+  Order({
+    this.id,
+    this.orderNo,
+    this.address,
+    this.customer,
+    this.cartItems,
+    this.datePlaced,
+    this.status,
+    this.updatedDate,
+    this.totalPrice,
+    this.paymentMode,
+  });
 
   factory Order.fromJson(Map json) {
     List cartItems = json['cartItems'];
@@ -33,8 +34,9 @@ class Order {
       id: json['id'],
       orderNo: json['orderNo'],
       address: jsonDecode(json['address']),
-      customer: User.fromJson(json['customer']),
-      cartItems: cartItems.map((i) => CartItemInput.fromJson(i)).toList(),
+      //customer: User.fromJson(json['customer']),
+      cartItems:
+          cartItems.map((i) => CartItemInput.fromJson(i['inventory'])).toList(),
       status: json['status'],
       datePlaced: json['datePlaced'],
       updatedDate: json['updatedDate'],

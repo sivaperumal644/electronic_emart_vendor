@@ -17,20 +17,15 @@ query GetVendorOrders{
         email
       }
       cartItems{
-        id
-        name 
-        category
-        originalPrice
-        sellingPrice
-        description
-        inStock
-        imageUrl
-        vendor{
+        inventory{
           id
-          phoneNumber
-          address
-          email
-          storeName
+          name 
+          category
+          originalPrice
+          sellingPrice
+          description
+          inStock
+          imageUrl 
         }
       } 
       status

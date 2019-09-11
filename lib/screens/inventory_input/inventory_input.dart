@@ -1,5 +1,6 @@
 import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/components/chips_component.dart';
+import 'package:electronic_emart_vendor/components/dialog_style.dart';
 import 'package:electronic_emart_vendor/components/header_and_subheader.dart';
 import 'package:electronic_emart_vendor/components/imageSelectionWidget.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
@@ -203,6 +204,27 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         setState(() {
           isAddOrEditClicked = true;
         });
+        if (nameController.text == "" ||
+            selectedChips == "" ||
+            originalPriceController.text == "" ||
+            sellingPriceController.text == "" ||
+            descriptionController.text == "" ||
+            quantityController.text == "" ||
+            inventoryImageUrl == "") {
+          setState(() {
+            isAddOrEditClicked = false;
+          });
+          showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return DialogStyle(
+                    titleMessage: 'Required fields are empty',
+                    contentMessage:
+                        'Please fill all the fields to add your inventory.',
+                    isRegister: false);
+              });
+        }
         runMutation(
           {
             "name": nameController.text,

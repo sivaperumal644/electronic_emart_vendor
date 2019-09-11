@@ -33,7 +33,7 @@ class CartItemInput {
       description: json['description'],
       inStock: json['inStock'].toDouble(),
       imageUrl: json['imageUrl'],
-      vendor: User.fromJson(json['vendor']),
+      //vendor: User.fromJson(json['vendor']),
     );
   }
 }

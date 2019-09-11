@@ -12,8 +12,7 @@ class User {
   final bool admin;
   final Map addressType;
 
-  User(
-    {
+  User({
     this.id,
     this.name,
     this.phoneNumber,
@@ -27,17 +26,17 @@ class User {
   });
 
   factory User.fromJson(Map json) {
+    print('user ' + json.toString());
     return User(
-      id: json['id'],
-      name: json['name'],
-      phoneNumber: json['phoneNumber'],
-      email: json['email'],
-      storeName: json['storeName'],
-      blocked: json['blocked'],
-      panCardPhotoUrls: json['panCardPhotoUrls'],
-      shopPhotoUrl: json['shopPhotoUrl'],
-      admin: json['admin'],
-      addressType: jsonDecode(json['address'])
-    );
+        id: json['id'],
+        name: json['name'],
+        phoneNumber: json['phoneNumber'],
+        email: json['email'],
+        storeName: json['storeName'],
+        blocked: json['blocked'],
+        panCardPhotoUrls: json['panCardPhotoUrls'],
+        shopPhotoUrl: json['shopPhotoUrl'],
+        admin: json['admin'],
+        addressType: jsonDecode(json['address']));
   }
 }

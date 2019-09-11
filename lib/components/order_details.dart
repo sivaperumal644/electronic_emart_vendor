@@ -1,4 +1,5 @@
 import 'package:electronic_emart_vendor/components/screen_indicator.dart';
+import 'package:electronic_emart_vendor/components/screen_indicator_row.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/constants/strings.dart';
 import 'package:electronic_emart_vendor/modals/CartItemInputModel.dart';
@@ -21,6 +22,57 @@ class _OrderDetailsState extends State<OrderDetails> {
         StringResolver.getTextForOrderStatus(status: widget.order.status);
     String statusMessage =
         StringResolver.getMessageForOrderStatus(status: widget.order.status);
+    List<Color> colors = [];
+    Color statusMessageColor = PRIMARY_COLOR;
+
+    if (widget.order.status == OrderStatuses.PLACED_BY_CUSTOMER) {
+      setState(() {
+        colors = [
+          PRIMARY_COLOR,
+          PRIMARY_COLOR.withOpacity(0.3),
+          PRIMARY_COLOR.withOpacity(0.3),
+          PRIMARY_COLOR.withOpacity(0.3)
+        ];
+      });
+    }
+    if (widget.order.status == OrderStatuses.CANCELLED_BY_CUSTOMER ||
+        widget.order.status == OrderStatuses.CANCELLED_BY_STORE) {
+      setState(() {
+        colors = [
+          PALE_RED_COLOR,
+          PALE_RED_COLOR,
+          PALE_RED_COLOR,
+          PALE_RED_COLOR
+        ];
+        statusMessageColor = PALE_RED_COLOR;
+      });
+    }
+    if (widget.order.status == OrderStatuses.RECEIVED_BY_STORE) {
+      setState(() {
+        colors = [
+          PRIMARY_COLOR,
+          PRIMARY_COLOR,
+          PRIMARY_COLOR.withOpacity(0.3),
+          PRIMARY_COLOR.withOpacity(0.3)
+        ];
+      });
+    }
+
+    if (widget.order.status == OrderStatuses.PICKED_UP) {
+      setState(() {
+        colors = [
+          PRIMARY_COLOR,
+          PRIMARY_COLOR,
+          PRIMARY_COLOR,
+          PRIMARY_COLOR.withOpacity(0.3)
+        ];
+      });
+    }
+    if (widget.order.status == OrderStatuses.DELIVERED_AND_PAID) {
+      setState(() {
+        colors = [PRIMARY_COLOR, PRIMARY_COLOR, PRIMARY_COLOR, PRIMARY_COLOR];
+      });
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,11 +99,11 @@ class _OrderDetailsState extends State<OrderDetails> {
                 'ORDER STATUS',
                 style: TextStyle(
                   fontSize: 12,
-                  color: PRIMARY_COLOR,
+                  color: statusMessageColor,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              screenIndicatorRow(),
+              ScreenIndicatorRow(colors: colors),
             ],
           ),
         ),
@@ -62,7 +114,7 @@ class _OrderDetailsState extends State<OrderDetails> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: PRIMARY_COLOR,
+              color: statusMessageColor,
             ),
           ),
         ),
@@ -222,25 +274,6 @@ class _OrderDetailsState extends State<OrderDetails> {
       ],
     );
   }
-
-  Widget screenIndicatorRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: ScreenIndicator(color: PRIMARY_COLOR),
-        ),
-        Container(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: ScreenIndicator(color: PRIMARY_COLOR.withOpacity(0.25)),
-        ),
-        Container(
-          padding: const EdgeInsets.only(right: 4.0),
-          child: ScreenIndicator(color: PRIMARY_COLOR.withOpacity(0.25)),
-        ),
-        ScreenIndicator(color: PRIMARY_COLOR.withOpacity(0.25))
-      ],
-    );
-  }
 }
+
+
