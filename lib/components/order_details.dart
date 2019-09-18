@@ -1,4 +1,3 @@
-import 'package:electronic_emart_vendor/components/screen_indicator.dart';
 import 'package:electronic_emart_vendor/components/screen_indicator_row.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/constants/strings.dart';
@@ -154,7 +153,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: Text(
-            'Mr. ' + widget.order.address['name'],
+            widget.order.address['name'],
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: BLACK_COLOR,
@@ -275,5 +274,3 @@ class _OrderDetailsState extends State<OrderDetails> {
     );
   }
 }
-
-
