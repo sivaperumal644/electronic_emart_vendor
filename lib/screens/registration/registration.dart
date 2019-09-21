@@ -7,6 +7,7 @@ import 'package:electronic_emart_vendor/components/persistent_bottom_bar.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/constants/strings.dart';
+import 'package:electronic_emart_vendor/screens/otp/otp.dart';
 import 'package:electronic_emart_vendor/screens/registration/register_graohql.dart';
 import 'package:electronic_emart_vendor/screens/registration_sent/registration_sent.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
@@ -114,18 +115,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         panImagesUrl =
                             '["${appState.getPanFrontUrl}","${appState.getPanBackUrl}"]';
                       });
-                      runMutation({
-                        'phoneNumber': inputFields['phoneNumber'],
-                        'email': inputFields['email'],
-                        'password': inputFields['password'],
-                        'storeName': inputFields['storeName'],
-                        'pancardPhotoUrls': panImagesUrl,
-                        'shopPhotoUrl': appState.getShopPhotoUrl,
-                        'address': {
-                          'addressLine': inputFields['address'],
-                          'city': inputFields['city'],
-                        }
-                      });
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OTPScreen(
+                                  phoneNumber: inputFields['phoneNumber'],
+                                  onOTPSuccess: () {
+                                    runMutation({
+                                      'phoneNumber': inputFields['phoneNumber'],
+                                      'email': inputFields['email'],
+                                      'password': inputFields['password'],
+                                      'storeName': inputFields['storeName'],
+                                      'pancardPhotoUrls': panImagesUrl,
+                                      'shopPhotoUrl': appState.getShopPhotoUrl,
+                                      'address': {
+                                        'addressLine': inputFields['address'],
+                                        'city': inputFields['city'],
+                                      }
+                                    });
+                                  },),),);
                     } else if (currentPage == 0) {
                       if (inputFields['phoneNumber'] == "" ||
                           inputFields['email'] == "" ||
@@ -209,6 +217,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 : 'We will use this information to contact you',
           ),
           Container(margin: EdgeInsets.only(top: 12.0)),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+                'An OTP will be sent to this number. Please keep it ready.'),
+          ),
           CustomTextField(
             keyboardType:
                 storeDetails ? TextInputType.text : TextInputType.number,
