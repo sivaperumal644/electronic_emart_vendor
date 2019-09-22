@@ -1,5 +1,4 @@
 import 'package:electronic_emart_vendor/components/primary_button.dart';
-import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
@@ -10,8 +9,9 @@ import 'package:flutter/services.dart';
 class OTPScreen extends StatefulWidget {
   final String phoneNumber;
   final Function onOTPSuccess;
+  final Function onOTPIncorrect;
 
-  const OTPScreen({this.phoneNumber, this.onOTPSuccess});
+  const OTPScreen({this.phoneNumber, this.onOTPSuccess, this.onOTPIncorrect});
   @override
   _OTPScreenState createState() => _OTPScreenState();
 }
@@ -20,7 +20,7 @@ class _OTPScreenState extends State<OTPScreen> {
   String phoneNo;
   String smsOTP;
   String verificationId;
-  String errorMessage = "";
+  String errorMessage = null;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   signIn() async {
@@ -40,21 +40,23 @@ class _OTPScreenState extends State<OTPScreen> {
 
   verifyPhone() async {
     final PhoneCodeSent smsOTPSent = (String verId, [int forceCodeResend]) {
-      this.verificationId = verId;
+      setState(() {
+        this.verificationId = verId;
+      });
     };
     try {
       print("STARTING VERIFICATION of +91${widget.phoneNumber}");
       firebaseAuth.verifyPhoneNumber(
           phoneNumber: '+91${widget.phoneNumber}',
           codeSent: smsOTPSent,
-          timeout: const Duration(seconds: 20),
+          timeout: const Duration(seconds: 60),
           codeAutoRetrievalTimeout: (String verId) {
-            this.verificationId = verId;
+            setState(() {
+              this.verificationId = verId;
+            });
           },
           verificationCompleted: (AuthCredential phoneAuthCredential) {
             print("RECEIVED FROM AUTH: " + phoneAuthCredential.toString());
-            widget.onOTPSuccess();
-            Navigator.pop(context);
           },
           verificationFailed: (AuthException e) {
             print("AUTH VERIFICATION FAILED : " +
@@ -80,6 +82,15 @@ class _OTPScreenState extends State<OTPScreen> {
       backgroundColor: WHITE_COLOR,
       body: layout(),
     );
+  }
+
+  void handleError(PlatformException e) {
+    print(e.toString());
+    print('ERROR CODE : ' + e.code);
+    if (e.code == 'ERROR_INVALID_VERIFICATION_CODE') {
+      errorMessage = 'Invalid OTP';
+      widget.onOTPIncorrect();
+    }
   }
 
   Widget layout() {
@@ -109,15 +120,15 @@ class _OTPScreenState extends State<OTPScreen> {
           CustomTextField(
             hintText: "OTP",
             obscureText: false,
+            errorText: errorMessage,
             onChanged: (val) {
               this.smsOTP = val;
             },
           ),
           SizedBox(height: 20),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.end,
             children: <Widget>[
-              TertiaryButton(text: "Resend OTP", onPressed: () {}),
               PrimaryButtonWidget(
                 buttonText: "Verify",
                 onPressed: () async {
@@ -126,6 +137,14 @@ class _OTPScreenState extends State<OTPScreen> {
                         PhoneAuthProvider.getCredential(
                             verificationId: verificationId, smsCode: smsOTP);
                     print("RECEIVED CREDENTIAL : " + credential.toString());
+                    await firebaseAuth.signInWithCredential(credential).then(
+                        (authResult) {
+                      //OTP verification success
+                      print(authResult.toString());
+                      widget.onOTPSuccess();
+                    }, onError: (error) {
+                      handleError(error);
+                    });
                   } catch (e) {
                     handleError(e);
                   }
@@ -147,9 +166,4 @@ class _OTPScreenState extends State<OTPScreen> {
       ),
     );
   }
-}
-
-void handleError(PlatformException e) {
-  print(e.toString());
-  print('ERROR CODE : ' + e.code);
 }
