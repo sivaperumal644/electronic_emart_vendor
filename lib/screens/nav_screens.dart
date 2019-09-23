@@ -1,5 +1,5 @@
 import 'package:electronic_emart_vendor/components/bottom_bar.dart';
-import 'package:electronic_emart_vendor/screens/order_history/order_history.dart';
+import 'package:electronic_emart_vendor/screens/order_stats/order_stats.dart';
 import 'package:electronic_emart_vendor/screens/profile/profile.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +51,7 @@ class _NavigateScreensState extends State<NavigateScreens> {
       case 1:
         return InventoryScreen();
       case 2:
-        return OrderExpandedScreen();
+        return OrderStatScreen();
       case 3:
         return ProfileScreen();
       default:

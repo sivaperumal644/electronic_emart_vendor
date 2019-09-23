@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:electronic_emart_vendor/components/screen_indicator_row.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/constants/strings.dart';
@@ -219,7 +221,7 @@ class _OrderDetailsState extends State<OrderDetails> {
           color: GREY_COLOR.withOpacity(0.15)),
       child: Row(
         children: <Widget>[
-          Image.network(cartItemInputDetails.imageUrl,
+          Image.network(jsonDecode(cartItemInputDetails.imageUrl)[0],
               fit: BoxFit.cover, width: 55, height: 55),
           Padding(
             padding: const EdgeInsets.only(left: 16.0),

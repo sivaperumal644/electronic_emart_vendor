@@ -275,7 +275,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             sellingPriceController.text == "" ||
             descriptionController.text == "" ||
             quantityController.text == "" ||
-            inventoryImageUrls.length > 0) {
+            inventoryImageUrls.length == 0) {
           setState(() {
             isAddOrEditClicked = false;
           });

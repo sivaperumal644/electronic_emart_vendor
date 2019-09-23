@@ -41,6 +41,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     "storeName": "",
     "address": "",
     "city": "",
+    "bankAccountName": "",
+    "bankAccountIFSC": "",
+    "bankAccountNumber": "",
   };
 
   TextEditingController phoneNumberController,
@@ -49,7 +52,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       confirmPasswordController,
       storeNameController,
       addressController,
-      cityController;
+      cityController,
+      bankAccountNameController,
+      bankAccountIFSCController,
+      bankAccountNumberController;
 
   @override
   void initState() {
@@ -63,6 +69,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     storeNameController = TextEditingController(text: inputFields['storeName']);
     addressController = TextEditingController(text: inputFields['address']);
     cityController = TextEditingController(text: inputFields['city']);
+    bankAccountNameController =
+        TextEditingController(text: inputFields['bankAccountName']);
+    bankAccountIFSCController =
+        TextEditingController(text: inputFields['bankAccountIFSC']);
+    bankAccountNumberController =
+        TextEditingController(text: inputFields['bankAccountNumber']);
   }
 
   @override
@@ -72,7 +84,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       body: Column(
         children: <Widget>[
           Container(margin: EdgeInsets.only(top: 44.0)),
-          FormProcessHeader(activeIndicators: currentPage, totalIndicators: 3),
+          FormProcessHeader(activeIndicators: currentPage, totalIndicators: 4),
           Container(
             height: 0.5,
             margin: EdgeInsets.only(top: 32.0),
@@ -102,10 +114,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 curve: Curves.fastLinearToSlowEaseIn,
               );
             },
-            primaryOnPressed: uploadedFile.length < 3 && currentPage == 2
+            primaryOnPressed: uploadedFile.length < 3 && currentPage == 3
                 ? null
                 : () {
-                    if (currentPage == 2) {
+                    if (currentPage == 3) {
                       setState(() {
                         isRegisterButtonClicked = true;
                         panCardUrls.add(appState.getPanFrontUrl);
@@ -129,7 +141,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 'address': {
                                   'addressLine': inputFields['address'],
                                   'city': inputFields['city'],
-                                }
+                                },
+                                'bankAccountName':
+                                    inputFields['bankAccountName'],
+                                'bankAccountIFSC':
+                                    inputFields['bankAccountIFSC'],
+                                'bankAccountNumber':
+                                    inputFields['bankAccountNumber']
                               });
                             },
                           ),
@@ -174,6 +192,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                           curve: Curves.fastLinearToSlowEaseIn,
                         );
                       }
+                    } else if (currentPage == 2) {
+                      if (inputFields['bankAccountName'] == "" ||
+                          inputFields['bankAccountIFSC'] == "" ||
+                          inputFields['bankAccountNumber'] == "") {
+                        setState(() {
+                          isRequiredFieldsFilled = false;
+                        });
+                      } else {
+                        setState(() {
+                          isRequiredFieldsFilled = true;
+                        });
+                        pageController.nextPage(
+                          duration: Duration(microseconds: 300),
+                          curve: Curves.fastLinearToSlowEaseIn,
+                        );
+                      }
                     }
                   },
             tertiaryText: 'Back',
@@ -189,6 +223,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         children: <Widget>[
           registrationStep(),
           registrationStep(),
+          registrationBankDetails(),
           registrationUpload(),
         ],
         scrollDirection: Axis.horizontal,
@@ -223,7 +258,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                      'An OTP will be sent to this number. Please keep it ready.'),
+                    'An OTP will be sent to this number. Please keep it ready.',
+                  ),
                 ),
           CustomTextField(
             keyboardType:
@@ -296,9 +332,88 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   'Enter all above fields',
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                      color: PALE_RED_COLOR,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16),
+                    color: PALE_RED_COLOR,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+          Container(margin: EdgeInsets.only(bottom: 40))
+        ],
+      ),
+    );
+  }
+
+  Widget registrationBankDetails() {
+    return Container(
+      margin: EdgeInsets.only(left: 24.0, right: 24.0),
+      child: ListView(
+        physics: BouncingScrollPhysics(),
+        children: <Widget>[
+          HeaderAndSubHeader(
+            headerText: 'Bank Account Number',
+            subHeaderText:
+                "Please enter the bank A/C No. you'd like to use for transactions",
+          ),
+          Container(height: 16.0),
+          CustomTextField(
+            controller: bankAccountNumberController,
+            hintText: 'Account Number',
+            maxLines: 1,
+            keyboardType: TextInputType.number,
+            obscureText: false,
+            onChanged: (val) {
+              inputFields['bankAccountNumber'] = val;
+            },
+          ),
+          Container(height: 24),
+          Text(
+            'Account Holder Name',
+            style: TextStyle(
+              fontSize: 16,
+              color: BLACK_COLOR,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(height: 16),
+          CustomTextField(
+            controller: bankAccountNameController,
+            hintText: 'A/C Holder Name',
+            maxLines: 1,
+            obscureText: false,
+            onChanged: (val) {
+              inputFields['bankAccountName'] = val;
+            },
+          ),
+          Container(height: 24),
+          Text(
+            'IFSC Code',
+            style: TextStyle(
+              fontSize: 16,
+              color: BLACK_COLOR,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(height: 16),
+          CustomTextField(
+            controller: bankAccountIFSCController,
+            hintText: 'IFSC Code',
+            maxLines: 1,
+            obscureText: false,
+            onChanged: (val) {
+              inputFields['bankAccountIFSC'] = val;
+            },
+          ),
+          Container(height: 32),
+          isRequiredFieldsFilled
+              ? Container()
+              : Text(
+                  'Enter all above fields',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: PALE_RED_COLOR,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
           Container(margin: EdgeInsets.only(bottom: 40))
         ],
@@ -391,6 +506,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   Widget createVendorMutationComponent() {
+    final appState = Provider.of<AppState>(context);
     return Mutation(
       options: MutationOptions(document: createVendorMutation),
       builder: (runMutation, result) {
@@ -433,6 +549,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           //     duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         }
         if (resultdata != null && resultdata['createVendor']['error'] == null) {
+          appState.setPanFrontUrl(null);
+          appState.setPanBackUrl(null);
+          appState.setShopPhotoUrl(null);
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => RegistrationSent()),
