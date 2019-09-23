@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/components/chips_component.dart';
 import 'package:electronic_emart_vendor/components/dialog_style.dart';
@@ -32,7 +34,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       sellingPriceController,
       descriptionController,
       quantityController;
-  String inventoryImageUrl;
+  List inventoryImageUrls = [];
+
   bool isAddOrEditClicked = false;
   bool isRemoveButtonClicked = false;
 
@@ -54,7 +57,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       descriptionController = TextEditingController();
       quantityController = TextEditingController();
       selectedChips = "";
-      inventoryImageUrl = null;
+      inventoryImageUrls = [];
     } else {
       nameController = TextEditingController(text: widget.inventory.name);
       originalPriceController = TextEditingController(
@@ -66,7 +69,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       quantityController =
           TextEditingController(text: widget.inventory.inStock.toString());
       selectedChips = widget.inventory.category;
-      inventoryImageUrl = widget.inventory.imageUrl;
+      inventoryImageUrls = jsonDecode(widget.inventory.imageUrl);
+      print(inventoryImageUrls);
     }
   }
 
@@ -107,12 +111,72 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
               },
             ),
           ),
-          headerText('Product Photo'),
-          ImageSelectionWidget(
-            existingUrl: inventoryImageUrl,
-            onUserImageSet: (imgUrl) {
-              inventoryImageUrl = imgUrl;
-            },
+          Container(
+            margin: EdgeInsets.fromLTRB(24.0, 16.0, 24.0, 16.0),
+            child: HeaderAndSubHeader(
+              headerText: 'Product Photo',
+              subHeaderText: 'Add minimum of one inventory image',
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              ImageSelectionWidget(
+                existingUrl:
+                    inventoryImageUrls.length == 0 ? null : inventoryImageUrls[0],
+                onUserImageSet: (imgUrl) {
+                  setState(() {
+                    inventoryImageUrls.add(imgUrl);
+                  });
+                },
+              ),
+              ImageSelectionWidget(
+                existingUrl:
+                    inventoryImageUrls.length < 2 ? null : inventoryImageUrls[1],
+                onUserImageSet: (imgUrl) {
+                  setState(() {
+                    inventoryImageUrls.add(imgUrl);
+                  });
+                },
+              ),
+              ImageSelectionWidget(
+                existingUrl:
+                    inventoryImageUrls.length < 3 ? null : inventoryImageUrls[2],
+                onUserImageSet: (imgUrl) {
+                  setState(() {
+                    inventoryImageUrls.add(imgUrl);
+                  });
+                },
+              ),
+            ],
+          ),
+          Container(
+            margin: EdgeInsets.only(top: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                ImageSelectionWidget(
+                  existingUrl: inventoryImageUrls.length < 4
+                      ? null
+                      : inventoryImageUrls[3],
+                  onUserImageSet: (imgUrl) {
+                    setState(() {
+                      inventoryImageUrls.add(imgUrl);
+                    });
+                  },
+                ),
+                ImageSelectionWidget(
+                  existingUrl: inventoryImageUrls.length < 5 
+                      ? null
+                      : inventoryImageUrls[4],
+                  onUserImageSet: (imgUrl) {
+                    setState(() {
+                      inventoryImageUrls.add(imgUrl);
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
           headerText('Pricing'),
           priceFields(),
@@ -144,6 +208,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
               hintText: 'Items in Stock',
               controller: quantityController,
               obscureText: false,
+              keyboardType: TextInputType.number,
               onChanged: (val) {
                 inputFields['quantity'] = val;
               },
@@ -210,7 +275,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             sellingPriceController.text == "" ||
             descriptionController.text == "" ||
             quantityController.text == "" ||
-            inventoryImageUrl == "") {
+            inventoryImageUrls.length > 0) {
           setState(() {
             isAddOrEditClicked = false;
           });
@@ -233,7 +298,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             "sellingPrice": double.parse(sellingPriceController.text),
             "description": descriptionController.text,
             "inStock": double.parse(quantityController.text),
-            "imageUrl": inventoryImageUrl,
+            "imageUrl": jsonEncode(inventoryImageUrls),
             "address": {
               "addressLine": appState.getVendorAddressLine,
               "city": appState.getVendorCity,
@@ -260,7 +325,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           "sellingPrice": double.parse(sellingPriceController.text),
           "description": descriptionController.text,
           "inStock": double.parse(quantityController.text),
-          "imageUrl": inventoryImageUrl,
+          "imageUrl": jsonEncode(inventoryImageUrls),
           "address": {
             "addressLine": appState.getVendorAddressLine,
             "city": appState.getVendorCity,

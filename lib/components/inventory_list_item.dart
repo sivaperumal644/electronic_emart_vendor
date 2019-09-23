@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
@@ -92,7 +94,7 @@ class InvetoryListItem extends StatelessWidget {
   Widget inventoryListRow(context) {
     return Row(
       children: <Widget>[
-        Image.network(inventoryItem.imageUrl, height: 80, width: 80),
+        Image.network(jsonDecode(inventoryItem.imageUrl)[0], height: 80, width: 80),
         Container(margin: const EdgeInsets.only(left: 8.0)),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

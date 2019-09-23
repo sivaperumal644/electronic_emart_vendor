@@ -110,30 +110,31 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         isRegisterButtonClicked = true;
                         panCardUrls.add(appState.getPanFrontUrl);
                         panCardUrls.add(appState.getPanBackUrl);
-                        // appState
-                        //     .setCombinedPanImagesUrl(jsonEncode(panCardUrls));
                         panImagesUrl =
                             '["${appState.getPanFrontUrl}","${appState.getPanBackUrl}"]';
                       });
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => OTPScreen(
-                                  phoneNumber: inputFields['phoneNumber'],
-                                  onOTPSuccess: () {
-                                    runMutation({
-                                      'phoneNumber': inputFields['phoneNumber'],
-                                      'email': inputFields['email'],
-                                      'password': inputFields['password'],
-                                      'storeName': inputFields['storeName'],
-                                      'pancardPhotoUrls': panImagesUrl,
-                                      'shopPhotoUrl': appState.getShopPhotoUrl,
-                                      'address': {
-                                        'addressLine': inputFields['address'],
-                                        'city': inputFields['city'],
-                                      }
-                                    });
-                                  },),),);
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OTPScreen(
+                            phoneNumber: inputFields['phoneNumber'],
+                            onOTPSuccess: () {
+                              runMutation({
+                                'phoneNumber': inputFields['phoneNumber'],
+                                'email': inputFields['email'],
+                                'password': inputFields['password'],
+                                'storeName': inputFields['storeName'],
+                                'pancardPhotoUrls': panImagesUrl,
+                                'shopPhotoUrl': appState.getShopPhotoUrl,
+                                'address': {
+                                  'addressLine': inputFields['address'],
+                                  'city': inputFields['city'],
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                      );
                     } else if (currentPage == 0) {
                       if (inputFields['phoneNumber'] == "" ||
                           inputFields['email'] == "" ||
@@ -217,11 +218,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 : 'We will use this information to contact you',
           ),
           Container(margin: EdgeInsets.only(top: 12.0)),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-                'An OTP will be sent to this number. Please keep it ready.'),
-          ),
+          storeDetails
+              ? Container()
+              : Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                      'An OTP will be sent to this number. Please keep it ready.'),
+                ),
           CustomTextField(
             keyboardType:
                 storeDetails ? TextInputType.text : TextInputType.number,
