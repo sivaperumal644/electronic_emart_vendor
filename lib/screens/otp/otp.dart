@@ -86,10 +86,14 @@ class _OTPScreenState extends State<OTPScreen> {
 
   void handleError(var e) {
     print(e.toString());
-    print('ERROR CODE : ' + e.code);
-    if (e.code == 'ERROR_INVALID_VERIFICATION_CODE') {
-      errorMessage = 'Invalid OTP';
-      widget.onOTPIncorrect();
+    if (e is PlatformException) {
+      print('ERROR CODE : ' + e.code);
+      if (e.code == 'ERROR_INVALID_VERIFICATION_CODE') {
+        errorMessage = 'Invalid OTP';
+        widget.onOTPIncorrect();
+      }
+    } else{
+      print('error handled.');
     }
   }
 

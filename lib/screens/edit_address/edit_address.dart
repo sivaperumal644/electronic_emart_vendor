@@ -17,7 +17,6 @@ class EditAddress extends StatefulWidget {
 class _EditAddressState extends State<EditAddress> {
   String addressText = "";
   String cityText = "";
-  bool isEmpty = false;
   bool isButtonClicked = false;
 
   @override
@@ -71,16 +70,6 @@ class _EditAddressState extends State<EditAddress> {
             BLACK_COLOR,
             false,
           ),
-          isEmpty
-              ? Text(
-                  'Enter All the fields below',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: PALE_RED_COLOR,
-                    fontWeight: FontWeight.bold,
-                  ),
-                )
-              : Container()
         ],
       ),
     );
@@ -116,24 +105,27 @@ class _EditAddressState extends State<EditAddress> {
   }
 
   Widget saveChangesButton(RunMutation runMutation) {
+    final snackbar = SnackBar(
+      content: Text('Enter all the above fields'),
+    );
     return Container(
       width: MediaQuery.of(context).size.width,
-      child: PrimaryButtonWidget(
-        buttonText: "Save Changes",
-        onPressed: () {
-          if (addressText == "" || cityText == "") {
-            setState(() {
-              isEmpty = true;
-            });
-          } else {
-            setState(() {
-              isButtonClicked = true;
-            });
-            runMutation({
-              'address': {'addressLine': addressText, 'city': cityText}
-            });
-          }
-        },
+      child: Builder(
+        builder: (context) => PrimaryButtonWidget(
+          buttonText: "Save Changes",
+          onPressed: () {
+            if (addressText == "" || cityText == "") {
+              Scaffold.of(context).showSnackBar(snackbar);
+            } else {
+              setState(() {
+                isButtonClicked = true;
+              });
+              runMutation({
+                'address': {'addressLine': addressText, 'city': cityText}
+              });
+            }
+          },
+        ),
       ),
     );
   }
@@ -170,6 +162,9 @@ class _EditAddressState extends State<EditAddress> {
       onCompleted: (dynamic resultData) {
         if (resultData != null &&
             resultData['updateVendorAccount']['error'] == null) {
+          setState(() {
+           isButtonClicked = false; 
+          });
           Navigator.pop(context);
         }
       },

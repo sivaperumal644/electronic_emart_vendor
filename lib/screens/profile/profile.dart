@@ -4,6 +4,7 @@ import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/User.dart';
 import 'package:electronic_emart_vendor/screens/about_app/about_app.dart';
+import 'package:electronic_emart_vendor/screens/change_bank_details/change_bank_details.dart';
 import 'package:electronic_emart_vendor/screens/change_number/change_number.dart';
 import 'package:electronic_emart_vendor/screens/edit_address/edit_address.dart';
 import 'package:electronic_emart_vendor/screens/edit_name/edit_name.dart';
@@ -77,6 +78,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
           child: SettingsOption(
             title: 'Change Phone Number',
+            color: BLACK_COLOR,
+          ),
+        ),
+        Container(padding: EdgeInsets.only(top: 10)),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => ChangeBankDetails()),
+            );
+          },
+          child: SettingsOption(
+            title: 'Change Bank Details',
             color: BLACK_COLOR,
           ),
         ),
