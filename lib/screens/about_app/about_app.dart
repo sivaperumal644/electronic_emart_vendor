@@ -28,8 +28,8 @@ class AboutApp extends StatelessWidget {
               Container(padding: EdgeInsets.only(top: 24)),
               Center(
                 child: Image.asset(
-                  'assets/images/place_holder.png',
-                  height: 150,
+                  'assets/images/app_logo.png',
+                  height: 130,
                   width: 150,
                   fit: BoxFit.fill,
                 ),
@@ -37,7 +37,7 @@ class AboutApp extends StatelessWidget {
               Container(padding: EdgeInsets.only(top: 24)),
               Center(
                 child: Text(
-                  'App Name',
+                  'Be Shoppi',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: PRIMARY_COLOR,

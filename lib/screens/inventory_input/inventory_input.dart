@@ -38,6 +38,14 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
 
   bool isAddOrEditClicked = false;
   bool isRemoveButtonClicked = false;
+  String newCategory = "";
+  List<String> itemList = [
+    "Mobile Phones",
+    "Headphones",
+    "Laptops",
+    "Accessories",
+    "other +"
+  ];
 
   Map inputFields = {
     "name": "",
@@ -68,6 +76,9 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           TextEditingController(text: widget.inventory.description);
       quantityController =
           TextEditingController(text: widget.inventory.inStock.toString());
+      if (!itemList.contains(widget.inventory.category)) {
+        itemList.insert(itemList.length - 1, widget.inventory.category);
+      }
       selectedChips = widget.inventory.category;
       inventoryImageUrls = jsonDecode(widget.inventory.imageUrl);
     }
@@ -96,17 +107,66 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           Container(
             padding: EdgeInsets.fromLTRB(24, 20, 24, 10),
             child: ChipsComponent(
-              itemList: [
-                "Mobile Phones",
-                "Headphones",
-                "Laptops",
-                "Accessories"
-              ],
+              itemList: itemList,
               selectedChips: selectedChips,
               onChanged: (value) {
-                setState(() {
-                  selectedChips = value;
-                });
+                if (value != "other +") {
+                  setState(() {
+                    selectedChips = value;
+                  });
+                } else {
+                  print('hello world');
+                  setState(() {
+                    selectedChips = "";
+                  });
+                  showDialog(
+                      context: context,
+                      barrierDismissible: false,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Add a new category',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              CustomTextField(
+                                hintText: 'Enter category',
+                                obscureText: false,
+                                onChanged: (val) {
+                                  setState(() {
+                                    newCategory = val;
+                                  });
+                                },
+                              ),
+                              Container(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: <Widget>[
+                                  PrimaryButtonWidget(
+                                    buttonText: 'Add',
+                                    onPressed: newCategory.length == 0
+                                        ? null
+                                        : () {
+                                            setState(() {
+                                              itemList.insert(
+                                                itemList.length - 1,
+                                                newCategory,
+                                              );
+                                            });
+                                            Navigator.pop(context);
+                                          },
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      });
+                }
               },
             ),
           ),
@@ -145,19 +205,19 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                     });
                   },
                 ),
-              if (inventoryImageUrls.length >= 2)  
-              ImageSelectionWidget(
-                existingUrl: inventoryImageUrls.length < 3
-                    ? null
-                    : inventoryImageUrls[2],
-                onUserImageSet: (imgUrl) {
-                  setState(() {
-                    if (inventoryImageUrls.length >= 3)
-                      inventoryImageUrls.removeAt(2);
-                    inventoryImageUrls.insert(2, imgUrl);
-                  });
-                },
-              ),
+              if (inventoryImageUrls.length >= 2)
+                ImageSelectionWidget(
+                  existingUrl: inventoryImageUrls.length < 3
+                      ? null
+                      : inventoryImageUrls[2],
+                  onUserImageSet: (imgUrl) {
+                    setState(() {
+                      if (inventoryImageUrls.length >= 3)
+                        inventoryImageUrls.removeAt(2);
+                      inventoryImageUrls.insert(2, imgUrl);
+                    });
+                  },
+                ),
             ],
           ),
           Container(
@@ -166,31 +226,31 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 if (inventoryImageUrls.length >= 3)
-                ImageSelectionWidget(
-                  existingUrl: inventoryImageUrls.length < 4
-                      ? null
-                      : inventoryImageUrls[3],
-                  onUserImageSet: (imgUrl) {
-                    setState(() {
-                      if (inventoryImageUrls.length >= 4)
-                        inventoryImageUrls.removeAt(3);
-                      inventoryImageUrls.insert(3, imgUrl);
-                    });
-                  },
-                ),
+                  ImageSelectionWidget(
+                    existingUrl: inventoryImageUrls.length < 4
+                        ? null
+                        : inventoryImageUrls[3],
+                    onUserImageSet: (imgUrl) {
+                      setState(() {
+                        if (inventoryImageUrls.length >= 4)
+                          inventoryImageUrls.removeAt(3);
+                        inventoryImageUrls.insert(3, imgUrl);
+                      });
+                    },
+                  ),
                 if (inventoryImageUrls.length >= 4)
-                ImageSelectionWidget(
-                  existingUrl: inventoryImageUrls.length < 5
-                      ? null
-                      : inventoryImageUrls[4],
-                  onUserImageSet: (imgUrl) {
-                    setState(() {
-                      if (inventoryImageUrls.length >= 5)
-                        inventoryImageUrls.removeAt(4);
-                      inventoryImageUrls.insert(4, imgUrl);
-                    });
-                  },
-                ),
+                  ImageSelectionWidget(
+                    existingUrl: inventoryImageUrls.length < 5
+                        ? null
+                        : inventoryImageUrls[4],
+                    onUserImageSet: (imgUrl) {
+                      setState(() {
+                        if (inventoryImageUrls.length >= 5)
+                          inventoryImageUrls.removeAt(4);
+                        inventoryImageUrls.insert(4, imgUrl);
+                      });
+                    },
+                  ),
               ],
             ),
           ),

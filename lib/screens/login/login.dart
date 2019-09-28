@@ -38,18 +38,22 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Padding(
               padding: const EdgeInsets.all(24.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  nameAndLogoWidget(),
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 35.0),
-                      child: Text(
-                        'Supercharge your business with us!',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: WHITE_COLOR,
-                        ),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: nameAndLogoWidget(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 35.0),
+                    child: Text(
+                      'Supercharge your business with us!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: WHITE_COLOR,
                       ),
                     ),
                   ),
@@ -137,6 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget registerContainer() {
+    final appState = Provider.of<AppState>(context);
     return Container(
       margin: EdgeInsets.all(24),
       padding: EdgeInsets.all(20),
@@ -179,6 +184,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 PrimaryButtonWidget(
                   buttonText: 'Register',
                   onPressed: () {
+                    appState.setShopPhotoUrl(null);
+                    appState.setPanFrontUrl(null);
+                    appState.setPanBackUrl(null);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -197,20 +205,29 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Widget nameAndLogoWidget() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Image.asset(
-          'assets/images/place_holder.png',
-          width: 110,
-          height: 110,
-          fit: BoxFit.cover,
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: WHITE_COLOR,
+          ),
+          margin: EdgeInsets.only(top: 8),
+          padding: EdgeInsets.all(8),
+          child: Image.asset(
+            'assets/images/app_logo.png',
+            width: 120,
+            height: 95,
+            fit: BoxFit.cover,
+          ),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 20.0),
+          padding: const EdgeInsets.only(left: 20.0, top: 30.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'App Name',
+                'be shoppi',
                 style: TextStyle(
                   fontSize: 36,
                   color: WHITE_COLOR,
@@ -245,8 +262,7 @@ class _LoginScreenState extends State<LoginScreen> {
             isButtonPressed = false;
             errorText = resultData['vendorLogin']['error']['message'];
           });
-        }
-        else{
+        } else {
           setState(() {
             errorText = "";
           });

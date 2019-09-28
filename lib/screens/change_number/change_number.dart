@@ -170,6 +170,9 @@ class _ChangeNumber extends State<ChangeNumber> {
             );
           } else {
             print('phone Number does not exist');
+            setState(() {
+              isButtonClicked = false;
+            });
             Navigator.push(
               context,
               MaterialPageRoute(

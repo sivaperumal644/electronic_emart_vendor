@@ -1,11 +1,14 @@
+import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegistrationSent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       body: Stack(
@@ -84,6 +87,9 @@ class RegistrationSent extends StatelessWidget {
                     PrimaryButtonWidget(
                       buttonText: 'Got it',
                       onPressed: () {
+                        appState.setPanBackUrl(null);
+                        appState.setPanFrontUrl(null);
+                        appState.setShopPhotoUrl(null);
                         Navigator.push(
                           context,
                           MaterialPageRoute(
