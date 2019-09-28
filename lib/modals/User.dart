@@ -26,7 +26,6 @@ class User {
   });
 
   factory User.fromJson(Map json) {
-    print('user ' + json.toString());
     return User(
         id: json['id'],
         name: json['name'],

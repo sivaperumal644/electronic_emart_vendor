@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType keyboardType;
   final int maxLines;
   final bool obscureText;
+  final int maxLength;
 
   CustomTextField({
     this.onChanged,
@@ -19,6 +20,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.maxLines,
     this.obscureText,
+    this.maxLength,
   });
   @override
   Widget build(BuildContext context) {
@@ -33,11 +35,13 @@ class CustomTextField extends StatelessWidget {
         onChanged: onChanged,
         keyboardType: keyboardType,
         maxLines: maxLines,
+        maxLength: maxLength,
         obscureText: obscureText,
         style: TextStyle(fontWeight: FontWeight.bold),
         decoration: InputDecoration(
           border: InputBorder.none,
           hintText: hintText,
+          counter: maxLength == null ? null : Container(),
           errorText: errorText,
           hintStyle: TextStyle(
             color: PRIMARY_COLOR.withOpacity(0.35),

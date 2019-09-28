@@ -49,7 +49,7 @@ class _OTPScreenState extends State<OTPScreen> {
       firebaseAuth.verifyPhoneNumber(
           phoneNumber: '+91${widget.phoneNumber}',
           codeSent: smsOTPSent,
-          timeout: const Duration(seconds: 60),
+          timeout: const Duration(seconds: 1),
           codeAutoRetrievalTimeout: (String verId) {
             setState(() {
               this.verificationId = verId;
@@ -84,7 +84,7 @@ class _OTPScreenState extends State<OTPScreen> {
     );
   }
 
-  void handleError(PlatformException e) {
+  void handleError(var e) {
     print(e.toString());
     print('ERROR CODE : ' + e.code);
     if (e.code == 'ERROR_INVALID_VERIFICATION_CODE') {

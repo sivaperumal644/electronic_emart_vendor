@@ -6,9 +6,9 @@ import 'package:electronic_emart_vendor/components/imageSelectionWidget.dart';
 import 'package:electronic_emart_vendor/components/persistent_bottom_bar.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/constants/strings.dart';
 import 'package:electronic_emart_vendor/screens/otp/otp.dart';
-import 'package:electronic_emart_vendor/screens/registration/register_graohql.dart';
+import 'package:electronic_emart_vendor/screens/registration/register_graphql.dart';
+import 'package:electronic_emart_vendor/screens/registration/validate_vendor_graphql.dart';
 import 'package:electronic_emart_vendor/screens/registration_sent/registration_sent.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -27,11 +27,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   List<String> uploadedFile = [];
   List<String> panCardUrls = [];
   int currentPage = 0;
-  bool isRequiredFieldsFilled = true;
   bool isConfirmedPasswordWrong = false;
   bool isRegisterButtonClicked = false;
+  bool phoneError = false;
+  bool invalidPasswordLength = false;
+  bool isNumberPresent;
+  bool isEmailPresent;
+  bool isAccountIFSCPresent;
+  bool isAccountNumberPresent;
   String panImagesUrl;
   String errorMessage = "";
+  String phoneNumberMessage,
+      emailMessage,
+      accountNumberMessage,
+      accoutIFSCMessage;
 
   Map inputFields = {
     "phoneNumber": "",
@@ -44,6 +53,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     "bankAccountName": "",
     "bankAccountIFSC": "",
     "bankAccountNumber": "",
+    "vendorGSTNumber": ""
   };
 
   TextEditingController phoneNumberController,
@@ -55,7 +65,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       cityController,
       bankAccountNameController,
       bankAccountIFSCController,
-      bankAccountNumberController;
+      bankAccountNumberController,
+      vendorGSTNumberController;
 
   @override
   void initState() {
@@ -75,6 +86,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         TextEditingController(text: inputFields['bankAccountIFSC']);
     bankAccountNumberController =
         TextEditingController(text: inputFields['bankAccountNumber']);
+    vendorGSTNumberController =
+        TextEditingController(text: inputFields['vendorGSTNumber']);
   }
 
   @override
@@ -91,127 +104,154 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             color: PRIMARY_COLOR.withOpacity(0.5),
           ),
           pageView(),
-          createVendorMutationComponent(),
+          validateVendorArgumentsMutation(),
         ],
       ),
     );
   }
 
-  Widget bottomBarButtons(RunMutation runMutation) {
+  Widget bottomBarButtons(
+      RunMutation runMutationCreate, RunMutation runMutationValidate) {
+    final snackbar = SnackBar(
+      content: Text(phoneError
+          ? 'Enter a valid number with 10 digits'
+          : 'Enter all the above fields'),
+    );
     final appState = Provider.of<AppState>(context);
     return isRegisterButtonClicked
         ? Container(
             height: 60,
             child: CupertinoActivityIndicator(),
           )
-        : PersistentBottomBar(
-            tertiaryOnPressed: () {
-              if (currentPage == 0) {
-                Navigator.pop(context);
-              }
-              pageController.previousPage(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.fastLinearToSlowEaseIn,
-              );
-            },
-            primaryOnPressed: uploadedFile.length < 3 && currentPage == 3
-                ? null
-                : () {
-                    if (currentPage == 3) {
-                      setState(() {
-                        isRegisterButtonClicked = true;
-                        panCardUrls.add(appState.getPanFrontUrl);
-                        panCardUrls.add(appState.getPanBackUrl);
-                        panImagesUrl =
-                            '["${appState.getPanFrontUrl}","${appState.getPanBackUrl}"]';
-                      });
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OTPScreen(
-                            phoneNumber: inputFields['phoneNumber'],
-                            onOTPSuccess: () {
-                              runMutation({
-                                'phoneNumber': inputFields['phoneNumber'],
-                                'email': inputFields['email'],
-                                'password': inputFields['password'],
-                                'storeName': inputFields['storeName'],
-                                'pancardPhotoUrls': panImagesUrl,
-                                'shopPhotoUrl': appState.getShopPhotoUrl,
-                                'address': {
-                                  'addressLine': inputFields['address'],
-                                  'city': inputFields['city'],
-                                },
-                                'bankAccountName':
-                                    inputFields['bankAccountName'],
-                                'bankAccountIFSC':
-                                    inputFields['bankAccountIFSC'],
-                                'bankAccountNumber':
-                                    inputFields['bankAccountNumber']
-                              });
-                            },
+        : Builder(
+            builder: (context) => PersistentBottomBar(
+              tertiaryOnPressed: () {
+                if (currentPage == 0) {
+                  Navigator.pop(context);
+                }
+                pageController.previousPage(
+                  duration: Duration(milliseconds: 300),
+                  curve: Curves.fastLinearToSlowEaseIn,
+                );
+              },
+              primaryOnPressed: uploadedFile.length < 3 && currentPage == 3
+                  ? null
+                  : () {
+                      if (currentPage == 3) {
+                        setState(() {
+                          isRegisterButtonClicked = true;
+                          panCardUrls.add(appState.getPanFrontUrl);
+                          panCardUrls.add(appState.getPanBackUrl);
+                          panImagesUrl =
+                              '["${appState.getPanFrontUrl}","${appState.getPanBackUrl}"]';
+                        });
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OTPScreen(
+                              phoneNumber: inputFields['phoneNumber'],
+                              onOTPSuccess: () {
+                                runMutationCreate({
+                                  'phoneNumber': inputFields['phoneNumber'],
+                                  'email': inputFields['email'],
+                                  'password': inputFields['password'],
+                                  'storeName': inputFields['storeName'],
+                                  'pancardPhotoUrls': panImagesUrl,
+                                  'shopPhotoUrl': appState.getShopPhotoUrl,
+                                  'address': {
+                                    'addressLine': inputFields['address'],
+                                    'city': inputFields['city'],
+                                  },
+                                  'bankAccountName':
+                                      inputFields['bankAccountName'],
+                                  'bankAccountIFSC':
+                                      inputFields['bankAccountIFSC'],
+                                  'bankAccountNumber':
+                                      inputFields['bankAccountNumber'],
+                                  'vendorGSTNumber':
+                                      inputFields['vendorGSTNumber']
+                                });
+                              },
+                            ),
                           ),
-                        ),
-                      );
-                    } else if (currentPage == 0) {
-                      if (inputFields['phoneNumber'] == "" ||
-                          inputFields['email'] == "" ||
-                          inputFields['password'] == "" ||
-                          inputFields['confirmPassword'] == "") {
+                        );
+                      } else if (currentPage == 0) {
                         setState(() {
-                          isRequiredFieldsFilled = false;
-                        });
-                      } else if (inputFields['password'] ==
-                          inputFields['confirmPassword']) {
-                        setState(() {
-                          isRequiredFieldsFilled = true;
+                          isRegisterButtonClicked = true;
                           isConfirmedPasswordWrong = false;
+                          phoneError = false;
+                          invalidPasswordLength = false;
                         });
-                        pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.fastLinearToSlowEaseIn,
-                        );
-                      } else {
+
+                        if (inputFields['phoneNumber'] == "" ||
+                            inputFields['email'] == "" ||
+                            inputFields['password'] == "" ||
+                            inputFields['confirmPassword'] == "") {
+                          setState(() {
+                            isRegisterButtonClicked = false;
+                          });
+                          Scaffold.of(context).showSnackBar(snackbar);
+                        } else if (inputFields['password'] !=
+                            inputFields['confirmPassword']) {
+                          setState(() {
+                            isRegisterButtonClicked = false;
+                            isConfirmedPasswordWrong = true;
+                          });
+                        } else if (inputFields['phoneNumber'].length < 10) {
+                          setState(() {
+                            isRegisterButtonClicked = false;
+                            phoneError = true;
+                          });
+                          Scaffold.of(context).showSnackBar(snackbar);
+                        } else if (inputFields['confirmPassword'].length < 6) {
+                          setState(() {
+                            isRegisterButtonClicked = false;
+                            invalidPasswordLength = true;
+                          });
+                        } else {
+                          setState(() {
+                            isConfirmedPasswordWrong = false;
+                          });
+                          runMutationValidate({
+                            "phoneNumber": inputFields['phoneNumber'],
+                            "email": inputFields['email']
+                          });
+                        }
+                      } else if (currentPage == 1) {
+                        if (inputFields['storeName'] == "" ||
+                            inputFields['address'] == "" ||
+                            inputFields['city'] == "" ||
+                            inputFields['vendorGSTNumber'] == "") {
+                          Scaffold.of(context).showSnackBar(snackbar);
+                        } else {
+                          pageController.nextPage(
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.fastLinearToSlowEaseIn,
+                          );
+                        }
+                      } else if (currentPage == 2) {
                         setState(() {
-                          isConfirmedPasswordWrong = true;
+                          isRegisterButtonClicked = true;
                         });
+                        if (inputFields['bankAccountName'] == "" ||
+                            inputFields['bankAccountIFSC'] == "" ||
+                            inputFields['bankAccountNumber'] == "") {
+                          setState(() {
+                            isRegisterButtonClicked = false;
+                          });
+                          Scaffold.of(context).showSnackBar(snackbar);
+                        } else {
+                          runMutationValidate({
+                            "bankAccountIFSC": inputFields['bankAccountIFSC'],
+                            "bankAccountNumber":
+                                inputFields['bankAccountNumber']
+                          });
+                        }
                       }
-                    } else if (currentPage == 1) {
-                      if (inputFields['storeName'] == "" ||
-                          inputFields['address'] == "" ||
-                          inputFields['city'] == "") {
-                        setState(() {
-                          isRequiredFieldsFilled = false;
-                        });
-                      } else {
-                        setState(() {
-                          isRequiredFieldsFilled = true;
-                        });
-                        pageController.nextPage(
-                          duration: Duration(milliseconds: 300),
-                          curve: Curves.fastLinearToSlowEaseIn,
-                        );
-                      }
-                    } else if (currentPage == 2) {
-                      if (inputFields['bankAccountName'] == "" ||
-                          inputFields['bankAccountIFSC'] == "" ||
-                          inputFields['bankAccountNumber'] == "") {
-                        setState(() {
-                          isRequiredFieldsFilled = false;
-                        });
-                      } else {
-                        setState(() {
-                          isRequiredFieldsFilled = true;
-                        });
-                        pageController.nextPage(
-                          duration: Duration(microseconds: 300),
-                          curve: Curves.fastLinearToSlowEaseIn,
-                        );
-                      }
-                    }
-                  },
-            tertiaryText: 'Back',
-            primaryText: 'Next',
+                    },
+              tertiaryText: 'Back',
+              primaryText: 'Next',
+            ),
           );
   }
 
@@ -238,7 +278,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   Widget registrationStep() {
     final storeDetails = currentPage == 1;
-
     return Padding(
       padding: EdgeInsets.only(left: 24.0, right: 24.0, bottom: 0),
       child: ListView(
@@ -265,6 +304,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             keyboardType:
                 storeDetails ? TextInputType.text : TextInputType.number,
             hintText: storeDetails ? 'Name' : 'Phone Number',
+            maxLength: storeDetails ? null : 10,
             obscureText: false,
             controller:
                 storeDetails ? storeNameController : phoneNumberController,
@@ -301,6 +341,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           CustomTextField(
             hintText: storeDetails ? 'Street/Locality' : 'Password',
             controller: storeDetails ? addressController : passwordController,
+            errorText: storeDetails
+                ? null
+                : invalidPasswordLength
+                    ? 'Password should contain atleast 6 characters'
+                    : null,
             obscureText: storeDetails ? false : true,
             onChanged: (val) {
               setState(() {
@@ -325,18 +370,34 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               });
             },
           ),
+          storeDetails
+              ? Column(
+                  children: <Widget>[
+                    Container(height: 32),
+                    Align(
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'GST Number',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: BLACK_COLOR,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    Container(height: 16),
+                    CustomTextField(
+                      controller: vendorGSTNumberController,
+                      hintText: 'GST Number',
+                      obscureText: false,
+                      onChanged: (val) {
+                        inputFields['vendorGSTNumber'] = val;
+                      },
+                    )
+                  ],
+                )
+              : Container(),
           Container(margin: EdgeInsets.only(top: 8.0)),
-          isRequiredFieldsFilled
-              ? Container()
-              : Text(
-                  'Enter all above fields',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: PALE_RED_COLOR,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
           Container(margin: EdgeInsets.only(bottom: 40))
         ],
       ),
@@ -404,17 +465,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             },
           ),
           Container(height: 32),
-          isRequiredFieldsFilled
-              ? Container()
-              : Text(
-                  'Enter all above fields',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: PALE_RED_COLOR,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
           Container(margin: EdgeInsets.only(bottom: 40))
         ],
       ),
@@ -505,12 +555,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Widget createVendorMutationComponent() {
+  Widget createVendorMutationComponent(RunMutation runMutationValidate) {
     final appState = Provider.of<AppState>(context);
     return Mutation(
       options: MutationOptions(document: createVendorMutation),
       builder: (runMutation, result) {
-        return bottomBarButtons(runMutation);
+        return bottomBarButtons(runMutation, runMutationValidate);
       },
       onCompleted: (dynamic resultdata) {
         if (resultdata != null && resultdata['createVendor']['error'] != null) {
@@ -519,34 +569,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 resultdata['createVendor']['error']['message'].toString();
             isRegisterButtonClicked = false;
           });
-          if (errorMessage == ErrorStatus.PHONE_NUMBER_EXISTS) {
-            return showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return DialogStyle(
-                    titleMessage: 'Phone Number already exists.',
-                    contentMessage:
-                        'The phone number you entered already exists. Please use a different number to register.',
-                    isRegister: false,
-                  );
-                });
-          }
-          if (errorMessage == ErrorStatus.EMAIL_EXISTS) {
-            return showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return DialogStyle(
-                    titleMessage: 'Email Id already exists.',
-                    contentMessage:
-                        'The Email Id you entered already exists. Please use a different Email Id to register.',
-                    isRegister: false,
-                  );
-                });
-          }
-          // Toast.show(errorMessage, context,
-          //     duration: Toast.LENGTH_LONG, gravity: Toast.BOTTOM);
         }
         if (resultdata != null && resultdata['createVendor']['error'] == null) {
           appState.setPanFrontUrl(null);
@@ -556,6 +578,87 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             context,
             MaterialPageRoute(builder: (context) => RegistrationSent()),
           );
+        }
+      },
+    );
+  }
+
+  Widget validateVendorArgumentsMutation() {
+    return Mutation(
+      options: MutationOptions(document: validateVendorArguments),
+      builder: (runMutation, result) {
+        return createVendorMutationComponent(runMutation);
+      },
+      onCompleted: (dynamic resultData) {
+        setState(() {
+          isRegisterButtonClicked = false;
+        });
+        if (resultData['validateVendorArguments']['errors'] == null) {
+          if (resultData['validateVendorArguments']['phoneNumber'] != null &&
+              resultData['validateVendorArguments']['email'] != null) {
+            if (resultData['validateVendorArguments']['phoneNumber']) {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return DialogStyle(
+                      titleMessage: 'The phone number already exist',
+                      contentMessage:
+                          'The phone number you have entered already exist. Please use another phone number for registration.',
+                      isRegister: false,
+                    );
+                  });
+            } else if (resultData['validateVendorArguments']['email']) {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return DialogStyle(
+                      titleMessage: 'The email already exist',
+                      contentMessage:
+                          'The Email you have entered already exist. Please use another email for registration.',
+                      isRegister: false,
+                    );
+                  });
+            } else {
+              pageController.nextPage(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.fastLinearToSlowEaseIn,
+              );
+            }
+          } else {
+            if (resultData['validateVendorArguments']['bankAccountIFSC']) {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return DialogStyle(
+                      titleMessage: 'The IFSC entered exists',
+                      contentMessage:
+                          'The Account IFSC you have entered already exist. Please use different account details for registration.',
+                      isRegister: false,
+                    );
+                  });
+            } else if (resultData['validateVendorArguments']
+                ['bankAccountNumber']) {
+              showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (BuildContext context) {
+                    return DialogStyle(
+                      titleMessage: 'The Account number entered exists',
+                      contentMessage:
+                          'The Account number you have entered already exist. Please use different account details for registration.',
+                      isRegister: false,
+                    );
+                  });
+            } else {
+              pageController.nextPage(
+                duration: Duration(milliseconds: 300),
+                curve: Curves.fastLinearToSlowEaseIn,
+              );
+            }
+          }
         }
       },
     );

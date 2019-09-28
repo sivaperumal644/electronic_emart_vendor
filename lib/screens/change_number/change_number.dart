@@ -1,8 +1,11 @@
 import 'package:electronic_emart_vendor/app_state.dart';
+import 'package:electronic_emart_vendor/components/dialog_style.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/screens/otp/otp.dart';
 import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
+import 'package:electronic_emart_vendor/screens/registration/validate_vendor_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +19,7 @@ class ChangeNumber extends StatefulWidget {
 
 class _ChangeNumber extends State<ChangeNumber> {
   String phoneNumber = "";
-  bool isEmpty = false;
+  bool isNumberExist = false;
   bool isButtonClicked = false;
 
   @override
@@ -36,7 +39,7 @@ class _ChangeNumber extends State<ChangeNumber> {
         textFields(),
         isButtonClicked
             ? CupertinoActivityIndicator()
-            : changePhoneNumberMutationComponent(),
+            : changePhoneNumberMutation()
       ],
     );
   }
@@ -80,7 +83,7 @@ class _ChangeNumber extends State<ChangeNumber> {
       padding: EdgeInsets.all(24),
       child: CustomTextField(
         hintText: "New Phone Number",
-        errorText: isEmpty ? 'Enter phone number' : null,
+        keyboardType: TextInputType.number,
         obscureText: false,
         onChanged: (val) {
           phoneNumber = val;
@@ -90,25 +93,31 @@ class _ChangeNumber extends State<ChangeNumber> {
   }
 
   Widget continueButton(RunMutation runMutation) {
+    final snackbar = SnackBar(
+      content: Text('Enter a valid number with 10 digits'),
+    );
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Container(
           padding: EdgeInsets.all(24),
-          child: PrimaryButtonWidget(
-            buttonText: "Continue",
-            onPressed: () {
-              if (phoneNumber == "") {
+          child: Builder(
+            builder: (buildContext) => PrimaryButtonWidget(
+              buttonText: "Continue",
+              onPressed: () {
                 setState(() {
-                  isEmpty = true;
+                  isNumberExist = false;
                 });
-              } else {
-                setState(() {
-                  isButtonClicked = true;
-                });
-                runMutation({"phoneNumber": phoneNumber});
-              }
-            },
+                if (phoneNumber.length < 10) {
+                  Scaffold.of(buildContext).showSnackBar(snackbar);
+                } else {
+                  setState(() {
+                    isButtonClicked = true;
+                  });
+                  runMutation({'phoneNumber': phoneNumber});
+                }
+              },
+            ),
           ),
         )
       ],
@@ -126,7 +135,64 @@ class _ChangeNumber extends State<ChangeNumber> {
     );
   }
 
-  Widget changePhoneNumberMutationComponent() {
+  Widget validateVendorArgumentMutation(RunMutation runMutationUpdate) {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(
+        document: validateVendorArguments,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+      ),
+      builder: (runMutation, result) {
+        return continueButton(runMutation);
+      },
+      onCompleted: (dynamic resultData) {
+        if (resultData['validateVendorArguments']['errors'] == null) {
+          if (resultData['validateVendorArguments']['phoneNumber']) {
+            setState(() {
+              isButtonClicked = false;
+            });
+            print('inside the phone number exist.');
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return DialogStyle(
+                  titleMessage: 'The phone number already exist',
+                  contentMessage:
+                      'The phone number you have entered already exist. Please use another phone number to change your number.',
+                  isRegister: false,
+                );
+              },
+            );
+          } else {
+            print('phone Number does not exist');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OTPScreen(
+                  phoneNumber: phoneNumber,
+                  onOTPIncorrect: () {
+                    print('on otp incorrect');
+                  },
+                  onOTPSuccess: () {
+                    print('onOTPSucess');
+                    runMutationUpdate({'phoneNumber': phoneNumber});
+                  },
+                ),
+              ),
+            );
+            setState(() {});
+          }
+        }
+      },
+    );
+  }
+
+  Widget changePhoneNumberMutation() {
     final appState = Provider.of<AppState>(context);
     return Mutation(
       options: MutationOptions(
@@ -138,10 +204,7 @@ class _ChangeNumber extends State<ChangeNumber> {
         },
       ),
       builder: (runMutation, result) {
-        return continueButton(runMutation);
-      },
-      update: (Cache cache, QueryResult result) {
-        return cache;
+        return validateVendorArgumentMutation(runMutation);
       },
       onCompleted: (dynamic resultData) {
         if (resultData != null &&

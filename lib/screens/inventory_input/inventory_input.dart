@@ -70,7 +70,6 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           TextEditingController(text: widget.inventory.inStock.toString());
       selectedChips = widget.inventory.category;
       inventoryImageUrls = jsonDecode(widget.inventory.imageUrl);
-      print(inventoryImageUrls);
     }
   }
 
@@ -122,29 +121,40 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: <Widget>[
               ImageSelectionWidget(
-                existingUrl:
-                    inventoryImageUrls.length == 0 ? null : inventoryImageUrls[0],
+                existingUrl: inventoryImageUrls.length == 0
+                    ? null
+                    : inventoryImageUrls[0],
                 onUserImageSet: (imgUrl) {
                   setState(() {
-                    inventoryImageUrls.add(imgUrl);
+                    if (inventoryImageUrls.length >= 1)
+                      inventoryImageUrls.removeAt(0);
+                    inventoryImageUrls.insert(0, imgUrl);
                   });
                 },
               ),
+              if (inventoryImageUrls.length >= 1)
+                ImageSelectionWidget(
+                  existingUrl: inventoryImageUrls.length < 2
+                      ? null
+                      : inventoryImageUrls[1],
+                  onUserImageSet: (imgUrl) {
+                    setState(() {
+                      if (inventoryImageUrls.length >= 2)
+                        inventoryImageUrls.removeAt(1);
+                      inventoryImageUrls.insert(1, imgUrl);
+                    });
+                  },
+                ),
+              if (inventoryImageUrls.length >= 2)  
               ImageSelectionWidget(
-                existingUrl:
-                    inventoryImageUrls.length < 2 ? null : inventoryImageUrls[1],
+                existingUrl: inventoryImageUrls.length < 3
+                    ? null
+                    : inventoryImageUrls[2],
                 onUserImageSet: (imgUrl) {
                   setState(() {
-                    inventoryImageUrls.add(imgUrl);
-                  });
-                },
-              ),
-              ImageSelectionWidget(
-                existingUrl:
-                    inventoryImageUrls.length < 3 ? null : inventoryImageUrls[2],
-                onUserImageSet: (imgUrl) {
-                  setState(() {
-                    inventoryImageUrls.add(imgUrl);
+                    if (inventoryImageUrls.length >= 3)
+                      inventoryImageUrls.removeAt(2);
+                    inventoryImageUrls.insert(2, imgUrl);
                   });
                 },
               ),
@@ -155,23 +165,29 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
+                if (inventoryImageUrls.length >= 3)
                 ImageSelectionWidget(
                   existingUrl: inventoryImageUrls.length < 4
                       ? null
                       : inventoryImageUrls[3],
                   onUserImageSet: (imgUrl) {
                     setState(() {
-                      inventoryImageUrls.add(imgUrl);
+                      if (inventoryImageUrls.length >= 4)
+                        inventoryImageUrls.removeAt(3);
+                      inventoryImageUrls.insert(3, imgUrl);
                     });
                   },
                 ),
+                if (inventoryImageUrls.length >= 4)
                 ImageSelectionWidget(
-                  existingUrl: inventoryImageUrls.length < 5 
+                  existingUrl: inventoryImageUrls.length < 5
                       ? null
                       : inventoryImageUrls[4],
                   onUserImageSet: (imgUrl) {
                     setState(() {
-                      inventoryImageUrls.add(imgUrl);
+                      if (inventoryImageUrls.length >= 5)
+                        inventoryImageUrls.removeAt(4);
+                      inventoryImageUrls.insert(4, imgUrl);
                     });
                   },
                 ),

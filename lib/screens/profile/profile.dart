@@ -9,6 +9,7 @@ import 'package:electronic_emart_vendor/screens/edit_address/edit_address.dart';
 import 'package:electronic_emart_vendor/screens/edit_name/edit_name.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
 import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
@@ -160,8 +161,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
+        pollInterval: 3,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
+        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.hasErrors)
+          return Center(child: Text("Oops something went wrong"));
         if (result.data != null &&
             result.data['getVendorInfo']['user'] != null) {
           final user = User.fromJson(result.data['getVendorInfo']['user']);
