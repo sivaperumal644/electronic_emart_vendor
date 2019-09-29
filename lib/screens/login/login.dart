@@ -331,7 +331,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         }
         if (errorText == "") {
-          Navigator.push(
+          Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => WelcomeScreen()),
           );

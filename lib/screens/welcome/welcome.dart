@@ -67,13 +67,13 @@ class WelcomeScreen extends StatelessWidget {
               tertiaryText: 'Skip',
               primaryText: 'Go to inventory',
               tertiaryOnPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   CupertinoPageRoute(builder: (context) => NavigateScreens()),
                 );
               },
               primaryOnPressed: () {
-                Navigator.push(
+                Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
                     builder: (context) => NavigateScreens(selectedIndex: 1),
