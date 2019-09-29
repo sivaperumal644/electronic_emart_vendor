@@ -47,7 +47,7 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
           ),
           Container(
             height: 1,
-            margin: EdgeInsets.only(top: 30.0, bottom: 5),
+            margin: EdgeInsets.only(top: 30.0, bottom: 3),
             color: PRIMARY_COLOR.withOpacity(0.35),
           ),
           InkWell(
@@ -65,7 +65,7 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 10),
+            margin: EdgeInsets.only(top: 3),
             child: InkWell(
               onTap: () {},
               child: SettingsOption(

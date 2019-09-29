@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -180,6 +181,9 @@ class _LoginScreenState extends State<LoginScreen> {
               children: <Widget>[
                 TertiaryButton(
                   text: 'Contact Us',
+                  onPressed: () {
+                    launch("tel:7339195584");
+                  },
                 ),
                 PrimaryButtonWidget(
                   buttonText: 'Register',

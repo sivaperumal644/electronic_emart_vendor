@@ -38,7 +38,7 @@ class DialogStyle extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(top: 32),
+            margin: EdgeInsets.only(top: 32, left: 24, right: 24,),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

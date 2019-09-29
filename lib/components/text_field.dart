@@ -39,9 +39,10 @@ class CustomTextField extends StatelessWidget {
         obscureText: obscureText,
         style: TextStyle(fontWeight: FontWeight.bold),
         decoration: InputDecoration(
+          contentPadding: maxLength == null ? null : EdgeInsets.only(top: 12, bottom: 4),
           border: InputBorder.none,
           hintText: hintText,
-          counter: maxLength == null ? null : Container(),
+          counter: maxLength == null ? null : Container(height: 0, width: 0),
           errorText: errorText,
           hintStyle: TextStyle(
             color: PRIMARY_COLOR.withOpacity(0.35),

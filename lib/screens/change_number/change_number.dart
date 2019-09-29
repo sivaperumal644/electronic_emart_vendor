@@ -48,12 +48,15 @@ class _ChangeNumber extends State<ChangeNumber> {
     return Row(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(top: 24, left: 24),
-          child: InkWell(
-            onTap: () {
+          padding: EdgeInsets.only(top: 24, left: 12),
+          child: IconButton(
+            onPressed: () {
               Navigator.pop(context);
             },
-            child: Icon(FeatherIcons.arrowLeft, color: PRIMARY_COLOR),
+            icon: Icon(
+              FeatherIcons.arrowLeft,
+              color: PRIMARY_COLOR,
+            ),
           ),
         ),
       ],

@@ -9,6 +9,7 @@ class TertiaryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       color: WHITE_COLOR,
       onPressed: onPressed,
       child: Text(

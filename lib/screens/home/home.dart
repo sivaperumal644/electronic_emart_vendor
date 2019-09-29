@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  'Quick Statastics',
+                  'Quick Statistics',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 TertiaryButton(
@@ -101,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
             onTap: () {
-              launch("tel:9442843180");
+              launch("tel:7339195584");
             },
             child: shortCutWidgets(FeatherIcons.phoneCall, 'Contact Support'),
           ),

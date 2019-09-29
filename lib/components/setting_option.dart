@@ -9,7 +9,7 @@ class SettingsOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 24, right: 24),
+      padding: const EdgeInsets.only(left: 24, right: 24, top: 12, bottom: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -21,10 +21,8 @@ class SettingsOption extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.arrow_forward_ios, color: color,),
-          )
+          Icon(Icons.arrow_forward_ios, color: color,),
+          
         ],
       ),
     );

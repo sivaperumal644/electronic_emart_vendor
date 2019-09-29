@@ -71,7 +71,14 @@ class _InventoryScreenState extends State<InventoryScreen> {
           return Container(
             height: MediaQuery.of(context).size.height / 2,
             child: Center(
-              child: Text('No inventories found.'),
+              child: Text(
+                'No items in inventory',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: GREY_COLOR,
+                ),
+              ),
             ),
           );
         }

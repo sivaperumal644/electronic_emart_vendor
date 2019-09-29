@@ -124,6 +124,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                       barrierDismissible: false,
                       builder: (BuildContext context) {
                         return AlertDialog(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(24)),
                           title: Text(
                             'Add a new category',
                             style: TextStyle(
@@ -501,17 +503,17 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
 
   Widget appBar() {
     return Container(
-      margin: EdgeInsets.only(top: 42.0, left: 22.0),
+      margin: EdgeInsets.only(top: 32.0, left: 12.0),
       child: Row(
         children: <Widget>[
-          InkWell(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: Icon(
+          IconButton(
+            icon: Icon(
               FeatherIcons.arrowLeft,
               color: PRIMARY_COLOR,
             ),
+            onPressed: () {
+              Navigator.pop(context);
+            },
           ),
           Container(width: 20),
           Text(

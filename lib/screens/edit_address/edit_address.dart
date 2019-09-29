@@ -42,12 +42,12 @@ class _EditAddressState extends State<EditAddress> {
     return Row(
       children: <Widget>[
         Container(
-          padding: EdgeInsets.only(left: 24, top: 24, bottom: 16),
-          child: InkWell(
-            onTap: () {
+          padding: EdgeInsets.only(left: 12, top: 24, bottom: 16),
+          child: IconButton(
+            onPressed: () {
               Navigator.pop(context);
             },
-            child: Icon(
+            icon: Icon(
               FeatherIcons.arrowLeft,
               color: PRIMARY_COLOR,
             ),
@@ -163,7 +163,7 @@ class _EditAddressState extends State<EditAddress> {
         if (resultData != null &&
             resultData['updateVendorAccount']['error'] == null) {
           setState(() {
-           isButtonClicked = false; 
+            isButtonClicked = false;
           });
           Navigator.pop(context);
         }

@@ -45,14 +45,14 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
 
   Widget appBar() {
     return Container(
-      margin: EdgeInsets.only(top: 42.0, left: 22.0),
+      margin: EdgeInsets.only(top: 42.0, left: 12.0),
       child: Row(
         children: <Widget>[
-          InkWell(
-            onTap: () {
+          IconButton(
+            onPressed: () {
               Navigator.pop(context);
             },
-            child: Icon(
+            icon: Icon(
               FeatherIcons.arrowLeft,
               color: PRIMARY_COLOR,
             ),
@@ -103,7 +103,16 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 20),
           child: activeOrders.isEmpty
-              ? Center(child: Text('No active orders'))
+              ? Center(
+                  child: Text(
+                    'No active orders',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: GREY_COLOR,
+                    ),
+                  ),
+                )
               : orderListComponent(activeOrders),
         ),
         Container(
@@ -120,7 +129,16 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
         Container(
           margin: EdgeInsets.only(top: 20, bottom: 20),
           child: inactiveOrders.isEmpty
-              ? Center(child: Text('No previous orders'))
+              ? Center(
+                  child: Text(
+                    'No previous orders',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: GREY_COLOR,
+                    ),
+                  ),
+                )
               : orderListComponent(inactiveOrders),
         )
       ],

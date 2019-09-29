@@ -68,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: BLACK_COLOR,
           ),
         ),
-        Container(padding: EdgeInsets.only(top: 10)),
+        Container(padding: EdgeInsets.only(top: 3)),
         InkWell(
           onTap: () {
             Navigator.push(
@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: BLACK_COLOR,
           ),
         ),
-        Container(padding: EdgeInsets.only(top: 10)),
+        Container(padding: EdgeInsets.only(top: 3)),
         InkWell(
           onTap: () {
             Navigator.push(
@@ -94,7 +94,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: BLACK_COLOR,
           ),
         ),
-        Container(padding: EdgeInsets.only(top: 10)),
+        Container(padding: EdgeInsets.only(top: 3)),
         InkWell(
           onTap: () async {
             final prefs = await SharedPreferences.getInstance();
@@ -111,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             color: BLACK_COLOR,
           ),
         ),
-        Container(padding: EdgeInsets.only(top: 10)),
+        Container(padding: EdgeInsets.only(top: 3)),
         InkWell(
           onTap: () {
             Navigator.push(

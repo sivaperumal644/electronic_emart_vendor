@@ -48,14 +48,17 @@ class _ChangeBankDetailsState extends State<ChangeBankDetails> {
 
   Widget backButton() {
     return Container(
-      margin: EdgeInsets.only(left: 24, top: 16),
+      margin: EdgeInsets.only(left: 12, top: 16),
       child: Row(
         children: <Widget>[
-          InkWell(
-            onTap: () {
+          IconButton(
+            onPressed: () {
               Navigator.pop(context);
             },
-            child: Icon(FeatherIcons.arrowLeft, color: PRIMARY_COLOR),
+            icon: Icon(
+              FeatherIcons.arrowLeft,
+              color: PRIMARY_COLOR,
+            ),
           ),
         ],
       ),

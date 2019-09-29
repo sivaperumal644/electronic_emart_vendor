@@ -6,7 +6,6 @@ import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/material.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
-
   final Order orders;
   final List<CartItemInput> cartItemInput;
 
@@ -20,20 +19,26 @@ class OrderDetailsScreen extends StatelessWidget {
         physics: BouncingScrollPhysics(),
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(left: 24, top: 24),
+            padding: EdgeInsets.only(left: 10, top: 24),
             child: Align(
               alignment: Alignment.topLeft,
-              child: InkWell(
-                onTap: () {
+              child: IconButton(
+                onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Icon(FeatherIcons.arrowLeft, color: PRIMARY_COLOR),
+                icon: Icon(
+                  FeatherIcons.arrowLeft,
+                  color: PRIMARY_COLOR,
+                ),
               ),
             ),
           ),
           Container(
             margin: EdgeInsets.fromLTRB(24, 16, 24, 42),
-            child: OrderDetails(order: orders, cartItemInput: cartItemInput,),
+            child: OrderDetails(
+              order: orders,
+              cartItemInput: cartItemInput,
+            ),
           ),
         ],
       ),
