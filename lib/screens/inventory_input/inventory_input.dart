@@ -217,6 +217,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                       if (inventoryImageUrls.length >= 3)
                         inventoryImageUrls.removeAt(2);
                       inventoryImageUrls.insert(2, imgUrl);
+                      
                     });
                   },
                 ),

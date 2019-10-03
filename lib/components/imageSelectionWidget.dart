@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,7 +42,8 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
             width: 120,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: PRIMARY_COLOR.withOpacity(0.1), width: 1.3)),
+                border: Border.all(
+                    color: PRIMARY_COLOR.withOpacity(0.1), width: 1.3)),
             child: !isImageSet
                 ? Image.network(
                     inventoryImgUrl,
@@ -89,10 +91,8 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
     StorageReference imageReference =
         storageReference.child('item$imgUrl/image.jpg');
     StorageUploadTask storageUploadTask = imageReference.putFile(item);
-    await (await storageUploadTask.onComplete)
-        .ref
-        .getDownloadURL()
-        .then((url) {
+
+    await (await storageUploadTask.onComplete).ref.getDownloadURL().then((url) {
       setState(() {
         inventoryImgUrl = url;
         isImageSet = true;

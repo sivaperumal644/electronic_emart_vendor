@@ -3,8 +3,8 @@ import 'package:electronic_emart_vendor/components/dialog_style.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/screens/nav_screens.dart';
 import 'package:electronic_emart_vendor/screens/otp/otp.dart';
-import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
 import 'package:electronic_emart_vendor/screens/registration/validate_vendor_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,7 +39,7 @@ class _ChangeNumber extends State<ChangeNumber> {
         textFields(),
         isButtonClicked
             ? CupertinoActivityIndicator()
-            : changePhoneNumberMutation()
+            : validateVendorArgumentMutation()
       ],
     );
   }
@@ -138,7 +138,7 @@ class _ChangeNumber extends State<ChangeNumber> {
     );
   }
 
-  Widget validateVendorArgumentMutation(RunMutation runMutationUpdate) {
+  Widget validateVendorArgumentMutation() {
     final appState = Provider.of<AppState>(context);
     return Mutation(
       options: MutationOptions(
@@ -184,38 +184,27 @@ class _ChangeNumber extends State<ChangeNumber> {
                   onOTPIncorrect: () {
                     print('on otp incorrect');
                   },
-                  onOTPSuccess: () {
-                    print('onOTPSucess');
-                    runMutationUpdate({'phoneNumber': phoneNumber});
+                  onOTPSuccess: () async {
+                    print('onOTPSucess' + phoneNumber);
+                    //runMutationUpdate({'phoneNumber': phoneNumber});
+                    final result =
+                        await appState.updatePhoneNumberMutation(phoneNumber);
+                    if (result.data["updateVendorAccount"]['errors'] == null) {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              NavigateScreens(selectedIndex: 3),
+                        ),
+                        (val) => false,
+                      );
+                    }
+                    print('after number');
                   },
                 ),
               ),
             );
-            setState(() {});
           }
-        }
-      },
-    );
-  }
-
-  Widget changePhoneNumberMutation() {
-    final appState = Provider.of<AppState>(context);
-    return Mutation(
-      options: MutationOptions(
-        document: updateVendorAccountMutation,
-        context: {
-          'headers': <String, String>{
-            'Authorization': 'Bearer ${appState.getJwtToken}',
-          },
-        },
-      ),
-      builder: (runMutation, result) {
-        return validateVendorArgumentMutation(runMutation);
-      },
-      onCompleted: (dynamic resultData) {
-        if (resultData != null &&
-            resultData['updateVendorAccount']['error'] == null) {
-          Navigator.pop(context);
         }
       },
     );

@@ -21,7 +21,7 @@ class _OTPScreenState extends State<OTPScreen> {
   String phoneNo;
   String smsOTP;
   String verificationId;
-  String errorMessage = null;
+  String errorMessage;
   bool isVerifyButtonClicked = false;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
@@ -98,7 +98,7 @@ class _OTPScreenState extends State<OTPScreen> {
         widget.onOTPIncorrect();
       }
     } else {
-      print('error handled.');
+      // throw e;
     }
   }
 

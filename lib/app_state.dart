@@ -1,4 +1,6 @@
+import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppState with ChangeNotifier {
@@ -15,6 +17,31 @@ class AppState with ChangeNotifier {
   String shopPhotoUrl;
   String combinedPanImagesUrl = "";
   String searchText = "";
+
+  static final HttpLink httpLink =
+      HttpLink(uri: 'http://cezhop.herokuapp.com/graphql');
+
+  GraphQLClient client = GraphQLClient(
+    cache: InMemoryCache(),
+    link: httpLink as Link,
+  );
+
+  Future<QueryResult> updatePhoneNumberMutation(String phoneNumber) async {
+    final result = await client.mutate(
+      MutationOptions(
+        document: updateVendorAccountMutation,
+        variables: {
+          'phoneNumber':phoneNumber
+        },
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer $jwtToken',
+          },    
+        },
+      ),
+    );
+    return result;
+  }
 
   Future getFromMemory() async {
     final pref = await SharedPreferences.getInstance();

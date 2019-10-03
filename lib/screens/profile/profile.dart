@@ -127,7 +127,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
-
+                  
   Widget textWidget(
       String text, TextAlign textAlign, Color color, double size) {
     return Container(
