@@ -15,6 +15,7 @@ class SecondaryButton extends StatelessWidget {
       height: buttonHeight,
       width: buttonWidth,
       child: OutlineButton(
+        padding: EdgeInsets.symmetric(vertical: 12),
         onPressed: onPressed,
         borderSide: BorderSide(color: PRIMARY_COLOR, width: 1.5),
         shape:

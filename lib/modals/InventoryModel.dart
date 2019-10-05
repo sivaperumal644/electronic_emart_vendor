@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:electronic_emart_vendor/modals/User.dart';
 
 class Inventory {
@@ -8,7 +10,7 @@ class Inventory {
   final String description;
   final String category;
   final double inStock;
-  final String imageUrl;
+  final List imageUrls;
   final User vendor;
 
   Inventory({
@@ -19,7 +21,7 @@ class Inventory {
     this.description,
     this.category,
     this.inStock,
-    this.imageUrl,
+    this.imageUrls,
     this.vendor,
   });
 
@@ -32,7 +34,7 @@ class Inventory {
       description: json['description'],
       category: json['category'],
       inStock: json['inStock'].toDouble(),
-      imageUrl: json['imageUrl'],
+      imageUrls: jsonDecode(json['imageUrl']),
     );
   }
 }

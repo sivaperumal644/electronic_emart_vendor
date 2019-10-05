@@ -11,6 +11,7 @@ class CustomTextField extends StatelessWidget {
   final int maxLines;
   final bool obscureText;
   final int maxLength;
+  final String counterText;
 
   CustomTextField({
     this.onChanged,
@@ -21,6 +22,7 @@ class CustomTextField extends StatelessWidget {
     this.maxLines,
     this.obscureText,
     this.maxLength,
+    this.counterText,
   });
   @override
   Widget build(BuildContext context) {
@@ -39,10 +41,12 @@ class CustomTextField extends StatelessWidget {
         obscureText: obscureText,
         style: TextStyle(fontWeight: FontWeight.bold),
         decoration: InputDecoration(
-          contentPadding: maxLength == null ? null : EdgeInsets.only(top: 12, bottom: 4),
+          contentPadding: maxLength == null && counterText == null
+              ? null
+              : EdgeInsets.only(top: 12, bottom: -2),
           border: InputBorder.none,
           hintText: hintText,
-          counter: maxLength == null ? null : Container(height: 0, width: 0),
+          counterText: counterText,
           errorText: errorText,
           hintStyle: TextStyle(
             color: PRIMARY_COLOR.withOpacity(0.35),

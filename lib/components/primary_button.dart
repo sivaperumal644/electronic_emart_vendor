@@ -11,6 +11,7 @@ class PrimaryButtonWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
+      padding: EdgeInsets.symmetric(vertical: 13, horizontal: 28),
       color: PRIMARY_COLOR,
       onPressed: onPressed,
       child: Row(
@@ -35,7 +36,7 @@ class PrimaryButtonWidget extends StatelessWidget {
           ],
         ],
       ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
     );
   }
 }

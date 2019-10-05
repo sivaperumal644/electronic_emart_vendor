@@ -53,7 +53,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     "bankAccountName": "",
     "bankAccountIFSC": "",
     "bankAccountNumber": "",
-    "vendorGSTNumber": ""
+    "vendorGSTNumber": "",
+    'landMark': "",
+    "pinCode": ""
   };
 
   TextEditingController phoneNumberController,
@@ -66,7 +68,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       bankAccountNameController,
       bankAccountIFSCController,
       bankAccountNumberController,
-      vendorGSTNumberController;
+      vendorGSTNumberController,
+      landMarkController,
+      pinCodeController;
 
   @override
   void initState() {
@@ -88,6 +92,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         TextEditingController(text: inputFields['bankAccountNumber']);
     vendorGSTNumberController =
         TextEditingController(text: inputFields['vendorGSTNumber']);
+    landMarkController = TextEditingController(text: inputFields['landMark']);
+    pinCodeController = TextEditingController(text: inputFields['pinCode']);
   }
 
   @override
@@ -161,6 +167,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   'address': {
                                     'addressLine': inputFields['address'],
                                     'city': inputFields['city'],
+                                    'landmark': inputFields['landMark'],
+                                    'pinCode': inputFields['pinCode'],
                                   },
                                   'bankAccountName':
                                       inputFields['bankAccountName'],
@@ -221,7 +229,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         if (inputFields['storeName'] == "" ||
                             inputFields['address'] == "" ||
                             inputFields['city'] == "" ||
-                            inputFields['vendorGSTNumber'] == "") {
+                            inputFields['landMark'] == "" ||
+                            inputFields['pinCode'] == "") {
                           Scaffold.of(context).showSnackBar(snackbar);
                         } else {
                           pageController.nextPage(
@@ -297,13 +306,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               : Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    'An OTP will be sent to this number. Please keep it ready.',
+                    '',
                   ),
                 ),
           CustomTextField(
             keyboardType:
                 storeDetails ? TextInputType.text : TextInputType.number,
             hintText: storeDetails ? 'Name' : 'Phone Number',
+            counterText: storeDetails ? null : 'An OTP will be sent to this number. Please keep it ready.  ' ,
             maxLength: storeDetails ? null : 10,
             obscureText: false,
             controller:
@@ -373,6 +383,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           storeDetails
               ? Column(
                   children: <Widget>[
+                    Container(height: 24),
+                    CustomTextField(
+                      hintText: 'landmark',
+                      controller: landMarkController,
+                      obscureText: false,
+                      onChanged: (val) {
+                        setState(() {
+                          inputFields['landMark'] = val;
+                        });
+                      },
+                    ),
+                    Container(height: 24),
+                    CustomTextField(
+                      hintText: 'pincode',
+                      controller: pinCodeController,
+                      obscureText: false,
+                      onChanged: (val) {
+                        setState(() {
+                          inputFields['pinCode'] = val;
+                        });
+                      },
+                    ),
                     Container(height: 32),
                     Align(
                       alignment: Alignment.topLeft,

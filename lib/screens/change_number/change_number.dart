@@ -88,6 +88,9 @@ class _ChangeNumber extends State<ChangeNumber> {
         hintText: "New Phone Number",
         keyboardType: TextInputType.number,
         obscureText: false,
+        maxLength: 10,
+        counterText:
+            'An OTP will be sent to this number. Please keep it ready.  ',
         onChanged: (val) {
           phoneNumber = val;
         },

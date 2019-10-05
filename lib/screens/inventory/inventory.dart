@@ -4,6 +4,7 @@ import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
 import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
+import 'package:electronic_emart_vendor/screens/inventory_detail_screen/inventory_detail_screen.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -99,10 +100,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AddInventoryScreen(
-                inventory: inventory,
-                isNewInventory: false,
-              ),
+              builder: (context) => InventortDetailScreen(inventory: inventory),
             ),
           );
         },

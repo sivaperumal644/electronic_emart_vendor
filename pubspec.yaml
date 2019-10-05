@@ -36,6 +36,8 @@ dependencies:
   firebase_storage: ^3.0.6
   firebase_auth:
   toast: ^0.1.5
+  smooth_star_rating: ^1.0.3
+  carousel_pro: ^1.0.0
 
 
 dev_dependencies:

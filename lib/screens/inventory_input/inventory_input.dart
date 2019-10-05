@@ -10,6 +10,7 @@ import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
+import 'package:electronic_emart_vendor/screens/inventory/inventory.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -80,7 +81,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         itemList.insert(itemList.length - 1, widget.inventory.category);
       }
       selectedChips = widget.inventory.category;
-      inventoryImageUrls = jsonDecode(widget.inventory.imageUrl);
+      inventoryImageUrls = widget.inventory.imageUrls;
     }
   }
 
@@ -217,7 +218,6 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                       if (inventoryImageUrls.length >= 3)
                         inventoryImageUrls.removeAt(2);
                       inventoryImageUrls.insert(2, imgUrl);
-                      
                     });
                   },
                 ),
@@ -328,6 +328,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
 
   Widget deleteInventoryButton(RunMutation runMutation) {
     return TertiaryButton(
+      isRed: true,
       text: 'Delete Item',
       onPressed: () {
         setState(() {
@@ -602,7 +603,11 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       onCompleted: (dynamic resultData) {
         if (resultData != null &&
             resultData['deleteInventory']['error'] == null) {
-          Navigator.pop(context);
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => InventoryScreen()),
+            (val) => false,
+          );
         }
       },
     );

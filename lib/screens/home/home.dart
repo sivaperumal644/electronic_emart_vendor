@@ -2,6 +2,7 @@ import 'package:electronic_emart_vendor/components/statistics_list_widget.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
+import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
 import 'package:electronic_emart_vendor/screens/nav_screens.dart';
 import 'package:electronic_emart_vendor/screens/order_history/order_history.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
@@ -119,46 +120,61 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget emptyInventoryContainer() {
-    return Container(
-      padding: EdgeInsets.all(20),
-      margin: EdgeInsets.all(24),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: PRIMARY_COLOR,
-        boxShadow: <BoxShadow>[
-          BoxShadow(
-            color: PRIMARY_COLOR.withOpacity(0.5),
-            offset: Offset(2.0, 6.0),
-            blurRadius: 10.0,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => AddInventoryScreen(
+              isNewInventory: true,
+            ),
           ),
-        ],
-      ),
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: PRIMARY_COLOR,
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: PRIMARY_COLOR.withOpacity(0.5),
+              offset: Offset(2.0, 6.0),
+              blurRadius: 10.0,
+            ),
+          ],
+        ),
+        child: Container(
+          padding: EdgeInsets.all(20),
+          child: Column(
             children: <Widget>[
-              Text(
-                'Your inventory is empty!',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: WHITE_COLOR,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    'Your inventory is empty!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: WHITE_COLOR,
+                    ),
+                  ),
+                  Icon(
+                    FeatherIcons.shoppingCart,
+                    size: 44,
+                    color: WHITE_COLOR.withOpacity(0.25),
+                  )
+                ],
               ),
-              Icon(
-                FeatherIcons.shoppingCart,
-                size: 44,
-                color: WHITE_COLOR.withOpacity(0.25),
+              Container(margin: EdgeInsets.only(top: 10)),
+              Text(
+                'You need to add items that you have in stock, to our inventory listing. Tap here to get started.',
+                style:
+                    TextStyle(color: WHITE_COLOR, fontWeight: FontWeight.bold),
               )
             ],
           ),
-          Container(margin: EdgeInsets.only(top: 10)),
-          Text(
-            'You need to add items that you have in stock, to our inventory listing. Tap here to get started.',
-            style: TextStyle(color: WHITE_COLOR, fontWeight: FontWeight.bold),
-          )
-        ],
+        ),
       ),
     );
   }
