@@ -91,6 +91,11 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
+  void setVendorId(String id){
+    vendorId = id;
+    notifyListeners();
+  }
+
   get getJwtToken => jwtToken;
   get getVendorAddressLine => vendorAddressLine;
   get getVendorCity => vendorCity;
@@ -99,4 +104,5 @@ class AppState with ChangeNotifier {
   get getShopPhotoUrl => shopPhotoUrl;
   get getCombinedPanImagesUrl => combinedPanImagesUrl;
   get getSearchText => searchText;
+  get getVendorId => vendorId;
 }

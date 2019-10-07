@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class OrderDetailsScreen extends StatefulWidget {
   final Order orders;
@@ -87,7 +88,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       EdgeInsets.only(left: 24, right: 24, top: 12, bottom: 12),
                   child: SecondaryButton(
                     buttonText: 'Generate Bill',
-                    onPressed: () {},
+                    onPressed: () {
+                      generateBill();
+                    },
                   ),
                 ),
           if (widget.orders.status == OrderStatuses.PLACED_BY_CUSTOMER ||
@@ -217,5 +220,18 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         }
       },
     );
+  }
+
+  void generateBill() async {
+    final appState = Provider.of<AppState>(context);
+    String orderId = widget.orders.id;
+    String vendorId = appState.getVendorId;
+    String url =
+        'http://cezhop.herokuapp.com/generateBill?orderId=$orderId&vendorId=$vendorId';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

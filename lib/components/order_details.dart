@@ -228,12 +228,15 @@ class _OrderDetailsState extends State<OrderDetails> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(
-                  cartItemInputDetails.name,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: BLACK_COLOR,
-                    fontSize: 14,
+                Container(
+                  width: MediaQuery.of(context).size.width/1.6,
+                  child: Text(
+                    cartItemInputDetails.name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: BLACK_COLOR,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
                 Text(

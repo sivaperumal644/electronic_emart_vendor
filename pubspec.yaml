@@ -29,7 +29,7 @@ dependencies:
   charts_flutter: ^0.7.0
   graphql_flutter: ^1.0.1
   shared_preferences:
-  url_launcher: ^5.1.0
+  url_launcher: ^5.1.4
   image_picker: ^0.4.10
   image: ^2.1.4
   firebase_core: ^0.4.0+1

@@ -328,6 +328,7 @@ class _LoginScreenState extends State<LoginScreen> {
             appState.setJwtToken(resultData['vendorLogin']['jwtToken']);
             appState.setVendorAddressLine(user.addressType['addressLine']);
             appState.setVendorCity(user.addressType['city']);
+            appState.setVendorId(user.id);
           }
         }
         if (errorText == "") {
