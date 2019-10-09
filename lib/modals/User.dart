@@ -26,16 +26,22 @@ class User {
   });
 
   factory User.fromJson(Map json) {
+    Map address;
+    if(json['address'] != null)
+    {
+      address = jsonDecode(json['address']); 
+    }
     return User(
-        id: json['id'],
-        name: json['name'],
-        phoneNumber: json['phoneNumber'],
-        email: json['email'],
-        storeName: json['storeName'],
-        blocked: json['blocked'],
-        panCardPhotoUrls: json['panCardPhotoUrls'],
-        shopPhotoUrl: json['shopPhotoUrl'],
-        admin: json['admin'],
-        addressType: jsonDecode(json['address']));
+      id: json['id'],
+      name: json['name'],
+      phoneNumber: json['phoneNumber'],
+      email: json['email'],
+      storeName: json['storeName'],
+      blocked: json['blocked'],
+      panCardPhotoUrls: json['panCardPhotoUrls'],
+      shopPhotoUrl: json['shopPhotoUrl'],
+      admin: json['admin'],
+      addressType: address
+    );
   }
 }

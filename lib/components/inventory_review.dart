@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class InventoryReview extends StatelessWidget {
-  final String rating;
+  final double rating;
   final String review;
   final String reviewer;
 
@@ -16,6 +16,7 @@ class InventoryReview extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.all(20),
+      margin: EdgeInsets.only(top: 24),
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: GREY_COLOR, width: 1)),
@@ -28,7 +29,7 @@ class InventoryReview extends StatelessWidget {
                 allowHalfRating: false,
                 onRatingChanged: (v) {},
                 starCount: 5,
-                rating: double.parse(rating),
+                rating: rating,
                 size: 20.0,
                 color: PRIMARY_COLOR,
                 borderColor: PRIMARY_COLOR,
@@ -48,11 +49,14 @@ class InventoryReview extends StatelessWidget {
             ],
           ),
           Container(height: 16),
-          Text(
-            "Works very well, and looks even better. It's been a few days since I purchased this and it works very well.",
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+          Align(
+            alignment: Alignment.centerLeft,
+                      child: Text(
+              review,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
             ),
           ),
           Container(height: 16),

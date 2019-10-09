@@ -3,11 +3,18 @@ import 'package:electronic_emart_vendor/components/inventory_question.dart';
 import 'package:electronic_emart_vendor/components/inventory_review.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
+import 'package:electronic_emart_vendor/modals/ReviewModel.dart';
 import 'package:electronic_emart_vendor/screens/inventory_detail_screen/answer_screen.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
+import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
+
+import '../../app_state.dart';
 
 class InventortDetailScreen extends StatefulWidget {
   final Inventory inventory;
@@ -31,7 +38,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
           dividerLine(),
           questionSection(),
           dividerLine(),
-          reviewSection(),
+          getReviewsQueryComponent(),
         ],
       ),
     );
@@ -121,9 +128,13 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                widget.inventory.name,
-                style: TextStyle(fontSize: 30, color: PRIMARY_COLOR),
+              Container(
+                width: MediaQuery.of(context).size.width / 1.2,
+                child: Text(
+                  widget.inventory.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 30, color: PRIMARY_COLOR),
+                ),
               ),
             ],
           ),
@@ -206,7 +217,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
     );
   }
 
-  Widget reviewSection() {
+  Widget reviewSection(avgRating, List<Review> reviews) {
     return Container(
       margin: EdgeInsets.all(24),
       child: Column(
@@ -237,7 +248,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
                       allowHalfRating: false,
                       onRatingChanged: (v) {},
                       starCount: 5,
-                      rating: 4.5,
+                      rating: avgRating.toDouble(),
                       size: 20.0,
                       color: PRIMARY_COLOR,
                       borderColor: PRIMARY_COLOR,
@@ -246,7 +257,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
                     Container(
                       padding: EdgeInsets.only(left: 8),
                       child: Text(
-                        '4.5/5',
+                        '$avgRating/5',
                         style: TextStyle(
                           color: PRIMARY_COLOR,
                           fontSize: 16,
@@ -259,26 +270,62 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
               ],
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 24),
-            child: InventoryReview(
-              rating: '4.5',
-              review:
-                  'Works very well, and looks even better. It’s been a few days since I purchased this and it works very well',
-              reviewer: 'Siva Perumal K',
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 24),
-            child: InventoryReview(
-              rating: '4.5',
-              review:
-                  'Works very well, and looks even better. It’s been a few days since I purchased this and it works very well',
-              reviewer: 'Siva Perumal K',
-            ),
-          ),
+          inventoryReviewList(reviews)
         ],
       ),
+    );
+  }
+
+  Widget inventoryReviewList(List<Review> reviews) {
+    print(reviews[0].text);
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: reviews.length,
+      physics: BouncingScrollPhysics(),
+      itemBuilder: (context, index) {
+        if (reviews.length == 0) return Text('No Review found.');
+        return InventoryReview(
+          rating: reviews[index].rating,
+          review: reviews[index].text,
+          reviewer: reviews[index].customer.name,
+        );
+      },
+    );
+  }
+
+  Widget getReviewsQueryComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Query(
+      options: QueryOptions(
+        document: getReviewsQuery,
+        variables: {'inventoryId': widget.inventory.id},
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+        pollInterval: 1,
+      ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        //print(result.data['getReviews']);
+        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.hasErrors)
+          return Center(child: Text("Oops something went wrong"));
+        if (result.data != null &&
+            result.data['getReviews'] != null &&
+            result.data['getReviews']['averageRating'] != null &&
+            result.data['getReviews']['reviews'] != null && result.data['getReviews']['reviews'].length != 0) {
+          final averageRating =
+              result.data['getReviews']['averageRating'].toDouble();
+          List reviewList = result.data['getReviews']['reviews'];
+          //print("reviewList" + result.data['getReviews']['reviews'].toString());
+          //print(reviewList[0]);
+          final reviews =
+              reviewList.map((review) => Review.fromJson(review)).toList();
+          return reviewSection(averageRating, reviews);
+        }
+        return Text('No Review found.');
+      },
     );
   }
 }

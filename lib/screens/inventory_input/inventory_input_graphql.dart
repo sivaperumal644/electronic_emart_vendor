@@ -42,3 +42,25 @@ mutation DeleteInventory(\$inventoryId:String){
   }
 }
 ''';
+
+String getReviewsQuery = '''
+query GetReviews(\$inventoryId: String){
+  getReviews(inventoryId:\$inventoryId){
+    averageRating
+    reviews{
+      id
+      date
+      rating
+      text
+      customer{
+        id
+        name
+      }  
+    }
+    error{
+      path
+      message
+    }
+  }
+}
+''';

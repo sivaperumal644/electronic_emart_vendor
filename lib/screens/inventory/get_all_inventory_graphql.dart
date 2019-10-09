@@ -14,7 +14,9 @@ query GetVendorInventory{
       category
       inStock
       imageUrl
+      averageRating
     }
   }
 }
 ''';
+

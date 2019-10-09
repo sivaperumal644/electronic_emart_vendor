@@ -63,7 +63,7 @@ class InvetoryListItem extends StatelessWidget {
               allowHalfRating: false,
               onRatingChanged: (v) {},
               starCount: 5,
-              rating: 3.5,
+              rating: double.parse(inventoryItem.averageRating),
               size: 20.0,
               color: PRIMARY_COLOR,
               borderColor: PRIMARY_COLOR,
