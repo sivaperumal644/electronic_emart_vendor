@@ -14,6 +14,7 @@ class Order {
   final String updatedDate;
   final double totalPrice;
   final String paymentMode;
+  final bool transactionSuccess;
 
   Order({
     this.id,
@@ -26,6 +27,7 @@ class Order {
     this.updatedDate,
     this.totalPrice,
     this.paymentMode,
+    this.transactionSuccess,
   });
 
   factory Order.fromJson(Map json) {
@@ -42,6 +44,7 @@ class Order {
       updatedDate: json['updatedDate'],
       totalPrice: json['totalPrice'].toDouble(),
       paymentMode: json['paymentMode'],
+      transactionSuccess: json['transactionSuccess']
     );
   }
 }

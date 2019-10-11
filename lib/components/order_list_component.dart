@@ -23,6 +23,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     String cartItemNames;
     List<Color> colors = [];
     Color orderStatusColor = GREEN_COLOR;
+    Color orderTransactionStatusColor = GREEN_COLOR;
     String orderProcessingMessage = "Order under processing";
     String orderStatus = "";
 
@@ -98,6 +99,10 @@ class _OrderListWidgetState extends State<OrderListWidget> {
         orderProcessingMessage = 'Order completed';
       });
     }
+    if (widget.orders.transactionSuccess)
+      orderTransactionStatusColor = GREEN_COLOR;
+    else
+      orderTransactionStatusColor = PALE_RED_COLOR;
     if (cartItemLength == 2)
       cartItemNames =
           widget.cartItemInput[0].name + ', ' + widget.cartItemInput[1].name;
@@ -127,7 +132,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
         child: Container(
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
-              color: GREY_COLOR.withOpacity(0.15),
+              color: PRIMARY_COLOR.withOpacity(0.10),
               borderRadius: BorderRadius.circular(12)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,18 +165,36 @@ class _OrderListWidgetState extends State<OrderListWidget> {
                 child: ScreenIndicatorRow(colors: colors),
               ),
               Container(padding: EdgeInsets.only(top: 6)),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text(
-                    orderStatus,
-                    style: TextStyle(
-                      color: orderStatusColor,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    widget.orders.paymentMode != "Cash On Delivery"
+                        ? Text(
+                            widget.orders.transactionSuccess
+                                ? 'Transaction Success'
+                                : 'Transaction failed',
+                            style: TextStyle(
+                              color: orderTransactionStatusColor,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : Container(),
+                    Container(
+                      width: MediaQuery.of(context).size.width / 2.3,
+                      child: Text(
+                        orderStatus,
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                          color: orderStatusColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

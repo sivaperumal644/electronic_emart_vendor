@@ -116,7 +116,6 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                     selectedChips = value;
                   });
                 } else {
-                  print('hello world');
                   setState(() {
                     selectedChips = "";
                   });

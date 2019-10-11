@@ -1,16 +1,13 @@
-import 'package:electronic_emart_vendor/components/statistics_list_widget.dart';
-import 'package:electronic_emart_vendor/components/tertiary_button.dart';
+import 'package:electronic_emart_vendor/components/home_active_orders.dart';
+import 'package:electronic_emart_vendor/components/home_seen_active_orders.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
-import 'package:electronic_emart_vendor/screens/nav_screens.dart';
-import 'package:electronic_emart_vendor/screens/order_history/order_history.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../app_state.dart';
 
@@ -39,85 +36,97 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           isInventoryEmpty(),
-          Padding(
-            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Quick Statistics',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                TertiaryButton(
-                  text: 'View more',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OrderExpandedScreen(),
-                      ),
-                    );
-                  },
-                )
-              ],
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              StatisticsListWidget(),
-              StatisticsListWidget(),
-              StatisticsListWidget(),
-            ],
-          ),
           Container(
-            padding: EdgeInsets.all(24),
+            margin: EdgeInsets.only(top: 20, left: 24),
             child: Text(
-              'Quick Shortcuts',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              'Active Orders',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => NavigateScreens(
-                    selectedIndex: 1,
-                  ),
-                ),
-              );
-            },
-            child: shortCutWidgets(
-                FeatherIcons.shoppingCart, 'Manage your inventory'),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => OrderExpandedScreen()),
-              );
-            },
-            child: shortCutWidgets(FeatherIcons.box, 'View your order history'),
-          ),
-          InkWell(
-            onTap: () {
-              launch("tel:7339195584");
-            },
-            child: shortCutWidgets(FeatherIcons.phoneCall, 'Contact Support'),
-          ),
+          HomeActiveOrders(),
+          HomeSeenActiveOrders()
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: <Widget>[
+          //       Text(
+          //         'Quick Statistics',
+          //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          //       ),
+          //       TertiaryButton(
+          //         text: 'View more',
+          //         onPressed: () {
+          //           Navigator.push(
+          //             context,
+          //             MaterialPageRoute(
+          //               builder: (context) => OrderExpandedScreen(),
+          //             ),
+          //           );
+          //         },
+          //       )
+          //     ],
+          //   ),
+          // ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          //   children: <Widget>[
+          //     StatisticsListWidget(),
+          //     StatisticsListWidget(),
+          //     StatisticsListWidget(),
+          //   ],
+          // ),
+          // Container(
+          //   padding: EdgeInsets.all(24),
+          //   child: Text(
+          //     'Quick Shortcuts',
+          //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          //   ),
+          // ),
+          // InkWell(
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //         builder: (context) => NavigateScreens(
+          //           selectedIndex: 1,
+          //         ),
+          //       ),
+          //     );
+          //   },
+          //   child: shortCutWidgets(
+          //       FeatherIcons.shoppingCart, 'Manage your inventory'),
+          // ),
+          // InkWell(
+          //   onTap: () {
+          //     Navigator.push(
+          //       context,
+          //       MaterialPageRoute(builder: (context) => OrderExpandedScreen()),
+          //     );
+          //   },
+          //   child: shortCutWidgets(FeatherIcons.box, 'View your order history'),
+          // ),
+          // InkWell(
+          //   onTap: () {
+          //     launch("tel:7339195584");
+          //   },
+          //   child: shortCutWidgets(FeatherIcons.phoneCall, 'Contact Support'),
+          // ),
         ],
       ),
     );
   }
 
-  Widget placeHolderContainer() {
-    return Container(
-      color: PRIMARY_COLOR.withOpacity(0.1),
-      height: 120,
-      width: 110,
-    );
-  }
+  // Widget placeHolderContainer() {
+  //   return Container(
+  //     color: PRIMARY_COLOR.withOpacity(0.1),
+  //     height: 120,
+  //     width: 110,
+  //   );
+  // }
 
   Widget emptyInventoryContainer() {
     return GestureDetector(
@@ -179,29 +188,29 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget shortCutWidgets(icon, text) {
-    return Container(
-      padding:
-          EdgeInsets.only(left: 24.0, right: 24.0, bottom: 10.0, top: 10.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Icon(icon, color: PRIMARY_COLOR.withOpacity(0.5)),
-          Padding(
-            padding: const EdgeInsets.only(left: 32.0),
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: PRIMARY_COLOR,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
+  // Widget shortCutWidgets(icon, text) {
+  //   return Container(
+  //     padding:
+  //         EdgeInsets.only(left: 24.0, right: 24.0, bottom: 10.0, top: 10.0),
+  //     child: Row(
+  //       crossAxisAlignment: CrossAxisAlignment.center,
+  //       children: <Widget>[
+  //         Icon(icon, color: PRIMARY_COLOR.withOpacity(0.5)),
+  //         Padding(
+  //           padding: const EdgeInsets.only(left: 32.0),
+  //           child: Text(
+  //             text,
+  //             style: TextStyle(
+  //               fontSize: 16,
+  //               fontWeight: FontWeight.bold,
+  //               color: PRIMARY_COLOR,
+  //             ),
+  //           ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget isInventoryEmpty() {
     final appState = Provider.of<AppState>(context);

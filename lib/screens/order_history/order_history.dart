@@ -170,13 +170,17 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
               vendorOrderList.map((item) => Order.fromJson(item)).toList();
           final activeOrders = orders
               .where((item) =>
-                  item.status == OrderStatuses.RECEIVED_BY_STORE ||
-                  item.status == OrderStatuses.PLACED_BY_CUSTOMER)
+                  (item.status == OrderStatuses.RECEIVED_BY_STORE ||
+                      item.status == OrderStatuses.PLACED_BY_CUSTOMER) &&
+                  (item.transactionSuccess == true ||
+                      item.paymentMode == "Cash On Delivery"))
               .toList();
           final inActiveOrders = orders
               .where((item) =>
-                  item.status != OrderStatuses.RECEIVED_BY_STORE &&
-                  item.status != OrderStatuses.PLACED_BY_CUSTOMER)
+                  (item.status != OrderStatuses.RECEIVED_BY_STORE &&
+                      item.status != OrderStatuses.PLACED_BY_CUSTOMER) &&
+                  (item.transactionSuccess == false ||
+                      item.paymentMode == "Cash On Delivery"))
               .toList();
           return Container(
             height: MediaQuery.of(context).size.height,

@@ -153,7 +153,6 @@ class _ChangeBankDetailsState extends State<ChangeBankDetails> {
               setState(() {
                 isButtonClicked = true;
               });
-              print(inputFields);
               runMutation({
                 'bankAccountName': inputFields['bankAccountName'],
                 'bankAccountNumber': inputFields['bankAccountNumber'],
@@ -187,7 +186,6 @@ class _ChangeBankDetailsState extends State<ChangeBankDetails> {
           return cache;
         },
         onCompleted: (dynamic resultData) {
-          print(resultData);
           if (resultData != null &&
               resultData['updateVendorAccount']['error'] == null) {
             setState(() {

@@ -33,6 +33,7 @@ query GetVendorOrders{
       updatedDate
       totalPrice
       paymentMode
+      transactionSuccess
     }
   }
 }

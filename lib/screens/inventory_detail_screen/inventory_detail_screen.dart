@@ -90,6 +90,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
   }
 
   Widget imagePageView() {
+    print(widget.inventory.id);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: Hero(
@@ -270,14 +271,16 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
               ],
             ),
           ),
-          inventoryReviewList(reviews)
+          if (reviews.length == 0)
+            Text('No reviews found')
+          else
+            inventoryReviewList(reviews)
         ],
       ),
     );
   }
 
   Widget inventoryReviewList(List<Review> reviews) {
-    print(reviews[0].text);
     return ListView.builder(
       shrinkWrap: true,
       itemCount: reviews.length,
@@ -307,24 +310,22 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
         pollInterval: 1,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        //print(result.data['getReviews']);
         if (result.loading) return Center(child: CupertinoActivityIndicator());
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null &&
             result.data['getReviews'] != null &&
             result.data['getReviews']['averageRating'] != null &&
-            result.data['getReviews']['reviews'] != null && result.data['getReviews']['reviews'].length != 0) {
+            result.data['getReviews']['reviews'] != null &&
+            result.data['getReviews']['reviews'].length != 0) {
           final averageRating =
-              result.data['getReviews']['averageRating'].toDouble();
+              double.parse(result.data['getReviews']['averageRating'].toString());
           List reviewList = result.data['getReviews']['reviews'];
-          //print("reviewList" + result.data['getReviews']['reviews'].toString());
-          //print(reviewList[0]);
           final reviews =
               reviewList.map((review) => Review.fromJson(review)).toList();
           return reviewSection(averageRating, reviews);
         }
-        return Text('No Review found.');
+        return Container();
       },
     );
   }

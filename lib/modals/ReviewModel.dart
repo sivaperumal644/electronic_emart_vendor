@@ -16,7 +16,6 @@ class Review {
   });
 
   factory Review.fromJson(Map json) {
-    print(json['customer']);
     return Review(
       id: json['id'],
       // date: json['date'],

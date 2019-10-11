@@ -161,7 +161,6 @@ class _ChangeNumber extends State<ChangeNumber> {
             setState(() {
               isButtonClicked = false;
             });
-            print('inside the phone number exist.');
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -175,7 +174,6 @@ class _ChangeNumber extends State<ChangeNumber> {
               },
             );
           } else {
-            print('phone Number does not exist');
             setState(() {
               isButtonClicked = false;
             });
@@ -185,11 +183,8 @@ class _ChangeNumber extends State<ChangeNumber> {
                 builder: (context) => OTPScreen(
                   phoneNumber: phoneNumber,
                   onOTPIncorrect: () {
-                    print('on otp incorrect');
                   },
                   onOTPSuccess: () async {
-                    print('onOTPSucess' + phoneNumber);
-                    //runMutationUpdate({'phoneNumber': phoneNumber});
                     final result =
                         await appState.updatePhoneNumberMutation(phoneNumber);
                     if (result.data["updateVendorAccount"]['errors'] == null) {
@@ -202,7 +197,6 @@ class _ChangeNumber extends State<ChangeNumber> {
                         (val) => false,
                       );
                     }
-                    print('after number');
                   },
                 ),
               ),
