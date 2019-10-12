@@ -26,7 +26,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
         children: <Widget>[
           appBar(),
           Container(
-            margin: EdgeInsets.only(left: 24, right: 24, bottom: 10, top: 24),
+            margin: EdgeInsets.only(left: 24, right: 24, bottom: 10, top: 12),
             child: ChipsComponent(
               itemList: ['All Time', 'This month', 'This year'],
               selectedChips: selectedChips,
@@ -71,7 +71,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
     );
   }
 
-  Widget orderListComponent(List<Order> orders) {
+    Widget orderListComponent(List<Order> orders, bool isActiveOrders) {
     return ListView.builder(
       shrinkWrap: true,
       physics: BouncingScrollPhysics(),
@@ -80,6 +80,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
         return OrderListWidget(
           orders: orders[index],
           cartItemInput: orders[index].cartItems,
+          isActiveOrders: isActiveOrders,
         );
       },
     );
@@ -113,7 +114,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
                     ),
                   ),
                 )
-              : orderListComponent(activeOrders),
+              : orderListComponent(activeOrders, true),
         ),
         Container(
           margin: EdgeInsets.only(left: 24.0),
@@ -139,7 +140,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
                     ),
                   ),
                 )
-              : orderListComponent(inactiveOrders),
+              : orderListComponent(inactiveOrders, false),
         )
       ],
     );
@@ -178,9 +179,9 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
           final inActiveOrders = orders
               .where((item) =>
                   (item.status != OrderStatuses.RECEIVED_BY_STORE &&
-                      item.status != OrderStatuses.PLACED_BY_CUSTOMER) &&
-                  (item.transactionSuccess == false ||
-                      item.paymentMode == "Cash On Delivery"))
+                      item.status != OrderStatuses.PLACED_BY_CUSTOMER) ||
+                  (item.transactionSuccess == false &&
+                      item.paymentMode != "Cash On Delivery"))
               .toList();
           return Container(
             height: MediaQuery.of(context).size.height,

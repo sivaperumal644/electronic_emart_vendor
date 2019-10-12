@@ -354,6 +354,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             sellingPriceController.text == "" ||
             descriptionController.text == "" ||
             quantityController.text == "" ||
+            inventoryImageUrls == [] ||
             inventoryImageUrls.length == 0) {
           setState(() {
             isAddOrEditClicked = false;
@@ -368,22 +369,22 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                         'Please fill all the fields to add your inventory.',
                     isRegister: false);
               });
-        }
-        runMutation(
-          {
-            "name": nameController.text,
-            "category": selectedChips,
-            "originalPrice": double.parse(originalPriceController.text),
-            "sellingPrice": double.parse(sellingPriceController.text),
-            "description": descriptionController.text,
-            "inStock": double.parse(quantityController.text),
-            "imageUrl": jsonEncode(inventoryImageUrls),
-            "address": {
-              "addressLine": appState.getVendorAddressLine,
-              "city": appState.getVendorCity,
-            }
-          },
-        );
+        } else
+          runMutation(
+            {
+              "name": nameController.text,
+              "category": selectedChips,
+              "originalPrice": double.parse(originalPriceController.text),
+              "sellingPrice": double.parse(sellingPriceController.text),
+              "description": descriptionController.text,
+              "inStock": double.parse(quantityController.text),
+              "imageUrl": jsonEncode(inventoryImageUrls),
+              "address": {
+                "addressLine": appState.getVendorAddressLine,
+                "city": appState.getVendorCity,
+              }
+            },
+          );
       },
     );
   }

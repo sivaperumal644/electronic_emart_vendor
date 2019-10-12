@@ -90,7 +90,6 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
   }
 
   Widget imagePageView() {
-    print(widget.inventory.id);
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 24),
       child: Hero(

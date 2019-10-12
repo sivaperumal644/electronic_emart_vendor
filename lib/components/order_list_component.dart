@@ -9,8 +9,13 @@ import 'package:flutter/material.dart';
 class OrderListWidget extends StatefulWidget {
   final Order orders;
   final List<CartItemInput> cartItemInput;
+  final bool isActiveOrders;
 
-  OrderListWidget({this.orders, this.cartItemInput});
+  OrderListWidget({
+    this.orders,
+    this.cartItemInput,
+    this.isActiveOrders = false,
+  });
 
   @override
   _OrderListWidgetState createState() => _OrderListWidgetState();
@@ -24,7 +29,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     List<Color> colors = [];
     Color orderStatusColor = GREEN_COLOR;
     Color orderTransactionStatusColor = GREEN_COLOR;
-    String orderProcessingMessage = "Order under processing";
+    String orderProcessingMessage = "Waiting store confirmation";
     String orderStatus = "";
 
     if (widget.orders.status == OrderStatuses.PLACED_BY_CUSTOMER) {
@@ -36,6 +41,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
           GREEN_COLOR.withOpacity(0.3)
         ];
         orderStatus = 'Placed by Customer';
+        orderProcessingMessage = 'Waiting store confirmation';
       });
     }
     if (widget.orders.status == OrderStatuses.CANCELLED_BY_CUSTOMER) {
@@ -48,6 +54,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
         ];
         orderStatusColor = PALE_RED_COLOR;
         orderStatus = 'Order cancelled by Customer';
+        orderProcessingMessage = 'Order Cancelled';
       });
     }
 
@@ -61,6 +68,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
         ];
         orderStatusColor = PALE_RED_COLOR;
         orderStatus = 'Order cancelled by Store';
+        orderProcessingMessage = 'Order Cancelled';
       });
     }
 
@@ -73,6 +81,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
           GREEN_COLOR.withOpacity(0.3)
         ];
         orderStatus = 'Order received by store';
+        orderProcessingMessage = 'Order under processing';
       });
     }
 
@@ -85,6 +94,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
           GREEN_COLOR.withOpacity(0.3)
         ];
         orderStatus = 'Order picked up';
+        orderProcessingMessage = 'Order under processing';
       });
     }
     if (widget.orders.status == OrderStatuses.DELIVERED_AND_PAID) {
@@ -97,6 +107,12 @@ class _OrderListWidgetState extends State<OrderListWidget> {
         ];
         orderStatus = 'Order delivered and paid';
         orderProcessingMessage = 'Order completed';
+      });
+    }
+    if (widget.orders.transactionSuccess == false &&
+        widget.orders.paymentMode != 'Cash On Delivery') {
+      setState(() {
+        orderProcessingMessage = 'Order Cancelled';
       });
     }
     if (widget.orders.transactionSuccess)
@@ -132,8 +148,13 @@ class _OrderListWidgetState extends State<OrderListWidget> {
         child: Container(
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
-              color: PRIMARY_COLOR.withOpacity(0.10),
-              borderRadius: BorderRadius.circular(12)),
+              color: widget.isActiveOrders
+                  ? PRIMARY_COLOR.withOpacity(0.05)
+                  : PRIMARY_COLOR.withOpacity(0.08),
+              borderRadius: BorderRadius.circular(12),
+              border: widget.isActiveOrders
+                  ? Border.all(color: PRIMARY_COLOR, width: 1)
+                  : null),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[

@@ -1,8 +1,11 @@
-import 'package:electronic_emart_vendor/components/home_active_orders.dart';
 import 'package:electronic_emart_vendor/components/home_seen_active_orders.dart';
+import 'package:electronic_emart_vendor/components/home_unseen_active_orders.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/constants/strings.dart';
+import 'package:electronic_emart_vendor/modals/OrderModel.dart';
 import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
+import 'package:electronic_emart_vendor/screens/order_history/order_history_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -46,8 +49,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          HomeActiveOrders(),
-          HomeSeenActiveOrders()
+          Container(height: 16),
+          getAllOrdersMutationComponent()
+          //HomeActiveOrders(),
+          //HomeSeenActiveOrders()
           // Padding(
           //   padding: const EdgeInsets.only(left: 24.0, right: 24.0),
           //   child: Row(
@@ -185,6 +190,93 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget mainList(listSeen, listUnSeen) {
+    return ListView(
+      physics: BouncingScrollPhysics(),
+      shrinkWrap: true,
+      children: <Widget>[
+        seenList(listSeen),
+        unSeenList(listUnSeen),
+        Container(height: 200),
+      ],
+    );
+  }
+
+  Widget seenList(List<Order> orders) {
+    return ListView.builder(
+      physics: BouncingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: orders.length,
+      itemBuilder: (context, index) {
+        return HomeSeenActiveOrders(
+          orders: orders[index],
+          cartItemInput: orders[index].cartItems,
+        );
+      },
+    );
+  }
+
+  Widget unSeenList(List<Order> orders) {
+    return ListView.builder(
+      physics: BouncingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: orders.length,
+      itemBuilder: (context, index) {
+        return HomeUnSeenActiveOrders(
+          orders: orders[index],
+          cartItemInput: orders[index].cartItems,
+        );
+      },
+    );
+  }
+
+  Widget getAllOrdersMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Query(
+      options: QueryOptions(
+        document: getVendorOrdersQuery,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+        pollInterval: 1,
+      ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.hasErrors)
+          return Center(child: Text("Oops something went wrong"));
+        if (result.data != null &&
+            result.data['getVendorOrders']['orders'] != null) {
+          if (result.data['getVendorOrders']['orders'].length == 0)
+            return mainList([], []);
+          List vendorOrderList = result.data['getVendorOrders']['orders'];
+          final orders =
+              vendorOrderList.map((item) => Order.fromJson(item)).toList();
+          final seenOrders = orders
+              .where((item) =>
+                  item.status == OrderStatuses.PLACED_BY_CUSTOMER &&
+                  (item.transactionSuccess == true ||
+                      item.paymentMode == "Cash On Delivery"))
+              .toList();
+          final unSeenOrders = orders
+              .where((item) =>
+                  item.status == OrderStatuses.RECEIVED_BY_STORE &&
+                  (item.transactionSuccess == true ||
+                      item.paymentMode == "Cash On Delivery"))
+              .toList();
+          return Container(
+            height: MediaQuery.of(context).size.height,
+            child: mainList(seenOrders, unSeenOrders),
+          );
+        }
+        return Container(
+          child: Center(child: Text('No orders found.')),
+        );
+      },
     );
   }
 
