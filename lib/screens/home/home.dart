@@ -2,6 +2,7 @@ import 'package:electronic_emart_vendor/components/home_seen_active_orders.dart'
 import 'package:electronic_emart_vendor/components/home_unseen_active_orders.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/constants/strings.dart';
+import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
 import 'package:electronic_emart_vendor/modals/OrderModel.dart';
 import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
@@ -24,11 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
-      body: ListView(
-        physics: BouncingScrollPhysics(),
+      body: Column(
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(top: 20),
+            margin: EdgeInsets.only(top: 50, bottom: 10),
             child: Text(
               'Home',
               textAlign: TextAlign.center,
@@ -38,121 +38,34 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-          isInventoryEmpty(),
-          Container(
-            margin: EdgeInsets.only(top: 20, left: 24),
-            child: Text(
-              'Active Orders',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          Container(height: 16),
-          getAllOrdersMutationComponent()
-          //HomeActiveOrders(),
-          //HomeSeenActiveOrders()
-          // Padding(
-          //   padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-          //   child: Row(
-          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //     children: <Widget>[
-          //       Text(
-          //         'Quick Statistics',
-          //         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          //       ),
-          //       TertiaryButton(
-          //         text: 'View more',
-          //         onPressed: () {
-          //           Navigator.push(
-          //             context,
-          //             MaterialPageRoute(
-          //               builder: (context) => OrderExpandedScreen(),
-          //             ),
-          //           );
-          //         },
-          //       )
-          //     ],
-          //   ),
-          // ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   children: <Widget>[
-          //     StatisticsListWidget(),
-          //     StatisticsListWidget(),
-          //     StatisticsListWidget(),
-          //   ],
-          // ),
-          // Container(
-          //   padding: EdgeInsets.all(24),
-          //   child: Text(
-          //     'Quick Shortcuts',
-          //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          //   ),
-          // ),
-          // InkWell(
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(
-          //         builder: (context) => NavigateScreens(
-          //           selectedIndex: 1,
-          //         ),
-          //       ),
-          //     );
-          //   },
-          //   child: shortCutWidgets(
-          //       FeatherIcons.shoppingCart, 'Manage your inventory'),
-          // ),
-          // InkWell(
-          //   onTap: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => OrderExpandedScreen()),
-          //     );
-          //   },
-          //   child: shortCutWidgets(FeatherIcons.box, 'View your order history'),
-          // ),
-          // InkWell(
-          //   onTap: () {
-          //     launch("tel:7339195584");
-          //   },
-          //   child: shortCutWidgets(FeatherIcons.phoneCall, 'Contact Support'),
-          // ),
+          Expanded(child: getAllOrdersMutationComponent()),
         ],
       ),
     );
   }
 
-  // Widget placeHolderContainer() {
-  //   return Container(
-  //     color: PRIMARY_COLOR.withOpacity(0.1),
-  //     height: 120,
-  //     width: 110,
-  //   );
-  // }
-
-  Widget emptyInventoryContainer() {
+  Widget emptyInventoryContainer(
+      headerText, subHeaderText, isInventoryEmpty, onTap) {
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => AddInventoryScreen(
-              isNewInventory: true,
-            ),
-          ),
-        );
-      },
+      onTap: onTap,
       child: Container(
-        margin: EdgeInsets.all(24),
+        margin: EdgeInsets.fromLTRB(24, 0, 24, 24),
         decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: FractionalOffset.topCenter,
+            end: FractionalOffset.bottomCenter,
+            colors: isInventoryEmpty
+                ? [PRIMARY_COLOR.withOpacity(0.85), PRIMARY_COLOR]
+                : [LIGHT_ORANGE_COLOR, ORANGE_COLOR],
+            stops: [0.0, 1.0],
+          ),
           borderRadius: BorderRadius.circular(16),
-          color: PRIMARY_COLOR,
+          color: isInventoryEmpty ? PRIMARY_COLOR : ORANGE_COLOR,
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: PRIMARY_COLOR.withOpacity(0.5),
+              color: isInventoryEmpty
+                  ? PRIMARY_COLOR.withOpacity(0.5)
+                  : ORANGE_COLOR.withOpacity(0.5),
               offset: Offset(2.0, 6.0),
               blurRadius: 10.0,
             ),
@@ -166,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Your inventory is empty!',
+                    headerText,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 20,
@@ -182,9 +95,11 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Container(margin: EdgeInsets.only(top: 10)),
               Text(
-                'You need to add items that you have in stock, to our inventory listing. Tap here to get started.',
-                style:
-                    TextStyle(color: WHITE_COLOR, fontWeight: FontWeight.bold),
+                subHeaderText,
+                style: TextStyle(
+                  color: WHITE_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
               )
             ],
           ),
@@ -198,9 +113,21 @@ class _HomeScreenState extends State<HomeScreen> {
       physics: BouncingScrollPhysics(),
       shrinkWrap: true,
       children: <Widget>[
+        isInventoryEmpty(),
+        Container(
+          margin: EdgeInsets.only(left: 24),
+          child: Text(
+            'Active Orders',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Container(height: 16),
         seenList(listSeen),
         unSeenList(listUnSeen),
-        Container(height: 200),
+        Container(height: 100),
       ],
     );
   }
@@ -280,30 +207,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Widget shortCutWidgets(icon, text) {
-  //   return Container(
-  //     padding:
-  //         EdgeInsets.only(left: 24.0, right: 24.0, bottom: 10.0, top: 10.0),
-  //     child: Row(
-  //       crossAxisAlignment: CrossAxisAlignment.center,
-  //       children: <Widget>[
-  //         Icon(icon, color: PRIMARY_COLOR.withOpacity(0.5)),
-  //         Padding(
-  //           padding: const EdgeInsets.only(left: 32.0),
-  //           child: Text(
-  //             text,
-  //             style: TextStyle(
-  //               fontSize: 16,
-  //               fontWeight: FontWeight.bold,
-  //               color: PRIMARY_COLOR,
-  //             ),
-  //           ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
-
   Widget isInventoryEmpty() {
     final appState = Provider.of<AppState>(context);
     return Query(
@@ -321,9 +224,36 @@ class _HomeScreenState extends State<HomeScreen> {
             result.data['getVendorInventory'] == null ||
             result.data['getVendorInventory']['inventory'] == null ||
             result.data['getVendorInventory']['inventory'].length == 0) {
-          return emptyInventoryContainer();
+          return emptyInventoryContainer(
+              'Your inventory is empty!',
+              'You need to add items that you have in stock, to our inventory listing. Tap here to get started.',
+              true, () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => AddInventoryScreen(
+                  isNewInventory: true,
+                ),
+              ),
+            );
+          });
+        } else {
+          List inventoryList = result.data['getVendorInventory']['inventory'];
+          final inventories =
+              inventoryList.map((item) => Inventory.fromJson(item)).toList();
+          final listStockAvailble =
+              inventories.where((inventory) => inventory.inStock < 1).toList();
+
+          print(listStockAvailble.length);
+          if (listStockAvailble.length != 0)
+            return emptyInventoryContainer(
+                'Some items are out of stock',
+                'You have items in your inventory that have no stock left. Tap to manage these items.',
+                false,
+                () {});
+          else
+            return Container();
         }
-        return Container();
       },
     );
   }

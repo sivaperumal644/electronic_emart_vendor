@@ -22,8 +22,6 @@ class InventoryScreen extends StatefulWidget {
 
 class _InventoryScreenState extends State<InventoryScreen> {
   String itemValue;
-  //List outOfStockList = [];
-  //bool isOutOfStock = outOfStockList.length > 0;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +65,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ],
             ),
           ),
-          //outOfStockList.length > 0 ? outOfStockWidget() : Container(),
+          isStockOfInventoryEmpty(),
           Expanded(
             child: ListView(
               shrinkWrap: true,
@@ -93,7 +91,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             children: <Widget>[
               Icon(
                 Icons.warning,
-                color: ORANGE_COLOR,
+                color: LIGHT_ORANGE_COLOR,
               ),
               Container(width: 8),
               Text(
@@ -101,7 +99,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
-                  color: ORANGE_COLOR,
+                  color: LIGHT_ORANGE_COLOR,
                 ),
               ),
             ],
@@ -240,8 +238,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
           List inventoryList = result.data['getVendorInventory']['inventory'];
           final inventories =
               inventoryList.map((item) => Inventory.fromJson(item)).toList();
-          // outOfStockList =
-          //     inventories.where((inventory) => inventory.inStock < 1).toList();
           inventories.sort((a, b) => a.name.compareTo(b.name));
           if (itemValue == 'Name (A-Z)')
             inventories.sort((a, b) => a.name.compareTo(b.name));
@@ -257,6 +253,39 @@ class _InventoryScreenState extends State<InventoryScreen> {
             height: MediaQuery.of(context).size.height,
             child: inventoryListWidget(inventories),
           );
+        }
+        return Container();
+      },
+    );
+  }
+
+  Widget isStockOfInventoryEmpty() {
+    final appState = Provider.of<AppState>(context);
+    return Query(
+      options: QueryOptions(
+        document: getVendorInventoryQuery,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+        pollInterval: 1,
+      ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        if (result.data != null &&
+            result.data['getVendorInventory'] != null &&
+            result.data['getVendorInventory']['inventory'] != null) {
+          List inventoryList = result.data['getVendorInventory']['inventory'];
+          final inventories =
+              inventoryList.map((item) => Inventory.fromJson(item)).toList();
+          final listStockAvailble =
+              inventories.where((inventory) => inventory.inStock < 1).toList();
+
+          print(listStockAvailble.length);
+          if (listStockAvailble.length != 0)
+            return outOfStockWidget();
+          else
+            return Container();
         }
         return Container();
       },
