@@ -1,5 +1,6 @@
 import 'package:electronic_emart_vendor/components/drop_down_widget.dart';
 import 'package:electronic_emart_vendor/components/inventory_list_item.dart';
+import 'package:electronic_emart_vendor/components/secondary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
@@ -21,6 +22,8 @@ class InventoryScreen extends StatefulWidget {
 
 class _InventoryScreenState extends State<InventoryScreen> {
   String itemValue;
+  //List outOfStockList = [];
+  //bool isOutOfStock = outOfStockList.length > 0;
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +50,27 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ),
       body: Column(
         children: <Widget>[
-          searchBar(),
-          filterBar(),
+          Container(
+            decoration: BoxDecoration(
+              color: WHITE_COLOR,
+              boxShadow: [
+                BoxShadow(
+                  color: GREY_COLOR,
+                  blurRadius: 4,
+                )
+              ],
+            ),
+            child: Column(
+              children: <Widget>[
+                searchBar(),
+                filterBar(),
+              ],
+            ),
+          ),
+          //outOfStockList.length > 0 ? outOfStockWidget() : Container(),
           Expanded(
             child: ListView(
+              shrinkWrap: true,
               physics: BouncingScrollPhysics(),
               children: <Widget>[
                 getAllVendorQueryComponent(),
@@ -58,6 +78,35 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ],
             ),
           )
+        ],
+      ),
+    );
+  }
+
+  Widget outOfStockWidget() {
+    return Container(
+      margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Row(
+            children: <Widget>[
+              Icon(
+                Icons.warning,
+                color: ORANGE_COLOR,
+              ),
+              Container(width: 8),
+              Text(
+                'Some items are out of stock.',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: ORANGE_COLOR,
+                ),
+              ),
+            ],
+          ),
+          SecondaryButton(buttonText: 'Manage', onPressed: () {})
         ],
       ),
     );
@@ -137,7 +186,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   Widget filterBar() {
     return Container(
-      padding: EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 10.0),
+      padding: EdgeInsets.fromLTRB(24.0, 10.0, 24.0, 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -191,6 +240,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
           List inventoryList = result.data['getVendorInventory']['inventory'];
           final inventories =
               inventoryList.map((item) => Inventory.fromJson(item)).toList();
+          // outOfStockList =
+          //     inventories.where((inventory) => inventory.inStock < 1).toList();
           inventories.sort((a, b) => a.name.compareTo(b.name));
           if (itemValue == 'Name (A-Z)')
             inventories.sort((a, b) => a.name.compareTo(b.name));
@@ -203,8 +254,9 @@ class _InventoryScreenState extends State<InventoryScreen> {
             inventories
                 .sort((a, b) => b.sellingPrice.compareTo(a.sellingPrice));
           return Container(
-              height: MediaQuery.of(context).size.height,
-              child: inventoryListWidget(inventories));
+            height: MediaQuery.of(context).size.height,
+            child: inventoryListWidget(inventories),
+          );
         }
         return Container();
       },

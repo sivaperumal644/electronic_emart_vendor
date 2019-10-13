@@ -3,8 +3,8 @@ import 'package:electronic_emart_vendor/components/inventory_question.dart';
 import 'package:electronic_emart_vendor/components/inventory_review.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
+import 'package:electronic_emart_vendor/modals/QuestionAnswer.dart';
 import 'package:electronic_emart_vendor/modals/ReviewModel.dart';
-import 'package:electronic_emart_vendor/screens/inventory_detail_screen/answer_screen.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
@@ -36,7 +36,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
           imagePageView(),
           itemDescription(),
           dividerLine(),
-          questionSection(),
+          getQAQueryComponent(),
           dividerLine(),
           getReviewsQueryComponent(),
         ],
@@ -159,7 +159,8 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
     );
   }
 
-  Widget questionSection() {
+  Widget questionSection(
+      List<QuestionAnswer> withoutAnswerQA, List<QuestionAnswer> withAnswerQA) {
     return Container(
       margin: EdgeInsets.all(24),
       child: Column(
@@ -172,48 +173,58 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 24),
-            child: InventoryQuestion(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AnswerPost(
-                      question:
-                          'What is the waterproof grading of this product, can I use tempered glass on it?',
-                    ),
-                  ),
-                );
-              },
-              question:
-                  'What is the waterproof grading of this product, can I use tempered glass on it?',
-              answer: 'ADD AN ANSWER',
-              isAnswered: false,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 24),
-            child: InventoryQuestion(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AnswerPost(
-                      question:
-                          'What is the waterproof grading of this product, can I use tempered glass on it?',
-                    ),
-                  ),
-                );
-              },
-              question:
-                  'What is the waterproof grading of this product, can I use tempered glass on it?',
-              answer: 'It is IP68. And yes, you can use tempered glass.',
-              isAnswered: true,
-            ),
-          ),
+          Container(height: 20),
+          if (withoutAnswerQA.length == 0 && withAnswerQA.length == 0)
+            Center(
+              child: Text(
+                'No Questions found',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: GREY_COLOR,
+                ),
+              ),
+            )
+          else
+            Column(
+              children: <Widget>[
+                inventoryQuestionList(withoutAnswerQA),
+                inventoryQuestionWithAnswerList(withAnswerQA)
+              ],
+            )
         ],
       ),
+    );
+  }
+
+  Widget inventoryQuestionList(List<QuestionAnswer> listQA) {
+    return ListView.builder(
+      physics: BouncingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: listQA.length,
+      itemBuilder: (context, index) {
+        return InventoryQuestion(
+          questionId: listQA[index].id,
+          question: listQA[index].questionText,
+          isAnswered: false,
+        );
+      },
+    );
+  }
+
+  Widget inventoryQuestionWithAnswerList(List<QuestionAnswer> listQA) {
+    return ListView.builder(
+      physics: BouncingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: listQA.length,
+      itemBuilder: (context, index) {
+        return InventoryQuestion(
+          questionId: listQA[index].id,
+          question: listQA[index].questionText,
+          answer: listQA[index].answerText,
+          isAnswered: true,
+        );
+      },
     );
   }
 
@@ -271,7 +282,19 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
             ),
           ),
           if (reviews.length == 0)
-            Text('No reviews found')
+            Container(
+              margin: EdgeInsets.only(top: 20),
+              child: Center(
+                child: Text(
+                  'No Review found',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: GREY_COLOR,
+                  ),
+                ),
+              ),
+            )
           else
             inventoryReviewList(reviews)
         ],
@@ -285,7 +308,6 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
       itemCount: reviews.length,
       physics: BouncingScrollPhysics(),
       itemBuilder: (context, index) {
-        if (reviews.length == 0) return Text('No Review found.');
         return InventoryReview(
           rating: reviews[index].rating,
           review: reviews[index].text,
@@ -317,14 +339,50 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
             result.data['getReviews']['averageRating'] != null &&
             result.data['getReviews']['reviews'] != null &&
             result.data['getReviews']['reviews'].length != 0) {
-          final averageRating =
-              double.parse(result.data['getReviews']['averageRating'].toString());
+          final averageRating = double.parse(
+              result.data['getReviews']['averageRating'].toString());
           List reviewList = result.data['getReviews']['reviews'];
           final reviews =
               reviewList.map((review) => Review.fromJson(review)).toList();
           return reviewSection(averageRating, reviews);
         }
-        return Container();
+        return reviewSection(0, []);
+      },
+    );
+  }
+
+  Widget getQAQueryComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Query(
+      options: QueryOptions(
+        document: getQAQuery,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+        pollInterval: 1,
+        variables: {'inventoryId': widget.inventory.id},
+      ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.hasErrors)
+          return Center(child: Text("Oops something went wrong"));
+        if (result.data != null &&
+            result.data['getQA'] != null &&
+            result.data['getQA'].length != 0) {
+          List listQA = result.data['getQA'];
+          final listOfQA =
+              listQA.map((qa) => QuestionAnswer.fromJson(qa)).toList();
+          final listOfQAWithoutAnswer = listOfQA
+              .where((questionAnswer) => questionAnswer.answerText == null)
+              .toList();
+          final listOfQAWithAnswer = listOfQA
+              .where((questionAnswer) => questionAnswer.answerText != null)
+              .toList();
+          return questionSection(listOfQAWithoutAnswer, listOfQAWithAnswer);
+        }
+        return questionSection([], []);
       },
     );
   }

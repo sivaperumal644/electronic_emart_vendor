@@ -260,7 +260,7 @@ class _OrderDetailsState extends State<OrderDetails> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          'Order ID. ' + widget.order.orderNo,
+          'Order ID. BS' + widget.order.orderNo,
           style: TextStyle(
             color: BLACK_COLOR,
             fontSize: 16,

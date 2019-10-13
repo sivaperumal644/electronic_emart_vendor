@@ -15,17 +15,18 @@ class SecondaryButton extends StatelessWidget {
       height: buttonHeight,
       width: buttonWidth,
       child: OutlineButton(
-        padding: EdgeInsets.symmetric(vertical: 12),
+        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 22),
         onPressed: onPressed,
         borderSide: BorderSide(color: PRIMARY_COLOR, width: 1.5),
         shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
         child: Text(
           buttonText,
           style: TextStyle(
-              fontSize: 16,
-              color: PRIMARY_COLOR,
-              fontWeight: FontWeight.bold),
+            fontSize: 16,
+            color: PRIMARY_COLOR,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );

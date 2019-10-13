@@ -64,3 +64,33 @@ query GetReviews(\$inventoryId: String){
   }
 }
 ''';
+
+String getQAQuery = '''
+query GetQA(\$inventoryId: String){
+  getQA(inventoryId:\$inventoryId){
+    id
+    date
+    questionText
+    answerText
+    customer{
+      id
+      name
+    }
+    inventory{
+      id
+    }
+  }
+}
+''';
+
+String answerQuestionMutation = '''
+mutation AnswerQuestion(\$questionId: String, \$answerText: String){
+  answerQuestion(questionId:\$questionId, answerText:\$answerText){
+    error{
+      path
+      message
+    }
+    jwtToken
+  }
+}
+''';

@@ -6,28 +6,49 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
-class InvetoryListItem extends StatelessWidget {
+class InvetoryListItem extends StatefulWidget {
   final Inventory inventoryItem;
   final Function onTap;
   InvetoryListItem({this.inventoryItem, this.onTap});
 
   @override
+  _InvetoryListItemState createState() => _InvetoryListItemState();
+}
+
+class _InvetoryListItemState extends State<InvetoryListItem> {
+  @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
-    if (!inventoryItem.name
+    bool isEmpty = false;
+    if (!widget.inventoryItem.name
         .toLowerCase()
         .contains(appState.getSearchText.toLowerCase())) {
       return Container();
     }
+    if (widget.inventoryItem.inStock < 1) {
+      setState(() {
+        isEmpty = true;
+      });
+    } else {
+      setState(() {
+        isEmpty = false;
+      });
+    }
+
     return InkWell(
-      onTap: onTap,
+      onTap: widget.onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: EdgeInsets.all(12.0),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            color: PRIMARY_COLOR.withOpacity(0.06),
-            border: Border.all(color: PRIMARY_COLOR.withOpacity(0.6))),
+            color: isEmpty
+                ? PALE_RED_COLOR.withOpacity(0.1)
+                : PRIMARY_COLOR.withOpacity(0.06),
+            border: Border.all(
+                color: isEmpty
+                    ? PALE_RED_COLOR
+                    : PRIMARY_COLOR.withOpacity(0.6))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -63,7 +84,7 @@ class InvetoryListItem extends StatelessWidget {
               allowHalfRating: false,
               onRatingChanged: (v) {},
               starCount: 5,
-              rating: double.parse(inventoryItem.averageRating),
+              rating: double.parse(widget.inventoryItem.averageRating),
               size: 20.0,
               color: PRIMARY_COLOR,
               borderColor: PRIMARY_COLOR,
@@ -81,11 +102,23 @@ class InvetoryListItem extends StatelessWidget {
   }
 
   Widget stockRow() {
+    int itemInStock;
+    if (widget.inventoryItem.inStock < 1) {
+      setState(() {
+        itemInStock = 0;
+      });
+    } else {
+      setState(() {
+        itemInStock = widget.inventoryItem.inStock.toInt();
+      });
+    }
+    bool isEmpty = itemInStock < 1;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         Text(
-          '${inventoryItem.category}',
+          '${widget.inventoryItem.category}',
           style: TextStyle(
             color: PRIMARY_COLOR,
             fontSize: 12,
@@ -102,9 +135,9 @@ class InvetoryListItem extends StatelessWidget {
           ),
         ),
         Text(
-          '${inventoryItem.inStock} in stock',
+          '$itemInStock in stock',
           style: TextStyle(
-            color: BLACK_COLOR,
+            color: isEmpty ? PALE_RED_COLOR : BLACK_COLOR,
             fontWeight: FontWeight.bold,
             fontSize: 12,
           ),
@@ -117,9 +150,10 @@ class InvetoryListItem extends StatelessWidget {
     return Row(
       children: <Widget>[
         Hero(
-          tag: inventoryItem.id,
+          tag: widget.inventoryItem.id,
           child: Image.network(
-            inventoryItem.imageUrls[0],
+            widget.inventoryItem.imageUrls[0],
+            fit: BoxFit.fill,
             height: 80,
             width: 80,
           ),
@@ -131,7 +165,7 @@ class InvetoryListItem extends StatelessWidget {
             Container(
               width: MediaQuery.of(context).size.width / 2.1,
               child: Text(
-                '${inventoryItem.name}',
+                '${widget.inventoryItem.name}',
                 style: TextStyle(
                   color: BLACK_COLOR,
                   fontSize: 14,
@@ -150,7 +184,7 @@ class InvetoryListItem extends StatelessWidget {
     return Row(
       children: <Widget>[
         Text(
-          'Rs. ${inventoryItem.originalPrice}',
+          'Rs. ${widget.inventoryItem.originalPrice}',
           style: TextStyle(
             decoration: TextDecoration.lineThrough,
             color: PRIMARY_COLOR.withOpacity(0.5),
@@ -159,7 +193,7 @@ class InvetoryListItem extends StatelessWidget {
         ),
         Container(margin: EdgeInsets.only(left: 8.0)),
         Text(
-          'Rs. ${inventoryItem.sellingPrice}',
+          'Rs. ${widget.inventoryItem.sellingPrice}',
           style: TextStyle(
             color: PRIMARY_COLOR,
             fontSize: 16,

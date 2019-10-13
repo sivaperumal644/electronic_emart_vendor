@@ -68,7 +68,7 @@ class _HomeSeenActiveOrdersState extends State<HomeSeenActiveOrders> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      'Order ID. '+widget.orders.orderNo,
+                      'Order ID. BS'+widget.orders.orderNo,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

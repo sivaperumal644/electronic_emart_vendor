@@ -162,7 +162,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    'Order ID. ' + widget.orders.orderNo,
+                    'Order ID. BS' + widget.orders.orderNo,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
