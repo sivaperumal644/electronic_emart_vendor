@@ -13,6 +13,7 @@ class Inventory {
   final List imageUrls;
   final User vendor;
   final String averageRating;
+  final int unAnswered;
 
   Inventory({
     this.id,
@@ -25,6 +26,7 @@ class Inventory {
     this.imageUrls,
     this.vendor,
     this.averageRating,
+    this.unAnswered,
   });
 
   factory Inventory.fromJson(Map json) {
@@ -38,6 +40,7 @@ class Inventory {
       inStock: json['inStock'].toDouble(),
       imageUrls: jsonDecode(json['imageUrl']),
       averageRating: json['averageRating'],
+      unAnswered: json['unAnswered']
     );
   }
 }

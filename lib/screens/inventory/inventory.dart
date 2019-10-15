@@ -7,6 +7,7 @@ import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
 import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
 import 'package:electronic_emart_vendor/screens/inventory_detail_screen/inventory_detail_screen.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
+import 'package:electronic_emart_vendor/screens/out_of_stock_screen/out_of_stock_screen.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -104,7 +105,17 @@ class _InventoryScreenState extends State<InventoryScreen> {
               ),
             ],
           ),
-          SecondaryButton(buttonText: 'Manage', onPressed: () {})
+          SecondaryButton(
+            buttonText: 'Manage',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OutOfStockScreen(),
+                ),
+              );
+            },
+          )
         ],
       ),
     );
@@ -112,6 +123,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   Widget inventoryListWidget(List<Inventory> inventories) {
     return ListView.builder(
+      shrinkWrap: true,
       physics: BouncingScrollPhysics(),
       itemCount: inventories.length + 1,
       itemBuilder: (context, index) {
@@ -281,7 +293,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
           final listStockAvailble =
               inventories.where((inventory) => inventory.inStock < 1).toList();
 
-          print(listStockAvailble.length);
           if (listStockAvailble.length != 0)
             return outOfStockWidget();
           else

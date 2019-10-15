@@ -15,6 +15,7 @@ query GetVendorInventory{
       inStock
       imageUrl
       averageRating
+      unAnswered
     }
   }
 }

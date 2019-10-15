@@ -7,6 +7,7 @@ import 'package:electronic_emart_vendor/modals/OrderModel.dart';
 import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
 import 'package:electronic_emart_vendor/screens/order_history/order_history_graphql.dart';
+import 'package:electronic_emart_vendor/screens/out_of_stock_screen/out_of_stock_screen.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -244,13 +245,18 @@ class _HomeScreenState extends State<HomeScreen> {
           final listStockAvailble =
               inventories.where((inventory) => inventory.inStock < 1).toList();
 
-          print(listStockAvailble.length);
           if (listStockAvailble.length != 0)
             return emptyInventoryContainer(
                 'Some items are out of stock',
                 'You have items in your inventory that have no stock left. Tap to manage these items.',
-                false,
-                () {});
+                false, () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OutOfStockScreen(),
+                ),
+              );
+            });
           else
             return Container();
         }

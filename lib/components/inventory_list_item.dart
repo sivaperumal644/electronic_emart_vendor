@@ -34,7 +34,7 @@ class _InvetoryListItemState extends State<InvetoryListItem> {
         isEmpty = false;
       });
     }
-
+    
     return InkWell(
       onTap: widget.onTap,
       borderRadius: BorderRadius.circular(12),
@@ -46,9 +46,8 @@ class _InvetoryListItemState extends State<InvetoryListItem> {
                 ? PALE_RED_COLOR.withOpacity(0.1)
                 : PRIMARY_COLOR.withOpacity(0.06),
             border: Border.all(
-                color: isEmpty
-                    ? PALE_RED_COLOR
-                    : PRIMARY_COLOR.withOpacity(0.6))),
+                color:
+                    isEmpty ? PALE_RED_COLOR : PRIMARY_COLOR.withOpacity(0.6))),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -92,7 +91,7 @@ class _InvetoryListItemState extends State<InvetoryListItem> {
             ),
             Container(height: 4),
             Text(
-              '3 unanswered questions',
+              '${widget.inventoryItem.unAnswered.toString()} unanswered questions',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
             )
           ],
