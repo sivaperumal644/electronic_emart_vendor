@@ -94,7 +94,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   ),
                 ),
           if (widget.orders.status == OrderStatuses.PLACED_BY_CUSTOMER ||
-              widget.orders.status == OrderStatuses.RECEIVED_BY_STORE)
+              widget.orders.status == OrderStatuses.RECEIVED_BY_STORE) 
             isRejectButtonClicked
                 ? Container(
                     padding: EdgeInsets.symmetric(vertical: 16),

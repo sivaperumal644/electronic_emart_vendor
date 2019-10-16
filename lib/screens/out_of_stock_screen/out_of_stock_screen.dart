@@ -36,7 +36,7 @@ class _OutOfStockScreenState extends State<OutOfStockScreen> {
 
   Widget appBar() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      margin: EdgeInsets.fromLTRB(16, 8, 24, 20),
       child: Row(
         children: <Widget>[
           IconButton(

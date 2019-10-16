@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
             end: FractionalOffset.bottomCenter,
             colors: isInventoryEmpty
                 ? [PRIMARY_COLOR.withOpacity(0.85), PRIMARY_COLOR]
-                : [LIGHT_ORANGE_COLOR, ORANGE_COLOR],
+                : [Colors.red.shade900.withOpacity(0.8), Colors.red.shade900],
             stops: [0.0, 1.0],
           ),
           borderRadius: BorderRadius.circular(16),
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
             BoxShadow(
               color: isInventoryEmpty
                   ? PRIMARY_COLOR.withOpacity(0.5)
-                  : ORANGE_COLOR.withOpacity(0.5),
+                  : PALE_RED_COLOR.withOpacity(0.5),
               offset: Offset(2.0, 6.0),
               blurRadius: 10.0,
             ),
@@ -109,10 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget mainList(listSeen, listUnSeen) {
+  Widget mainList(List<Order> listSeen, List<Order> listUnSeen) {
     return ListView(
       physics: BouncingScrollPhysics(),
-      shrinkWrap: true,
       children: <Widget>[
         isInventoryEmpty(),
         Container(
@@ -126,9 +125,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         Container(height: 16),
+        if (listSeen.length == 0 && listUnSeen.length == 0)
+          Container(
+            height: MediaQuery.of(context).size.height / 3,
+            child: Center(
+              child: Text(
+                'No active orders now',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: GREY_COLOR,
+                ),
+              ),
+            ),
+          ),
         seenList(listSeen),
         unSeenList(listUnSeen),
-        Container(height: 100),
       ],
     );
   }

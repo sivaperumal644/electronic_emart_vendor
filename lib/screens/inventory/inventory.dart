@@ -67,16 +67,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
           ),
           isStockOfInventoryEmpty(),
-          Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              children: <Widget>[
-                getAllVendorQueryComponent(),
-                Container(padding: EdgeInsets.only(bottom: 60))
-              ],
-            ),
-          )
+          getAllVendorQueryComponent(),
         ],
       ),
     );
@@ -84,7 +75,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   Widget outOfStockWidget() {
     return Container(
-      margin: EdgeInsets.fromLTRB(24, 12, 24, 0),
+      margin: EdgeInsets.fromLTRB(24, 8, 24, 6),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -123,9 +114,8 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   Widget inventoryListWidget(List<Inventory> inventories) {
     return ListView.builder(
-      shrinkWrap: true,
       physics: BouncingScrollPhysics(),
-      itemCount: inventories.length + 1,
+      itemCount: inventories.length,
       itemBuilder: (context, index) {
         if (inventories.length == 0) {
           return Container(
@@ -142,9 +132,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
             ),
           );
         }
-        if (index == inventories.length) {
-          return Container(height: 320);
-        }
+
         return inventoryItem(inventories[index]);
       },
     );
@@ -261,8 +249,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
           else if (itemValue == 'Price (high to low)')
             inventories
                 .sort((a, b) => b.sellingPrice.compareTo(a.sellingPrice));
-          return Container(
-            height: MediaQuery.of(context).size.height,
+          return Expanded(
             child: inventoryListWidget(inventories),
           );
         }
