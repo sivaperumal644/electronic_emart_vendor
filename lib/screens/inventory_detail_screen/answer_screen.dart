@@ -33,6 +33,7 @@ class _AnswerPostState extends State<AnswerPost> {
   TextEditingController answerController;
   Map answerText = {"answerText": ""};
   bool isButtonClicked = false;
+  bool isDeleteButtonClicked = false;
 
   @override
   void initState() {
@@ -77,29 +78,38 @@ class _AnswerPostState extends State<AnswerPost> {
           isButtonClicked
               ? CupertinoActivityIndicator()
               : answerQuestionMutationComponent(),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 24),
-            child: TertiaryButton(
-              isRed: true,
-              text: 'Delete Question',
-              onPressed: () {
-                showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (BuildContext context) {
-                      return DialogStyle(
-                        titleMessage: 'Delete question?',
-                        contentMessage:
-                            'This question along with any answers, will be permanently deleted.',
-                        isRegister: true,
-                        isDelete: true,
-                        deleteOnPressed: () {},
-                      );
-                    });
-              },
-            ),
-          )
+          isDeleteButtonClicked
+              ? CupertinoActivityIndicator()
+              : deleteQuestionMutationComponent(),
         ],
+      ),
+    );
+  }
+
+  Widget deleteButton(RunMutation runMutation) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 24),
+      child: TertiaryButton(
+        isRed: true,
+        text: 'Delete Question',
+        onPressed: () {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return DialogStyle(
+                titleMessage: 'Delete question?',
+                contentMessage:
+                    'This question along with any answers, will be permanently deleted.',
+                isRegister: true,
+                isDelete: true,
+                deleteOnPressed: () {
+                  runMutation({'questionId': widget.questionId});
+                },
+              );
+            },
+          );
+        },
       ),
     );
   }
@@ -113,10 +123,28 @@ class _AnswerPostState extends State<AnswerPost> {
           setState(() {
             isButtonClicked = true;
           });
-          runMutation({
-            'questionId': widget.questionId,
-            'answerText': answerText['answerText'],
-          });
+          if (answerText['answerText'] == '') {
+            setState(() {
+              isButtonClicked = false;
+            });
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return DialogStyle(
+                  titleMessage: 'Add your answer',
+                  contentMessage:
+                      'Add an answer to the question and then try clicking the save changes button.',
+                  isRegister: false,
+                );
+              },
+            );
+          } else {
+            runMutation({
+              'questionId': widget.questionId,
+              'answerText': answerText['answerText'],
+            });
+          }
         },
       ),
     );
@@ -167,6 +195,32 @@ class _AnswerPostState extends State<AnswerPost> {
       onCompleted: (dynamic resultData) {
         if (resultData != null &&
             resultData['answerQuestion']['error'] == null) {
+          Navigator.pop(context);
+        }
+      },
+    );
+  }
+
+  Widget deleteQuestionMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(
+        document: deleteQuestionMutation,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+      ),
+      builder: (runMutation, result) {
+        print(result.data);
+        print(result.errors);
+        return deleteButton(runMutation);
+      },
+      onCompleted: (dynamic resultData) {
+        print(resultData['deleteQuestion']['error']);
+        if (resultData != null &&
+            resultData['deleteQuestion']['error'] == null) {
           Navigator.pop(context);
         }
       },

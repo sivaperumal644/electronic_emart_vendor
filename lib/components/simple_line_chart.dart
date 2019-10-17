@@ -9,7 +9,7 @@ class SimpleLineChart extends StatelessWidget {
 
   /// Creates a [LineChart] with sample data and no transition.
   factory SimpleLineChart.withSampleData() {
-    return new SimpleLineChart(
+    return SimpleLineChart(
       _createSampleData(),
       // Disable animations for image tests.
       animate: false,
@@ -18,20 +18,26 @@ class SimpleLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new charts.LineChart(seriesList, animate: animate);
+    return charts.LineChart(seriesList, animate: animate);
   }
 
   /// Create one series with sample hard coded data.
   static List<charts.Series<LinearSales, int>> _createSampleData() {
     final data = [
-      new LinearSales(0, 5),
-      new LinearSales(1, 25),
-      new LinearSales(2, 100),
-      new LinearSales(3, 75),
+      LinearSales(0, 5),
+      LinearSales(1, 25),
+      LinearSales(2, 100),
+      LinearSales(3, 75),
     ];
 
+    final dataSecond = [
+      LinearSales(0, 10),
+      LinearSales(1, 30),
+      LinearSales(2, 90),
+      LinearSales(3, 85),
+    ];
     return [
-      new charts.Series<LinearSales, int>(
+      charts.Series<LinearSales, int>(
         id: 'Sales',
         colorFn: (_, __) => charts.Color.fromHex(code: '#0039CA'),
         domainFn: (LinearSales sales, _) => sales.year,
@@ -41,6 +47,17 @@ class SimpleLineChart extends StatelessWidget {
         outsideLabelStyleAccessorFn: (_, __) =>
             charts.TextStyleSpec(color: charts.Color.fromHex(code: '#0039CA')),
         data: data,
+      ),
+      charts.Series<LinearSales, int>(
+        id: 'Count',
+        colorFn: (_, __) => charts.Color.fromHex(code: '#0039CA'),
+        domainFn: (LinearSales sales, _) => sales.year,
+        measureFn: (LinearSales sales, _) => sales.sales,
+        insideLabelStyleAccessorFn: (_, __) =>
+            charts.TextStyleSpec(color: charts.Color.fromHex(code: '#0039CA')),
+        outsideLabelStyleAccessorFn: (_, __) =>
+            charts.TextStyleSpec(color: charts.Color.fromHex(code: '#0039CA')),
+        data: dataSecond,
       )
     ];
   }

@@ -10,8 +10,8 @@ import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
-import 'package:electronic_emart_vendor/screens/inventory/inventory.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input_graphql.dart';
+import 'package:electronic_emart_vendor/screens/nav_screens.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -605,7 +605,11 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             resultData['deleteInventory']['error'] == null) {
           Navigator.pushAndRemoveUntil(
             context,
-            MaterialPageRoute(builder: (context) => InventoryScreen()),
+            MaterialPageRoute(
+              builder: (context) => NavigateScreens(
+                selectedIndex: 1,
+              ),
+            ),
             (val) => false,
           );
         }

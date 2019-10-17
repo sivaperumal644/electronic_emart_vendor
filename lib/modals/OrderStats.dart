@@ -1,18 +1,18 @@
 class OrderStats {
   final String date;
-  final double itemCount;
+  final double orderCount;
   final double totalAmount;
 
   OrderStats({
     this.date,
-    this.itemCount,
+    this.orderCount,
     this.totalAmount,
   });
 
   factory OrderStats.fromJson(Map json) {
     return OrderStats(
       date: json['date'],
-      itemCount: json['itemCount'].toDouble(),
+      orderCount: json['orderCount'].toDouble(),
       totalAmount: json['totalAmount'].toDouble(),
     );
   }

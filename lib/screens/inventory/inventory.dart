@@ -229,7 +229,13 @@ class _InventoryScreenState extends State<InventoryScreen> {
         pollInterval: 1,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.loading)
+          return Container(
+            height: MediaQuery.of(context).size.height / 2,
+            child: Center(
+              child: CupertinoActivityIndicator(),
+            ),
+          );
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null &&

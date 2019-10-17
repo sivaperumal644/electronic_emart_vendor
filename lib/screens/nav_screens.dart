@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import 'home/home.dart';
 import 'inventory/inventory.dart';
+import 'offer_poster_screen/offer_poster_screen.dart';
 
 class NavigateScreens extends StatefulWidget {
   final int selectedIndex;
@@ -32,8 +33,9 @@ class _NavigateScreensState extends State<NavigateScreens> {
         icons: [
           FeatherIcons.home,
           FeatherIcons.shoppingCart,
+          FeatherIcons.tag,
           FeatherIcons.box,
-          FeatherIcons.settings
+          FeatherIcons.settings,
         ],
         onTap: (index) {
           setState(() {
@@ -51,8 +53,10 @@ class _NavigateScreensState extends State<NavigateScreens> {
       case 1:
         return InventoryScreen();
       case 2:
-        return OrderStatScreen();
+        return OfferPosterScreen();
       case 3:
+        return OrderStatScreen();
+      case 4:
         return ProfileScreen();
       default:
         return Container();

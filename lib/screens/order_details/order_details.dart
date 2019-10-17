@@ -70,7 +70,9 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               ),
             ),
           ),
-          if (widget.orders.status == OrderStatuses.PLACED_BY_CUSTOMER ||
+          if ((widget.orders.status == OrderStatuses.PLACED_BY_CUSTOMER &&
+                  (widget.orders.transactionSuccess == true ||
+                      widget.orders.paymentMode == 'Cash On Delivery')) ||
               widget.orders.status == OrderStatuses.RECEIVED_BY_STORE)
             isChangeButtonClicked
                 ? Container(
@@ -93,8 +95,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                     },
                   ),
                 ),
-          if (widget.orders.status == OrderStatuses.PLACED_BY_CUSTOMER ||
-              widget.orders.status == OrderStatuses.RECEIVED_BY_STORE) 
+          if ((widget.orders.status == OrderStatuses.PLACED_BY_CUSTOMER &&
+                  (widget.orders.transactionSuccess == true ||
+                      widget.orders.paymentMode == 'Cash On Delivery')) ||
+              widget.orders.status == OrderStatuses.RECEIVED_BY_STORE)
             isRejectButtonClicked
                 ? Container(
                     padding: EdgeInsets.symmetric(vertical: 16),

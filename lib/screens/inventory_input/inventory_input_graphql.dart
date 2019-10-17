@@ -94,3 +94,17 @@ mutation AnswerQuestion(\$questionId: String, \$answerText: String){
   }
 }
 ''';
+
+String deleteQuestionMutation = '''
+mutation DeleteQuestion(\$questionId:String){
+  deleteQuestion(questionId:\$questionId){
+    error{
+      path
+      message
+    }
+    qa{
+      id
+    }
+  }
+}
+''';

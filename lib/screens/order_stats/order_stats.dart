@@ -118,7 +118,6 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
               );
               final formattedDate =
                   DateFormat('yyyy-MM-dd').format(selectedDate);
-              print(formattedDate);
               setState(() {
                 startDate = formattedDate;
               });
@@ -153,7 +152,6 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
               );
               final formattedDate =
                   DateFormat('yyyy-MM-dd').format(selectedDate);
-              print(formattedDate);
               setState(() {
                 endDate = formattedDate;
               });
@@ -219,7 +217,9 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
         pollInterval: 1,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        print(result.data);
+        print(result.errors);
+        //if (result.loading) return Center(child: CupertinoActivityIndicator());
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null && result.data['getOrderStats'] != null) {
@@ -230,7 +230,7 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
           int totalOrders = 0;
           for (int i = 0; i < getOrderStatsList.length; i++) {
             totalIncome = totalIncome + getOrderStatsList[i].totalAmount;
-            totalOrders = totalOrders + getOrderStatsList[i].itemCount.toInt();
+            totalOrders = totalOrders + getOrderStatsList[i].orderCount.toInt();
           }
           return displayOrderStats(totalIncome, totalOrders);
         }
