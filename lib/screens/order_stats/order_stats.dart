@@ -2,6 +2,7 @@ import 'package:electronic_emart_vendor/components/setting_option.dart';
 import 'package:electronic_emart_vendor/components/simple_line_chart.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/OrderStats.dart';
+import 'package:electronic_emart_vendor/screens/download_your_data/download_your_data_screen.dart';
 import 'package:electronic_emart_vendor/screens/order_history/order_history.dart';
 import 'package:electronic_emart_vendor/screens/order_stats/order_stats_graphql.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
 import '../../app_state.dart';
 
 class OrderStatScreen extends StatefulWidget {
@@ -69,7 +69,14 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
           Container(
             margin: EdgeInsets.only(top: 3),
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DownloadYourDataScreen(),
+                  ),
+                );
+              },
               child: SettingsOption(
                 title: 'Download your data',
                 color: BLACK_COLOR,
@@ -112,9 +119,9 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
             onTap: () async {
               final selectedDate = await showDatePicker(
                 context: context,
-                initialDate: DateTime.now(),
+                initialDate: DateTime.parse(startDate),
                 firstDate: DateTime(2019),
-                lastDate: DateTime(2050),
+                lastDate: DateTime.now(),
               );
               final formattedDate =
                   DateFormat('yyyy-MM-dd').format(selectedDate);
@@ -146,9 +153,9 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
             onTap: () async {
               final selectedDate = await showDatePicker(
                 context: context,
-                initialDate: DateTime.now(),
-                firstDate: DateTime(2019),
-                lastDate: DateTime(2050),
+                initialDate: DateTime.parse(endDate),
+                firstDate: DateTime.parse(startDate),
+                lastDate: DateTime.now(),
               );
               final formattedDate =
                   DateFormat('yyyy-MM-dd').format(selectedDate);
@@ -217,8 +224,6 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
         pollInterval: 1,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        print(result.data);
-        print(result.errors);
         //if (result.loading) return Center(child: CupertinoActivityIndicator());
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));

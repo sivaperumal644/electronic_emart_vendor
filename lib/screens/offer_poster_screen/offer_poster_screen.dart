@@ -100,7 +100,6 @@ class _OfferPosterScreenState extends State<OfferPosterScreen> {
       physics: BouncingScrollPhysics(),
       itemCount: posters.length,
       itemBuilder: (context, index) {
-        print(posters[index].inventory);
         return OfferPosterListItem(
           poster: posters[index],
         );

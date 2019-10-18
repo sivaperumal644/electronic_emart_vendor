@@ -50,13 +50,13 @@ class SimpleLineChart extends StatelessWidget {
       ),
       charts.Series<LinearSales, int>(
         id: 'Count',
-        colorFn: (_, __) => charts.Color.fromHex(code: '#0039CA'),
+        colorFn: (_, __) => charts.Color.fromHex(code: '#8B0000'),
         domainFn: (LinearSales sales, _) => sales.year,
         measureFn: (LinearSales sales, _) => sales.sales,
         insideLabelStyleAccessorFn: (_, __) =>
-            charts.TextStyleSpec(color: charts.Color.fromHex(code: '#0039CA')),
+            charts.TextStyleSpec(color: charts.Color.fromHex(code: '#8B0000')),
         outsideLabelStyleAccessorFn: (_, __) =>
-            charts.TextStyleSpec(color: charts.Color.fromHex(code: '#0039CA')),
+            charts.TextStyleSpec(color: charts.Color.fromHex(code: '#8B0000')),
         data: dataSecond,
       )
     ];

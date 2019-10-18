@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -91,6 +92,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           },
           child: SettingsOption(
             title: 'Change Bank Details',
+            color: BLACK_COLOR,
+          ),
+        ),
+        Container(padding: EdgeInsets.only(top: 3)),
+        InkWell(
+          onTap: () {
+            launch("tel://6380222901");
+          },
+          child: SettingsOption(
+            title: 'Help Line',
             color: BLACK_COLOR,
           ),
         ),

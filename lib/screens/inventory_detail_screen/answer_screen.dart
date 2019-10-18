@@ -213,14 +213,12 @@ class _AnswerPostState extends State<AnswerPost> {
         },
       ),
       builder: (runMutation, result) {
-        print(result.data);
-        print(result.errors);
         return deleteButton(runMutation);
       },
       onCompleted: (dynamic resultData) {
-        print(resultData['deleteQuestion']['error']);
         if (resultData != null &&
             resultData['deleteQuestion']['error'] == null) {
+          Navigator.pop(context);
           Navigator.pop(context);
         }
       },
