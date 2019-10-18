@@ -3,6 +3,7 @@ import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/constants/profanityFilter.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
@@ -71,7 +72,21 @@ class _AnswerPostState extends State<AnswerPost> {
               hintText: 'Give your answer here',
               maxLines: 10,
               onChanged: (val) {
-                answerText['answerText'] = val;
+                setState(() {
+                  answerText['answerText'] = val;
+                });
+                if (ProfanityFilter().hasProfanity(answerText['answerText'])) {
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => DialogStyle(
+                      contentMessage:
+                          "Please avoid using vulgar words while answering.",
+                      titleMessage: "Vulgar Word Found",
+                      isRegister: false,
+                    ),
+                  );
+                }
               },
             ),
           ),
@@ -138,6 +153,21 @@ class _AnswerPostState extends State<AnswerPost> {
                   isRegister: false,
                 );
               },
+            );
+          }
+          if (ProfanityFilter().hasProfanity(answerText['answerText'])) {
+            setState(() {
+              isButtonClicked = false;
+            });
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (context) => DialogStyle(
+                contentMessage:
+                    "Please avoid using vulgar words while answering.",
+                titleMessage: "Vulgar Word Found",
+                isRegister: false,
+              ),
             );
           } else {
             runMutation({

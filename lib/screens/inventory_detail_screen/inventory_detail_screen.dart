@@ -45,6 +45,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
   }
 
   Container dividerLine() {
+    print(widget.inventory.id);
     return Container(
       margin: EdgeInsets.only(top: 16, bottom: 24),
       height: 2,
