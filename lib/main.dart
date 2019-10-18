@@ -1,3 +1,4 @@
+import 'package:electronic_emart_vendor/components/material_display_connection_status_overlay_widget_dart.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
 import 'package:electronic_emart_vendor/screens/nav_screens.dart';
@@ -47,9 +48,11 @@ class _MyAppState extends State<MyApp> {
       child: CacheProvider(
         child: ChangeNotifierProvider<AppState>(
           builder: (_) => AppState(),
-          child: MaterialApp(
-            theme: ThemeData(fontFamily: 'Quicksand'),
-            home: isAuthenticated ? NavigateScreens() : LoginScreen(),
+          child: MaterialDisplayConnectionStatusOverlayWidget(
+            child: MaterialApp(
+              theme: ThemeData(fontFamily: 'Quicksand'),
+              home: isAuthenticated ? NavigateScreens() : LoginScreen(),
+            ),
           ),
         ),
       ),

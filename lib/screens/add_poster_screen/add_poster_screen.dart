@@ -9,6 +9,7 @@ import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
 import 'package:electronic_emart_vendor/modals/PosterModel.dart';
 import 'package:electronic_emart_vendor/screens/add_poster_inventory_screen/add_poster_inventory_screen.dart';
 import 'package:electronic_emart_vendor/screens/add_poster_screen/poster_input_graphql.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +30,8 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
   String posterImage = "";
   List<Inventory> selectedInventories = [];
   List<String> inventoryIdsList = [];
+  bool isButtonClicked = false;
+  bool isDeleteButtonClicked = false;
 
   @override
   void initState() {
@@ -128,7 +131,11 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
             height: 1,
             color: PRIMARY_COLOR.withOpacity(0.3),
           ),
-          widget.isNewPoster ? Container() : deletePosterMutationComponent(),
+          widget.isNewPoster
+              ? Container()
+              : isDeleteButtonClicked
+                  ? CupertinoActivityIndicator()
+                  : deletePosterMutationComponent(),
           Container(height: 20),
         ],
       ),
@@ -143,9 +150,26 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
           text: 'Remove this poster',
           isRed: true,
           onPressed: () {
-            runMutation({
-              'posterId': widget.poster.id,
-            });
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return DialogStyle(
+                    titleMessage: 'Delete Poster?',
+                    contentMessage:
+                        'Are you sure you want to delete this poster.',
+                    isDelete: true,
+                    isRegister: true,
+                    deleteOnPressed: () {
+                      setState(() {
+                        isDeleteButtonClicked = true;
+                      });
+                      runMutation({
+                        'posterId': widget.poster.id,
+                      });
+                    },
+                  );
+                });
           },
         ),
       ],
@@ -200,7 +224,9 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
               ),
             ],
           ),
-          addPosterMutationComponent(),
+          isButtonClicked
+              ? CupertinoActivityIndicator()
+              : addPosterMutationComponent(),
         ],
       ),
     );
@@ -210,7 +236,13 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
     return TertiaryButton(
       text: 'DONE',
       onPressed: () {
+        setState(() {
+          isButtonClicked = true;
+        });
         if (posterImage == "" || inventoryIdsList == []) {
+          setState(() {
+            isButtonClicked = false;
+          });
           showDialog(
               context: context,
               barrierDismissible: false,
@@ -223,22 +255,29 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
                 );
               });
         } else {
-          runMutation({
-            'inventoryIds': inventoryIdsList,
-            'posterImage': posterImage,
-          });
+          for (int i = 0; i < selectedInventories.length; i++) {
+            setState(() {
+              inventoryIdsList.add(selectedInventories[i].id);
+            });
+          }
+          if (widget.isNewPoster == true) {
+            runMutation({
+              'inventoryIds': inventoryIdsList,
+              'posterImage': posterImage,
+            });
+          } else {
+            runMutation({
+              'inventoryIds': inventoryIdsList,
+              'posterImage': posterImage,
+              'posterId': widget.poster.id,
+            });
+          }
         }
       },
     );
   }
 
   Widget addPosterMutationComponent() {
-    for (int i = 0; i < selectedInventories.length; i++) {
-      setState(() {
-        inventoryIdsList.add(selectedInventories[i].id);
-      });
-    }
-
     final appState = Provider.of<AppState>(context);
     return Mutation(
       options: MutationOptions(
@@ -276,6 +315,7 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
       },
       onCompleted: (dynamic resultData) {
         if (resultData != null && resultData['deletePoster']['error'] == null) {
+          Navigator.pop(context);
           Navigator.pop(context);
         }
       },

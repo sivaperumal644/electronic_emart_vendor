@@ -71,7 +71,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
     );
   }
 
-    Widget orderListComponent(List<Order> orders, bool isActiveOrders) {
+  Widget orderListComponent(List<Order> orders, bool isActiveOrders) {
     return ListView.builder(
       shrinkWrap: true,
       physics: BouncingScrollPhysics(),
@@ -176,6 +176,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
                   (item.transactionSuccess == true ||
                       item.paymentMode == "Cash On Delivery"))
               .toList();
+          activeOrders.sort((a, b) => a.datePlaced.compareTo(b.datePlaced));
           final inActiveOrders = orders
               .where((item) =>
                   (item.status != OrderStatuses.RECEIVED_BY_STORE &&
@@ -183,6 +184,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
                   (item.transactionSuccess == false &&
                       item.paymentMode != "Cash On Delivery"))
               .toList();
+          inActiveOrders.sort((a, b) => a.updatedDate.compareTo(b.updatedDate));
           return Container(
             height: MediaQuery.of(context).size.height,
             child: mainList(activeOrders, inActiveOrders),

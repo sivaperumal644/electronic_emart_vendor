@@ -202,12 +202,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   (item.transactionSuccess == true ||
                       item.paymentMode == "Cash On Delivery"))
               .toList();
+          seenOrders.sort((a, b) => a.updatedDate.compareTo(b.updatedDate));
           final unSeenOrders = orders
               .where((item) =>
                   item.status == OrderStatuses.RECEIVED_BY_STORE &&
                   (item.transactionSuccess == true ||
                       item.paymentMode == "Cash On Delivery"))
               .toList();
+          unSeenOrders.sort((a, b) => b.updatedDate.compareTo(a.updatedDate));
           return Container(
             height: MediaQuery.of(context).size.height,
             child: mainList(seenOrders, unSeenOrders),

@@ -62,6 +62,21 @@ class _AddPosterInventoryScreenState extends State<AddPosterInventoryScreen> {
       physics: BouncingScrollPhysics(),
       itemCount: inventories.length,
       itemBuilder: (context, index) {
+        if (inventories.length == 0) {
+          return Container(
+            height: MediaQuery.of(context).size.height / 2,
+            child: Center(
+              child: Text(
+                'No items in inventory',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: GREY_COLOR,
+                ),
+              ),
+            ),
+          );
+        }
         return OfferPosterInventoryItem(
           isAddOfferInventory: true,
           inventoryItem: inventories[index],
@@ -92,7 +107,7 @@ class _AddPosterInventoryScreenState extends State<AddPosterInventoryScreen> {
         hintText: 'Search for items',
         obscureText: false,
         onChanged: (text) {
-          appState.setSearchText(text);
+          appState.setPosterSearchText(text);
         },
       ),
     );

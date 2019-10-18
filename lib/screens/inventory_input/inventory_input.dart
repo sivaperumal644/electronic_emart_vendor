@@ -330,12 +330,26 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       isRed: true,
       text: 'Delete Item',
       onPressed: () {
-        setState(() {
-          isRemoveButtonClicked = true;
-        });
-        runMutation({
-          "inventoryId": widget.inventory.id,
-        });
+        showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return DialogStyle(
+              titleMessage: 'Delete Inventory?',
+              contentMessage: 'Are you sure you want to delete the inventory',
+              isRegister: true,
+              isDelete: true,
+              deleteOnPressed: () {
+                setState(() {
+                  isRemoveButtonClicked = true;
+                });
+                runMutation({
+                  "inventoryId": widget.inventory.id,
+                });
+              },
+            );
+          },
+        );
       },
     );
   }
@@ -606,9 +620,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => NavigateScreens(
-                selectedIndex: 1,
-              ),
+              builder: (context) => NavigateScreens(selectedIndex: 1),
             ),
             (val) => false,
           );

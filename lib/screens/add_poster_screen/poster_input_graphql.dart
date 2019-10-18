@@ -1,6 +1,6 @@
 String addPosterMutation = '''
-mutation AddPoster(\$inventoryIds:[String], \$posterImage: String){
-  addPoster(inventoryIds:\$inventoryIds, posterImage:\$posterImage){
+mutation AddPoster(\$inventoryIds:[String], \$posterImage: String, \$posterId:String){
+  addPoster(inventoryIds:\$inventoryIds, posterImage:\$posterImage, posterId:\$posterId){
     error{
       path
       message

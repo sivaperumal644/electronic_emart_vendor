@@ -26,6 +26,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       floatingActionButton: FloatingActionButton.extended(
@@ -49,6 +50,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ),
       body: Column(
         children: <Widget>[
+          
           Container(
             decoration: BoxDecoration(
               color: WHITE_COLOR,

@@ -1,6 +1,9 @@
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../app_state.dart';
 
 class OfferPosterInventoryItem extends StatefulWidget {
   final bool isAddOfferInventory;
@@ -22,10 +25,17 @@ class OfferPosterInventoryItem extends StatefulWidget {
 class _OfferPosterInventoryItemState extends State<OfferPosterInventoryItem> {
   @override
   Widget build(BuildContext context) {
+    final appState = Provider.of<AppState>(context);
     final isSelected = widget.selectedInventories
             .where((inventory) => inventory.id == widget.inventoryItem.id)
             .length !=
         0;
+
+    if (!widget.inventoryItem.name
+        .toLowerCase()
+        .contains(appState.getPosterSearchText.toLowerCase())) {
+      return Container();
+    }
     return Container(
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.symmetric(horizontal: 24, vertical: 12),

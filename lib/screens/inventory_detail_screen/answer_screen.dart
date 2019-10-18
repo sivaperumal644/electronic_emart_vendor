@@ -119,6 +119,9 @@ class _AnswerPostState extends State<AnswerPost> {
                 isRegister: true,
                 isDelete: true,
                 deleteOnPressed: () {
+                  setState(() {
+                    isDeleteButtonClicked = true;
+                  });
                   runMutation({'questionId': widget.questionId});
                 },
               );

@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
-
 import '../../app_state.dart';
 
 class InventortDetailScreen extends StatefulWidget {
@@ -45,7 +44,6 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
   }
 
   Container dividerLine() {
-    print(widget.inventory.id);
     return Container(
       margin: EdgeInsets.only(top: 16, bottom: 24),
       height: 2,
@@ -103,7 +101,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
                 .map(
                   (f) => Image.network(
                     f,
-                    fit: BoxFit.fitWidth,
+                    fit: BoxFit.fill,
                   ),
                 )
                 .toList(),

@@ -17,6 +17,7 @@ class AppState with ChangeNotifier {
   String shopPhotoUrl;
   String combinedPanImagesUrl = "";
   String searchText = "";
+  String posterSearchText = "";
 
   static final HttpLink httpLink =
       HttpLink(uri: 'http://cezhop.herokuapp.com/graphql');
@@ -30,13 +31,11 @@ class AppState with ChangeNotifier {
     final result = await client.mutate(
       MutationOptions(
         document: updateVendorAccountMutation,
-        variables: {
-          'phoneNumber':phoneNumber
-        },
+        variables: {'phoneNumber': phoneNumber},
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer $jwtToken',
-          },    
+          },
         },
       ),
     );
@@ -91,8 +90,13 @@ class AppState with ChangeNotifier {
     notifyListeners();
   }
 
-  void setVendorId(String id){
+  void setVendorId(String id) {
     vendorId = id;
+    notifyListeners();
+  }
+
+  void setPosterSearchText(String text) {
+    posterSearchText = text;
     notifyListeners();
   }
 
@@ -105,4 +109,5 @@ class AppState with ChangeNotifier {
   get getCombinedPanImagesUrl => combinedPanImagesUrl;
   get getSearchText => searchText;
   get getVendorId => vendorId;
+  get getPosterSearchText => posterSearchText;
 }
