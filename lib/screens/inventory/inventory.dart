@@ -26,7 +26,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       backgroundColor: WHITE_COLOR,
       floatingActionButton: FloatingActionButton.extended(
@@ -50,7 +49,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
       ),
       body: Column(
         children: <Widget>[
-          
           Container(
             decoration: BoxDecoration(
               color: WHITE_COLOR,
@@ -119,22 +117,6 @@ class _InventoryScreenState extends State<InventoryScreen> {
       physics: BouncingScrollPhysics(),
       itemCount: inventories.length,
       itemBuilder: (context, index) {
-        if (inventories.length == 0) {
-          return Container(
-            height: MediaQuery.of(context).size.height / 2,
-            child: Center(
-              child: Text(
-                'No items in inventory',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: GREY_COLOR,
-                ),
-              ),
-            ),
-          );
-        }
-
         return inventoryItem(inventories[index]);
       },
     );
@@ -261,7 +243,19 @@ class _InventoryScreenState extends State<InventoryScreen> {
             child: inventoryListWidget(inventories),
           );
         }
-        return Container();
+        return Container(
+          height: MediaQuery.of(context).size.height / 2,
+          child: Center(
+            child: Text(
+              'No items in inventory',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: GREY_COLOR,
+              ),
+            ),
+          ),
+        );
       },
     );
   }

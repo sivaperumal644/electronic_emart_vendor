@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
 import '../../app_state.dart';
 
 class OrderStatScreen extends StatefulWidget {
@@ -33,77 +34,122 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: WHITE_COLOR,
-      body: ListView(
-        physics: BouncingScrollPhysics(),
+      body: Column(
         children: <Widget>[
-          Container(padding: EdgeInsets.only(top: 25)),
+          Container(padding: EdgeInsets.only(top: 45)),
           headerText('Order Stats', TextAlign.center),
-          Container(
-            width: 360,
-            height: 300,
-            margin: EdgeInsets.all(24.0),
-            child: SimpleLineChart.withSampleData(),
-          ),
+          Container(height: 16),
           dateShowingString(),
-          incomeTextWidget('Total INCOME', 0.35, 16.0),
-          getOrderStatsComponent(),
-          Container(
-            height: 1,
-            margin: EdgeInsets.only(top: 30.0, bottom: 3),
-            color: PRIMARY_COLOR.withOpacity(0.35),
-          ),
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OrderExpandedScreen(),
-                ),
-              );
-            },
-            child: SettingsOption(
-              title: 'Order History',
-              color: BLACK_COLOR,
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(top: 3),
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DownloadYourDataScreen(),
-                  ),
-                );
-              },
-              child: SettingsOption(
-                title: 'Download your data',
-                color: BLACK_COLOR,
-              ),
-            ),
-          )
+          Expanded(child: getOrderStatsComponent()),
         ],
       ),
     );
   }
 
-  Widget displayOrderStats(income, orders) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+  Widget orderStatsMainList(List<OrderStats> orderStats, income, orders) {
+    return ListView(
+      physics: BouncingScrollPhysics(),
       children: <Widget>[
+        graphHeader('Order Graph', 'This graph depicts the orders per day.'),
+        Container(
+          width: 360,
+          height: 300,
+          margin: EdgeInsets.all(24.0),
+          child: SimpleLineChart.withSampleData(orderStats, false),
+        ),
+        dividerLine(),
+        Container(height: 16),
+        graphHeader('Amount Graph', 'This graph depicts the Amount per day'),
+        Container(
+          width: 360,
+          height: 300,
+          margin: EdgeInsets.all(24.0),
+          child: SimpleLineChart.withSampleData(orderStats, true),
+        ),
+        dividerLine(),
+        Container(height: 16),
+        incomeTextWidget('Total INCOME', 0.35, 16.0),
         incomeTextWidget('Rs. ${income.toString()}', 1.0, 36.0),
         Container(
-          margin: EdgeInsets.only(right: 24.0),
-          child: headerText('${orders.toString()} orders', TextAlign.end),
+          margin: EdgeInsets.only(left: 24.0),
+          child: headerText('${orders.toString()} orders', TextAlign.start),
         ),
+        Container(height: 16),
+        dividerLine(),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OrderExpandedScreen(),
+              ),
+            );
+          },
+          child: SettingsOption(
+            title: 'Order History',
+            color: BLACK_COLOR,
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(top: 3),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => DownloadYourDataScreen(),
+                ),
+              );
+            },
+            child: SettingsOption(
+              title: 'Download your data',
+              color: BLACK_COLOR,
+            ),
+          ),
+        )
       ],
+    );
+  }
+
+  Widget dividerLine() {
+    return Container(
+      height: 1,
+      margin: EdgeInsets.only(top: 10.0, bottom: 3),
+      color: PRIMARY_COLOR.withOpacity(0.35),
+    );
+  }
+
+  Widget graphHeader(title, subTitle) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            title,
+            style: TextStyle(
+              color: PRIMARY_COLOR.withOpacity(0.35),
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(height: 2),
+          Text(
+            subTitle,
+            style: TextStyle(
+              fontSize: 16,
+              color: GREY_COLOR.withOpacity(0.5),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
   Widget dateShowingString() {
     return Container(
-      margin: EdgeInsets.only(left: 24, right: 24, bottom: 10),
+      margin: EdgeInsets.only(left: 24, right: 24),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
@@ -182,10 +228,10 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
 
   Widget incomeTextWidget(String text, double opacity, double size) {
     return Container(
-      margin: EdgeInsets.only(right: 24.0),
+      margin: EdgeInsets.only(left: 24.0),
       child: Text(
         text,
-        textAlign: TextAlign.end,
+        textAlign: TextAlign.start,
         style: TextStyle(
           color: PRIMARY_COLOR.withOpacity(opacity),
           fontSize: size,
@@ -237,7 +283,8 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
             totalIncome = totalIncome + getOrderStatsList[i].totalAmount;
             totalOrders = totalOrders + getOrderStatsList[i].orderCount.toInt();
           }
-          return displayOrderStats(totalIncome, totalOrders);
+          return orderStatsMainList(
+              getOrderStatsList, totalIncome, totalOrders);
         }
         return Container();
       },

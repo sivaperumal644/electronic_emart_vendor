@@ -164,6 +164,7 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
                       setState(() {
                         isDeleteButtonClicked = true;
                       });
+                      Navigator.pop(context);
                       runMutation({
                         'posterId': widget.poster.id,
                       });
@@ -315,7 +316,6 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
       },
       onCompleted: (dynamic resultData) {
         if (resultData != null && resultData['deletePoster']['error'] == null) {
-          Navigator.pop(context);
           Navigator.pop(context);
         }
       },

@@ -343,6 +343,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 setState(() {
                   isRemoveButtonClicked = true;
                 });
+                Navigator.pop(context);
                 runMutation({
                   "inventoryId": widget.inventory.id,
                 });
@@ -617,6 +618,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       onCompleted: (dynamic resultData) {
         if (resultData != null &&
             resultData['deleteInventory']['error'] == null) {
+          print('object');
+          //Navigator.pop(context);
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(

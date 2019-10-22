@@ -17,7 +17,7 @@ class OrderExpandedScreen extends StatefulWidget {
 }
 
 class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
-  String selectedChips = '';
+  String selectedChips = 'All Time';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,6 +177,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
                       item.paymentMode == "Cash On Delivery"))
               .toList();
           activeOrders.sort((a, b) => a.datePlaced.compareTo(b.datePlaced));
+
           final inActiveOrders = orders
               .where((item) =>
                   (item.status != OrderStatuses.RECEIVED_BY_STORE &&
@@ -185,9 +186,33 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
                       item.paymentMode != "Cash On Delivery"))
               .toList();
           inActiveOrders.sort((a, b) => a.updatedDate.compareTo(b.updatedDate));
+          List<Order> activeOrdersSorted;
+          List<Order> inActiveOrdersSorted;
+          if (selectedChips == 'All Time') {
+            activeOrdersSorted = activeOrders;
+            inActiveOrdersSorted = inActiveOrders;
+          }
+          if (selectedChips == 'This month') {
+            activeOrdersSorted = activeOrders
+                .where(
+                    (order) => order.datePlaced.month == DateTime.now().month)
+                .toList();
+            inActiveOrdersSorted = inActiveOrders
+                .where(
+                    (order) => order.updatedDate.month == DateTime.now().month)
+                .toList();
+          }
+          if (selectedChips == 'This year') {
+            activeOrdersSorted = activeOrders
+                .where((order) => order.datePlaced.year == DateTime.now().year)
+                .toList();
+            inActiveOrdersSorted = inActiveOrders
+                .where((order) => order.updatedDate.year == DateTime.now().year)
+                .toList();
+          }
           return Container(
             height: MediaQuery.of(context).size.height,
-            child: mainList(activeOrders, inActiveOrders),
+            child: mainList(activeOrdersSorted, inActiveOrdersSorted),
           );
         }
         return Container(

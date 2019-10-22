@@ -1,4 +1,5 @@
 import 'package:charts_flutter/flutter.dart' as charts;
+import 'package:electronic_emart_vendor/modals/OrderStats.dart';
 import 'package:flutter/material.dart';
 
 class SimpleLineChart extends StatelessWidget {
@@ -7,10 +8,10 @@ class SimpleLineChart extends StatelessWidget {
 
   SimpleLineChart(this.seriesList, {this.animate});
 
-  /// Creates a [LineChart] with sample data and no transition.
-  factory SimpleLineChart.withSampleData() {
+  factory SimpleLineChart.withSampleData(
+      List<OrderStats> orderStatsList, bool isAmountGraph) {
     return SimpleLineChart(
-      _createSampleData(),
+      _createSampleData(orderStatsList, isAmountGraph),
       // Disable animations for image tests.
       animate: false,
     );
@@ -18,55 +19,43 @@ class SimpleLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return charts.LineChart(seriesList, animate: animate);
+    return charts.TimeSeriesChart(seriesList, animate: animate, behaviors: []);
   }
 
   /// Create one series with sample hard coded data.
-  static List<charts.Series<LinearSales, int>> _createSampleData() {
-    final data = [
-      LinearSales(0, 5),
-      LinearSales(1, 25),
-      LinearSales(2, 100),
-      LinearSales(3, 75),
-    ];
+  static List<charts.Series<TimeSeriesSales, DateTime>> _createSampleData(
+      List<OrderStats> orderStatsList, bool isAmountGraph) {
+    List<TimeSeriesSales> data = [];
 
-    final dataSecond = [
-      LinearSales(0, 10),
-      LinearSales(1, 30),
-      LinearSales(2, 90),
-      LinearSales(3, 85),
-    ];
+    for (int i = 0; i < orderStatsList.length; i++) {
+      data.add(TimeSeriesSales(DateTime.parse(orderStatsList[i].date),
+          orderStatsList[i].orderCount));
+    }
+
+    List<TimeSeriesSales> data2 = [];
+    for (int i = 0; i < orderStatsList.length; i++) {
+      data2.add(TimeSeriesSales(DateTime.parse(orderStatsList[i].date),
+          orderStatsList[i].totalAmount));
+    }
+
     return [
-      charts.Series<LinearSales, int>(
+      charts.Series<TimeSeriesSales, DateTime>(
         id: 'Sales',
-        colorFn: (_, __) => charts.Color.fromHex(code: '#0039CA'),
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        insideLabelStyleAccessorFn: (_, __) =>
-            charts.TextStyleSpec(color: charts.Color.fromHex(code: '#0039CA')),
-        outsideLabelStyleAccessorFn: (_, __) =>
-            charts.TextStyleSpec(color: charts.Color.fromHex(code: '#0039CA')),
-        data: data,
+        colorFn: (_, __) => isAmountGraph
+            ? charts.Color.fromHex(code: '#8B0000')
+            : charts.Color.fromHex(code: '#0039CA'),
+        domainFn: (TimeSeriesSales sales, _) => sales.time,
+        measureFn: (TimeSeriesSales sales, _) => sales.sales,
+        data: isAmountGraph ? data2 : data,
       ),
-      charts.Series<LinearSales, int>(
-        id: 'Count',
-        colorFn: (_, __) => charts.Color.fromHex(code: '#8B0000'),
-        domainFn: (LinearSales sales, _) => sales.year,
-        measureFn: (LinearSales sales, _) => sales.sales,
-        insideLabelStyleAccessorFn: (_, __) =>
-            charts.TextStyleSpec(color: charts.Color.fromHex(code: '#8B0000')),
-        outsideLabelStyleAccessorFn: (_, __) =>
-            charts.TextStyleSpec(color: charts.Color.fromHex(code: '#8B0000')),
-        data: dataSecond,
-      )
     ];
   }
 }
 
-/// Sample linear data type.
-class LinearSales {
-  final int year;
-  final int sales;
+/// Sample time series data type.
+class TimeSeriesSales {
+  final DateTime time;
+  final double sales;
 
-  LinearSales(this.year, this.sales);
+  TimeSeriesSales(this.time, this.sales);
 }
