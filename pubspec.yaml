@@ -38,6 +38,7 @@ dependencies:
   toast: ^0.1.5
   smooth_star_rating: ^1.0.3
   carousel_pro: ^1.0.0
+  path_provider: ^1.4.0
 
 
 dev_dependencies:

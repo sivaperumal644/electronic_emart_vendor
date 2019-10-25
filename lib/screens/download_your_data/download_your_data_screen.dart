@@ -1,7 +1,15 @@
+import 'dart:io';
+
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
+import 'package:electronic_emart_vendor/screens/download_your_data/download_data_graphql.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+
+import '../../app_state.dart';
 
 class DownloadYourDataScreen extends StatefulWidget {
   @override
@@ -140,15 +148,24 @@ class _DownloadYourDataScreenState extends State<DownloadYourDataScreen> {
             ],
           ),
           Container(height: 30),
-          Container(
-            margin: EdgeInsets.all(24),
-            padding: EdgeInsets.only(top: 20, bottom: 20),
-            child: PrimaryButtonWidget(
-              buttonText: 'Download',
-              onPressed: () {},
-            ),
-          ),
+          downloadDataMutationComponent(),
         ],
+      ),
+    );
+  }
+
+  Widget downloadButton(RunMutation runMutation) {
+    return Container(
+      margin: EdgeInsets.all(24),
+      padding: EdgeInsets.only(top: 20, bottom: 20),
+      child: PrimaryButtonWidget(
+        buttonText: 'Download',
+        onPressed: () {
+          runMutation({
+            'startDate': startDate,
+            'endDate': endDate,
+          });
+        },
       ),
     );
   }
@@ -166,6 +183,54 @@ class _DownloadYourDataScreenState extends State<DownloadYourDataScreen> {
           },
         ),
       ),
+    );
+  }
+
+  Future<String> get _localPath async {
+    final directory = await getExternalStorageDirectory();
+    print(directory);
+    print(directory.path);
+    // Directory pathDirectory = "";
+    return directory.path;
+  }
+
+  Future<File> get _localFile async {
+    final path = await _localPath;
+    return File('$path/data.csv');
+  }
+
+  Future<File> downloadDataAsCSV(String data) async {
+    final file = await _localFile;
+    return file.writeAsString(data);
+  }
+
+  // download(data) async {
+  //   final directory = await getApplicationDocumentsDirectory();
+  //   final file = File('${directory.path}/order_stats.csv');
+  //   await file.writeAsString(data);
+  //   print('saved');
+  // }
+
+  Widget downloadDataMutationComponent() {
+    final appState = Provider.of<AppState>(context);
+    return Mutation(
+      options: MutationOptions(
+        document: downloadData,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+      ),
+      builder: (runMutation, result) {
+        return downloadButton(runMutation);
+      },
+      onCompleted: (dynamic resultData) {
+        print(resultData['downloadData']);
+        if (resultData != null) {
+          downloadDataAsCSV(resultData['downloadData']);
+        }
+      },
     );
   }
 }

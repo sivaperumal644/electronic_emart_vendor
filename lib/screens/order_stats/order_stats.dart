@@ -50,7 +50,7 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
     return ListView(
       physics: BouncingScrollPhysics(),
       children: <Widget>[
-        graphHeader('Order Graph', 'This graph depicts the orders per day.'),
+        graphHeader('Order Graph', 'Showing total orders per day'),
         Container(
           width: 360,
           height: 300,
@@ -59,7 +59,7 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
         ),
         dividerLine(),
         Container(height: 16),
-        graphHeader('Amount Graph', 'This graph depicts the Amount per day'),
+        graphHeader('Income Graph', 'Showing total income of each day'),
         Container(
           width: 360,
           height: 300,
@@ -128,7 +128,7 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
           Text(
             title,
             style: TextStyle(
-              color: PRIMARY_COLOR.withOpacity(0.35),
+              color: PRIMARY_COLOR,
               fontSize: 16,
               fontWeight: FontWeight.bold,
             ),
@@ -138,7 +138,7 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
             subTitle,
             style: TextStyle(
               fontSize: 16,
-              color: GREY_COLOR.withOpacity(0.5),
+              color: GREY_COLOR,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -270,7 +270,7 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
         pollInterval: 1,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
-        //if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.loading) return Center(child: CupertinoActivityIndicator());
         if (result.hasErrors)
           return Center(child: Text("Oops something went wrong"));
         if (result.data != null && result.data['getOrderStats'] != null) {
