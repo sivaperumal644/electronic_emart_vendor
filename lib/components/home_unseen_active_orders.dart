@@ -25,13 +25,13 @@ class _HomeUnSeenActiveOrdersState extends State<HomeUnSeenActiveOrders> {
     String cartItemNames;
     if (cartItemLength == 2)
       cartItemNames =
-          widget.cartItemInput[0].name + ', ' + widget.cartItemInput[1].name;
+          widget.cartItemInput[0].inventory.name + ', ' + widget.cartItemInput[1].inventory.name;
     else if (cartItemLength == 1)
-      cartItemNames = widget.cartItemInput[0].name;
+      cartItemNames = widget.cartItemInput[0].inventory.name;
     else
-      cartItemNames = widget.cartItemInput[0].name +
+      cartItemNames = widget.cartItemInput[0].inventory.name +
           ', ' +
-          widget.cartItemInput[1].name +
+          widget.cartItemInput[1].inventory.name +
           ' and ${cartItemLength - 2} more.';
     return Container(
       margin: EdgeInsets.symmetric(horizontal: 24, vertical: 12),

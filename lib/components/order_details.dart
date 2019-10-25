@@ -221,7 +221,7 @@ class _OrderDetailsState extends State<OrderDetails> {
           color: GREY_COLOR.withOpacity(0.15)),
       child: Row(
         children: <Widget>[
-          Image.network(jsonDecode(cartItemInputDetails.imageUrl)[0],
+          Image.network(cartItemInputDetails.inventory.imageUrls[0],
               fit: BoxFit.cover, width: 55, height: 55),
           Padding(
             padding: const EdgeInsets.only(left: 16.0),
@@ -231,7 +231,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                 Container(
                   width: MediaQuery.of(context).size.width/1.6,
                   child: Text(
-                    cartItemInputDetails.name,
+                    cartItemInputDetails.inventory.name,
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: BLACK_COLOR,
@@ -240,7 +240,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ),
                 ),
                 Text(
-                  'Rs. ' + cartItemInputDetails.sellingPrice.toString(),
+                  'Rs. ' + cartItemInputDetails.inventory.sellingPrice.toString(),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

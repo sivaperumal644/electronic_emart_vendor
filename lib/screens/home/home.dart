@@ -127,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Container(height: 16),
         if (listSeen.length == 0 && listUnSeen.length == 0)
           Container(
-            height: MediaQuery.of(context).size.height / 3,
+            height: MediaQuery.of(context).size.height / 2,
             child: Center(
               child: Text(
                 'No active orders now',

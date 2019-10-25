@@ -1,39 +1,21 @@
-import 'package:electronic_emart_vendor/modals/User.dart';
+import 'InventoryModel.dart';
 
 class CartItemInput {
   final String id;
-  final String name;
-  final String category;
-  final double originalPrice;
-  final double sellingPrice;
-  final String description;
-  final double inStock;
-  final String imageUrl;
-  final User vendor;
+  final Inventory inventory;
+  final String itemStatus;
 
   CartItemInput({
     this.id,
-    this.name,
-    this.category,
-    this.originalPrice,
-    this.sellingPrice,
-    this.description,
-    this.inStock,
-    this.imageUrl,
-    this.vendor,
+    this.inventory,
+    this.itemStatus,
   });
 
   factory CartItemInput.fromJson(Map json) {
     return CartItemInput(
       id: json['id'],
-      name: json['name'],
-      category: json['category'],
-      originalPrice: json['originalPrice'].toDouble(),
-      sellingPrice: json['sellingPrice'].toDouble(),
-      description: json['description'],
-      inStock: json['inStock'].toDouble(),
-      imageUrl: json['imageUrl'],
-      //vendor: User.fromJson(json['vendor']),
+      inventory: Inventory.fromJson(json['inventory']),
+      itemStatus: json['itemStatus'],
     );
   }
 }

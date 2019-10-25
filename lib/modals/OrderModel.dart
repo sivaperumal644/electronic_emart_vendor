@@ -38,7 +38,7 @@ class Order {
         address: jsonDecode(json['address']),
         //customer: User.fromJson(json['customer']),
         cartItems: cartItems
-            .map((i) => CartItemInput.fromJson(i['inventory']))
+            .map((i) => CartItemInput.fromJson(i))
             .toList(),
         status: json['status'],
         datePlaced: DateTime.fromMicrosecondsSinceEpoch(
