@@ -1,13 +1,16 @@
+import 'package:electronic_emart_vendor/components/amount_to_pay_widget.dart';
 import 'package:electronic_emart_vendor/components/home_seen_active_orders.dart';
 import 'package:electronic_emart_vendor/components/home_unseen_active_orders.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/constants/strings.dart';
 import 'package:electronic_emart_vendor/modals/InventoryModel.dart';
 import 'package:electronic_emart_vendor/modals/OrderModel.dart';
+import 'package:electronic_emart_vendor/modals/User.dart';
 import 'package:electronic_emart_vendor/screens/inventory/get_all_inventory_graphql.dart';
 import 'package:electronic_emart_vendor/screens/inventory_input/inventory_input.dart';
 import 'package:electronic_emart_vendor/screens/order_history/order_history_graphql.dart';
 import 'package:electronic_emart_vendor/screens/out_of_stock_screen/out_of_stock_screen.dart';
+import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -114,8 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
       physics: BouncingScrollPhysics(),
       children: <Widget>[
         isInventoryEmpty(),
+        getVendorInfo(),
         Container(
-          margin: EdgeInsets.only(left: 24),
+          margin: EdgeInsets.only(left: 24, top: 8),
           child: Text(
             'Active Orders',
             style: TextStyle(
@@ -198,14 +202,16 @@ class _HomeScreenState extends State<HomeScreen> {
               vendorOrderList.map((item) => Order.fromJson(item)).toList();
           final seenOrders = orders
               .where((item) =>
-                  item.cartItems[0].itemStatus == OrderStatuses.PLACED_BY_CUSTOMER &&
+                  item.cartItems[0].itemStatus ==
+                      OrderStatuses.PLACED_BY_CUSTOMER &&
                   (item.transactionSuccess == true ||
                       item.paymentMode == "Cash On Delivery"))
               .toList();
           seenOrders.sort((a, b) => a.updatedDate.compareTo(b.updatedDate));
           final unSeenOrders = orders
               .where((item) =>
-                  item.cartItems[0].itemStatus == OrderStatuses.RECEIVED_BY_STORE &&
+                  item.cartItems[0].itemStatus ==
+                      OrderStatuses.RECEIVED_BY_STORE &&
                   (item.transactionSuccess == true ||
                       item.paymentMode == "Cash On Delivery"))
               .toList();
@@ -274,6 +280,32 @@ class _HomeScreenState extends State<HomeScreen> {
           else
             return Container();
         }
+      },
+    );
+  }
+
+  Widget getVendorInfo() {
+    final appState = Provider.of<AppState>(context);
+    return Query(
+      options: QueryOptions(
+        document: getVendorInfoQuery,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.getJwtToken}',
+          },
+        },
+        pollInterval: 3,
+      ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        if (result.loading) return Center(child: CupertinoActivityIndicator());
+        if (result.hasErrors)
+          return Center(child: Text("Oops something went wrong"));
+        if (result.data != null &&
+            result.data['getVendorInfo']['user'] != null) {
+          final user = User.fromJson(result.data['getVendorInfo']['user']);
+          return AmountToBePaid(amountToPay: user.amountToPay.toString());
+        }
+        return Container();
       },
     );
   }

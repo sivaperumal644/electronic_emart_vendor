@@ -1,4 +1,5 @@
 import 'package:electronic_emart_vendor/app_state.dart';
+import 'package:electronic_emart_vendor/components/amount_to_pay_widget.dart';
 import 'package:electronic_emart_vendor/components/setting_option.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
@@ -31,8 +32,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget mainList(
-      String storeName, String phoneNumber, String addressLine, String city) {
+  Widget mainList(String storeName, String phoneNumber, String addressLine,
+      String city, String amountToPay) {
     return ListView(
       physics: BouncingScrollPhysics(),
       children: <Widget>[
@@ -56,6 +57,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ],
         ),
+        AmountToBePaid(amountToPay: amountToPay),
         addressContainer(storeName, addressLine, city, phoneNumber),
         InkWell(
           onTap: () {
@@ -138,7 +140,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ],
     );
   }
-                  
+
+  Widget amountToPayWidget(String amountToPay) {
+    return Container(
+      decoration: BoxDecoration(
+          color: WHITE_COLOR,
+          border: Border.all(color: PRIMARY_COLOR),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: PRIMARY_COLOR,
+              blurRadius: 5.0,
+            )
+          ]),
+      margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+      padding: EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            'Pending Amount to be paid: ',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            'Rs. ' + amountToPay,
+            style: TextStyle(
+                color: PRIMARY_COLOR,
+                fontSize: 18,
+                fontWeight: FontWeight.bold),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget textWidget(
       String text, TextAlign textAlign, Color color, double size) {
     return Container(
@@ -161,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       padding: EdgeInsets.all(24),
       margin: EdgeInsets.all(20),
       decoration: BoxDecoration(
-          border: Border.all(color: PRIMARY_COLOR.withOpacity(0.13)),
+          border: Border.all(color: PRIMARY_COLOR.withOpacity(0.5)),
           borderRadius: BorderRadius.circular(12)),
       child: Column(
         children: <Widget>[
@@ -195,8 +233,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (result.data != null &&
             result.data['getVendorInfo']['user'] != null) {
           final user = User.fromJson(result.data['getVendorInfo']['user']);
-          return mainList(user.storeName, user.phoneNumber,
-              user.addressType['addressLine'], user.addressType['city']);
+          return mainList(
+            user.storeName,
+            user.phoneNumber,
+            user.addressType['addressLine'],
+            user.addressType['city'],
+            user.amountToPay.toString(),
+          );
         }
         return Container();
       },

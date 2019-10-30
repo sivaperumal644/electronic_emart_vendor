@@ -11,6 +11,7 @@ class User {
   final String shopPhotoUrl;
   final bool admin;
   final Map addressType;
+  final double amountToPay;
 
   User({
     this.id,
@@ -23,13 +24,13 @@ class User {
     this.shopPhotoUrl,
     this.admin,
     this.addressType,
+    this.amountToPay,
   });
 
   factory User.fromJson(Map json) {
     Map address;
-    if(json['address'] != null)
-    {
-      address = jsonDecode(json['address']); 
+    if (json['address'] != null) {
+      address = jsonDecode(json['address']);
     }
     return User(
       id: json['id'],
@@ -41,7 +42,8 @@ class User {
       panCardPhotoUrls: json['panCardPhotoUrls'],
       shopPhotoUrl: json['shopPhotoUrl'],
       admin: json['admin'],
-      addressType: address
+      addressType: address,
+      amountToPay: json['amountToPay'].toDouble(),
     );
   }
 }

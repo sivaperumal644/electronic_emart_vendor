@@ -30,6 +30,7 @@ query GetVendorInfo{
       pancardPhotoUrls
       shopPhotoUrl
       admin
+      amountToPay
     }
     error{
       path
