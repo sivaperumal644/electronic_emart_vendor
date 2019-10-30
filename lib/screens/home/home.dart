@@ -198,14 +198,14 @@ class _HomeScreenState extends State<HomeScreen> {
               vendorOrderList.map((item) => Order.fromJson(item)).toList();
           final seenOrders = orders
               .where((item) =>
-                  item.status == OrderStatuses.PLACED_BY_CUSTOMER &&
+                  item.cartItems[0].itemStatus == OrderStatuses.PLACED_BY_CUSTOMER &&
                   (item.transactionSuccess == true ||
                       item.paymentMode == "Cash On Delivery"))
               .toList();
           seenOrders.sort((a, b) => a.updatedDate.compareTo(b.updatedDate));
           final unSeenOrders = orders
               .where((item) =>
-                  item.status == OrderStatuses.RECEIVED_BY_STORE &&
+                  item.cartItems[0].itemStatus == OrderStatuses.RECEIVED_BY_STORE &&
                   (item.transactionSuccess == true ||
                       item.paymentMode == "Cash On Delivery"))
               .toList();

@@ -17,6 +17,7 @@ query GetVendorOrders{
         email
       }
       cartItems{
+        id
         inventory{
           id
           name 
@@ -27,6 +28,7 @@ query GetVendorOrders{
           inStock
           imageUrl 
         }
+        itemStatus
       } 
       status
       datePlaced

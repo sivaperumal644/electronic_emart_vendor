@@ -171,21 +171,25 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
               vendorOrderList.map((item) => Order.fromJson(item)).toList();
           final activeOrders = orders
               .where((item) =>
-                  (item.status == OrderStatuses.RECEIVED_BY_STORE ||
-                      item.status == OrderStatuses.PLACED_BY_CUSTOMER) &&
+                  (item.cartItems[0].itemStatus ==
+                          OrderStatuses.RECEIVED_BY_STORE ||
+                      item.cartItems[0].itemStatus ==
+                          OrderStatuses.PLACED_BY_CUSTOMER) &&
                   (item.transactionSuccess == true ||
                       item.paymentMode == "Cash On Delivery"))
               .toList();
-          activeOrders.sort((a, b) => a.datePlaced.compareTo(b.datePlaced));
+          activeOrders.sort((a, b) => a.updatedDate.compareTo(b.updatedDate));
 
           final inActiveOrders = orders
               .where((item) =>
-                  (item.status != OrderStatuses.RECEIVED_BY_STORE &&
-                      item.status != OrderStatuses.PLACED_BY_CUSTOMER) ||
+                  (item.cartItems[0].itemStatus !=
+                          OrderStatuses.RECEIVED_BY_STORE &&
+                      item.cartItems[0].itemStatus !=
+                          OrderStatuses.PLACED_BY_CUSTOMER) ||
                   (item.transactionSuccess == false &&
                       item.paymentMode != "Cash On Delivery"))
               .toList();
-          inActiveOrders.sort((a, b) => a.updatedDate.compareTo(b.updatedDate));
+          inActiveOrders.sort((a, b) => b.updatedDate.compareTo(a.updatedDate));
           List<Order> activeOrdersSorted;
           List<Order> inActiveOrdersSorted;
           if (selectedChips == 'All Time') {
@@ -194,12 +198,14 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
           }
           if (selectedChips == 'This month') {
             activeOrdersSorted = activeOrders
-                .where(
-                    (order) => order.datePlaced.month == DateTime.now().month)
+                .where((order) =>
+                    (order.updatedDate.month == DateTime.now().month) &&
+                    (order.datePlaced.year == DateTime.now().year))
                 .toList();
             inActiveOrdersSorted = inActiveOrders
-                .where(
-                    (order) => order.updatedDate.month == DateTime.now().month)
+                .where((order) =>
+                    (order.updatedDate.month == DateTime.now().month) &&
+                    (order.datePlaced.year == DateTime.now().year))
                 .toList();
           }
           if (selectedChips == 'This year') {

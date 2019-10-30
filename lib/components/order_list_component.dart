@@ -32,7 +32,8 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     String orderProcessingMessage = "Waiting store confirmation";
     String orderStatus = "";
 
-    if (widget.orders.status == OrderStatuses.PLACED_BY_CUSTOMER) {
+    if (widget.cartItemInput[0].itemStatus ==
+        OrderStatuses.PLACED_BY_CUSTOMER) {
       setState(() {
         colors = [
           GREEN_COLOR,
@@ -44,7 +45,8 @@ class _OrderListWidgetState extends State<OrderListWidget> {
         orderProcessingMessage = 'Waiting store confirmation';
       });
     }
-    if (widget.orders.status == OrderStatuses.CANCELLED_BY_CUSTOMER) {
+    if (widget.cartItemInput[0].itemStatus ==
+        OrderStatuses.CANCELLED_BY_CUSTOMER) {
       setState(() {
         colors = [
           PALE_RED_COLOR,
@@ -58,7 +60,8 @@ class _OrderListWidgetState extends State<OrderListWidget> {
       });
     }
 
-    if (widget.orders.status == OrderStatuses.CANCELLED_BY_STORE) {
+    if (widget.cartItemInput[0].itemStatus ==
+        OrderStatuses.CANCELLED_BY_STORE) {
       setState(() {
         colors = [
           PALE_RED_COLOR,
@@ -72,7 +75,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
       });
     }
 
-    if (widget.orders.status == OrderStatuses.RECEIVED_BY_STORE) {
+    if (widget.cartItemInput[0].itemStatus == OrderStatuses.RECEIVED_BY_STORE) {
       setState(() {
         colors = [
           GREEN_COLOR,
@@ -85,7 +88,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
       });
     }
 
-    if (widget.orders.status == OrderStatuses.PICKED_UP) {
+    if (widget.cartItemInput[0].itemStatus == OrderStatuses.PICKED_UP) {
       setState(() {
         colors = [
           GREEN_COLOR,
@@ -97,7 +100,8 @@ class _OrderListWidgetState extends State<OrderListWidget> {
         orderProcessingMessage = 'Order under processing';
       });
     }
-    if (widget.orders.status == OrderStatuses.DELIVERED_AND_PAID) {
+    if (widget.cartItemInput[0].itemStatus ==
+        OrderStatuses.DELIVERED_AND_PAID) {
       setState(() {
         colors = [
           GREEN_COLOR,
@@ -120,8 +124,9 @@ class _OrderListWidgetState extends State<OrderListWidget> {
     else
       orderTransactionStatusColor = PALE_RED_COLOR;
     if (cartItemLength == 2)
-      cartItemNames =
-          widget.cartItemInput[0].inventory.name + ', ' + widget.cartItemInput[1].inventory.name;
+      cartItemNames = widget.cartItemInput[0].inventory.name +
+          ', ' +
+          widget.cartItemInput[1].inventory.name;
     else if (cartItemLength == 1)
       cartItemNames = widget.cartItemInput[0].inventory.name;
     else
@@ -177,6 +182,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
                   )
                 ],
               ),
+              Text(widget.orders.datePlaced.toString()),
               Text(
                 cartItemNames,
                 style: TextStyle(fontSize: 16),

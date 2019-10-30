@@ -20,13 +20,13 @@ class _OrderDetailsState extends State<OrderDetails> {
   @override
   Widget build(BuildContext context) {
     String statusTitle =
-        StringResolver.getTextForOrderStatus(status: widget.order.status);
+        StringResolver.getTextForOrderStatus(status: widget.order.cartItems[0].itemStatus);
     String statusMessage =
-        StringResolver.getMessageForOrderStatus(status: widget.order.status);
+        StringResolver.getMessageForOrderStatus(status: widget.order.cartItems[0].itemStatus);
     List<Color> colors = [];
     Color statusMessageColor = PRIMARY_COLOR;
 
-    if (widget.order.status == OrderStatuses.PLACED_BY_CUSTOMER) {
+    if (widget.cartItemInput[0].itemStatus == OrderStatuses.PLACED_BY_CUSTOMER) {
       setState(() {
         colors = [
           PRIMARY_COLOR,
@@ -36,7 +36,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         ];
       });
     }
-    if (widget.order.status == OrderStatuses.CANCELLED_BY_CUSTOMER ||
+    if (widget.cartItemInput[0].itemStatus == OrderStatuses.CANCELLED_BY_CUSTOMER ||
         widget.order.status == OrderStatuses.CANCELLED_BY_STORE) {
       setState(() {
         colors = [
@@ -48,7 +48,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         statusMessageColor = PALE_RED_COLOR;
       });
     }
-    if (widget.order.status == OrderStatuses.RECEIVED_BY_STORE) {
+    if (widget.cartItemInput[0].itemStatus == OrderStatuses.RECEIVED_BY_STORE) {
       setState(() {
         colors = [
           PRIMARY_COLOR,
@@ -59,7 +59,7 @@ class _OrderDetailsState extends State<OrderDetails> {
       });
     }
 
-    if (widget.order.status == OrderStatuses.PICKED_UP) {
+    if (widget.cartItemInput[0].itemStatus== OrderStatuses.PICKED_UP) {
       setState(() {
         colors = [
           PRIMARY_COLOR,
@@ -69,7 +69,7 @@ class _OrderDetailsState extends State<OrderDetails> {
         ];
       });
     }
-    if (widget.order.status == OrderStatuses.DELIVERED_AND_PAID) {
+    if (widget.cartItemInput[0].itemStatus == OrderStatuses.DELIVERED_AND_PAID) {
       setState(() {
         colors = [PRIMARY_COLOR, PRIMARY_COLOR, PRIMARY_COLOR, PRIMARY_COLOR];
       });
