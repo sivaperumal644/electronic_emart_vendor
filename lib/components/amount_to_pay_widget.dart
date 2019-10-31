@@ -2,7 +2,7 @@ import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class AmountToBePaid extends StatelessWidget {
-  final String amountToPay;
+  final double amountToPay;
 
   const AmountToBePaid({this.amountToPay});
   @override
@@ -34,7 +34,7 @@ class AmountToBePaid extends StatelessWidget {
               ),
             ),
             Text(
-              'Rs. ' + amountToPay,
+              'Rs. ' + amountToPay.toString(),
               style: TextStyle(
                   color: PRIMARY_COLOR,
                   fontSize: 18,
@@ -44,6 +44,5 @@ class AmountToBePaid extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

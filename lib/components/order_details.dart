@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:electronic_emart_vendor/components/screen_indicator_row.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/constants/strings.dart';

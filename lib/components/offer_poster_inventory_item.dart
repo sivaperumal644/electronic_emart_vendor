@@ -103,7 +103,6 @@ class _OfferPosterInventoryItemState extends State<OfferPosterInventoryItem> {
         itemInStock = widget.inventoryItem.inStock.toInt();
       });
     }
-    bool isEmpty = itemInStock < 1;
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,

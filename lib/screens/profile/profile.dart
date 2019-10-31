@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget mainList(String storeName, String phoneNumber, String addressLine,
-      String city, String amountToPay) {
+      String city, double amountToPay) {
     return ListView(
       physics: BouncingScrollPhysics(),
       children: <Widget>[
@@ -238,7 +238,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             user.phoneNumber,
             user.addressType['addressLine'],
             user.addressType['city'],
-            user.amountToPay.toString(),
+            user.amountToPay,
           );
         }
         return Container();

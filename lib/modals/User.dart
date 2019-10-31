@@ -29,8 +29,12 @@ class User {
 
   factory User.fromJson(Map json) {
     Map address;
+    double amountToPay;
     if (json['address'] != null) {
       address = jsonDecode(json['address']);
+    }
+    if (json['amountToPay'] != null) {
+      amountToPay = json['amountToPay'].toDouble();
     }
     return User(
       id: json['id'],
@@ -43,7 +47,7 @@ class User {
       shopPhotoUrl: json['shopPhotoUrl'],
       admin: json['admin'],
       addressType: address,
-      amountToPay: json['amountToPay'].toDouble(),
+      amountToPay: amountToPay,
     );
   }
 }

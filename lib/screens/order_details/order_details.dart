@@ -74,7 +74,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       OrderStatuses.PLACED_BY_CUSTOMER &&
                   (widget.orders.transactionSuccess == true ||
                       widget.orders.paymentMode == 'Cash On Delivery')) ||
-              widget.orders.cartItems[0].itemStatus == OrderStatuses.RECEIVED_BY_STORE)
+              widget.orders.cartItems[0].itemStatus ==
+                  OrderStatuses.RECEIVED_BY_STORE)
             isChangeButtonClicked
                 ? Container(
                     padding: EdgeInsets.symmetric(vertical: 16),
@@ -117,7 +118,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     return Container(
       margin: EdgeInsets.fromLTRB(24, 12, 24, 24),
       child: TertiaryButton(
-        text: widget.orders.cartItems[0].itemStatus == OrderStatuses.PLACED_BY_CUSTOMER
+        text: widget.orders.cartItems[0].itemStatus ==
+                OrderStatuses.PLACED_BY_CUSTOMER
             ? 'Reject Order'
             : 'Cancel Order',
         onPressed: () {
@@ -137,15 +139,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
     return Container(
       margin: EdgeInsets.fromLTRB(24, 12, 24, 12),
       child: PrimaryButtonWidget(
-        buttonText: widget.orders.cartItems[0].itemStatus == OrderStatuses.PLACED_BY_CUSTOMER
+        buttonText: widget.orders.cartItems[0].itemStatus ==
+                OrderStatuses.PLACED_BY_CUSTOMER
             ? 'Accept Order'
-            : 'Pickup Order',
+            : 'Order Picked up',
         onPressed: () {
           setState(() {
             isChangeButtonClicked = true;
           });
           runMutation({
-            'status': widget.orders.cartItems[0].itemStatus == OrderStatuses.PLACED_BY_CUSTOMER
+            'status': widget.orders.cartItems[0].itemStatus ==
+                    OrderStatuses.PLACED_BY_CUSTOMER
                 ? OrderStatuses.RECEIVED_BY_STORE
                 : OrderStatuses.PICKED_UP,
             'orderId': widget.orders.id
