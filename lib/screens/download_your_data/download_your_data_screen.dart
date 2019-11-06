@@ -1,16 +1,12 @@
-import 'dart:io';
-import 'dart:math';
+import 'package:electronic_emart_vendor/app_state.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/download_your_data/download_data_graphql.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../../app_state.dart';
 
 class DownloadYourDataScreen extends StatefulWidget {
   @override
@@ -153,14 +149,14 @@ class _DownloadYourDataScreenState extends State<DownloadYourDataScreen> {
           isButtonClicked
               ? Container(
                   margin: EdgeInsets.only(top: 50),
-                  child: CupertinoActivityIndicator())
-              : downloadDataMutationComponent(),
+                  child: CupertinoActivityIndicator(),)
+              :downloadButton(),
         ],
       ),
     );
   }
 
-  Widget downloadButton(RunMutation runMutation) {
+  Widget downloadButton() {
     return Container(
       margin: EdgeInsets.all(24),
       padding: EdgeInsets.only(top: 20, bottom: 20),
@@ -170,10 +166,8 @@ class _DownloadYourDataScreenState extends State<DownloadYourDataScreen> {
           setState(() {
             isButtonClicked = true;
           });
-          runMutation({
-            'startDate': startDate,
-            'endDate': endDate,
-          });
+          downloadYourData();
+          
         },
       ),
     );
@@ -194,61 +188,20 @@ class _DownloadYourDataScreenState extends State<DownloadYourDataScreen> {
       ),
     );
   }
-
-  int randomNumber() {
-    Random rnd;
-    int min = 1000;
-    int max = 9999;
-    rnd = new Random();
-    return min + rnd.nextInt(max - min);
-  }
-
-  Future<String> get _localPath async {
-    final directory = await getExternalStorageDirectory();
-    return directory.path;
-  }
-
-  Future<File> get _localFile async {
-    final path = await _localPath;
-    return File(
-        '$path/OrderHistory from $startDate to $endDate ${randomNumber().toString()}.csv');
-  }
-
-  Future<File> downloadDataAsCSV(String data) async {
-    final file = await _localFile;
-    return file.writeAsString(data);
-  }
-
-  // download(data) async {
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   final file = File('${directory.path}/order_stats.csv');
-  //   await file.writeAsString(data);
-  //   print('saved');
-  // }
-
-  Widget downloadDataMutationComponent() {
+  void downloadYourData() async {
     final appState = Provider.of<AppState>(context);
-    return Mutation(
-      options: MutationOptions(
-        document: downloadData,
-        context: {
-          'headers': <String, String>{
-            'Authorization': 'Bearer ${appState.getJwtToken}',
-          },
-        },
-      ),
-      builder: (runMutation, result) {
-        return downloadButton(runMutation);
-      },
-      onCompleted: (dynamic resultData) {
-        print(resultData['downloadData']);
-        if (resultData != null) {
-          downloadDataAsCSV(resultData['downloadData']);
-          setState(() {
-            isButtonClicked = false;
-          });
-        }
-      },
-    );
+    String vendorId = appState.getVendorId;
+    
+    String url =
+        'http://cezhop.herokuapp.com/downloadCSV?vendorId=$vendorId&startDate=$startDate&endDate=$endDate';
+        print(url);
+    if (await canLaunch(url)) {
+      setState(() {
+        isButtonClicked = false;
+      });
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
