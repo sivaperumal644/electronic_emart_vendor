@@ -55,7 +55,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     "bankAccountNumber": "",
     "vendorGSTNumber": "",
     'landMark': "",
-    "pinCode": ""
+    "pinCode": "",
+    "paytmName":"",
+    "paytmNumber":""
   };
 
   TextEditingController phoneNumberController,
@@ -70,7 +72,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       bankAccountNumberController,
       vendorGSTNumberController,
       landMarkController,
-      pinCodeController;
+      pinCodeController,
+      paytmNameController,
+      paytmNumberController;
 
   @override
   void initState() {
@@ -94,6 +98,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         TextEditingController(text: inputFields['vendorGSTNumber']);
     landMarkController = TextEditingController(text: inputFields['landMark']);
     pinCodeController = TextEditingController(text: inputFields['pinCode']);
+    paytmNameController = TextEditingController(text: inputFields['paytmName']);
+    paytmNumberController = TextEditingController(text: inputFields['paytmNumber']);
   }
 
   @override
@@ -177,7 +183,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   'bankAccountNumber':
                                       inputFields['bankAccountNumber'],
                                   'vendorGSTNumber':
-                                      inputFields['vendorGSTNumber']
+                                      inputFields['vendorGSTNumber'],
+                                      'paytmName':inputFields['paytmName'],
+                                      'paytmNumber':inputFields['paytmNumber'],
                                 });
                               },
                             ),
@@ -244,7 +252,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         });
                         if (inputFields['bankAccountName'] == "" ||
                             inputFields['bankAccountIFSC'] == "" ||
-                            inputFields['bankAccountNumber'] == "") {
+                            inputFields['bankAccountNumber'] == "" || inputFields['paytmName'] == "" || inputFields['paytmNumber'] == "") {
                           setState(() {
                             isRegisterButtonClicked = false;
                           });
@@ -497,6 +505,44 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             },
           ),
           Container(height: 32),
+          Text(
+            'Paytm Name',
+            style: TextStyle(
+              fontSize: 16,
+              color: BLACK_COLOR,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(height: 16),
+          CustomTextField(
+            controller: paytmNameController,
+            hintText: 'Paytm Name',
+            maxLines: 1,
+            obscureText: false,
+            onChanged: (val) {
+              inputFields['paytmName'] = val;
+            },
+          ),
+          Container(height: 16),
+          Text(
+            'Paytm Number',
+            style: TextStyle(
+              fontSize: 16,
+              color: BLACK_COLOR,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Container(height: 16),
+          CustomTextField(
+            controller: paytmNumberController,
+            hintText: 'paytmNumber',
+            keyboardType: TextInputType.number,
+            maxLines: 1,
+            obscureText: false,
+            onChanged: (val) {
+              inputFields['paytmNumber'] = val;
+            },
+          ),
           Container(margin: EdgeInsets.only(bottom: 40))
         ],
       ),

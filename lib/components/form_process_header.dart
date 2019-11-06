@@ -7,7 +7,7 @@ class FormProcessHeader extends StatelessWidget {
   final List titleLists = [
     'Account Credentials',
     'Store Details',
-    'Bank Details',
+    'Bank & Paytm Details',
     'Upload Documents'
   ];
 

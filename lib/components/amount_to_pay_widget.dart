@@ -33,12 +33,15 @@ class AmountToBePaid extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
-              'Rs. ' + amountToPay.toString(),
-              style: TextStyle(
-                  color: PRIMARY_COLOR,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
+            Expanded(
+                          child: Text(
+                'Rs. ' + amountToPay.toString(),
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: PRIMARY_COLOR,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold),
+              ),
             ),
           ],
         ),
