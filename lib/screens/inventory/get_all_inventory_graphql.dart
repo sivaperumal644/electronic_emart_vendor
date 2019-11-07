@@ -14,6 +14,9 @@ query GetVendorInventory{
       category
       inStock
       imageUrl
+      length
+      breadth
+      height
       averageRating
       unAnswered
     }

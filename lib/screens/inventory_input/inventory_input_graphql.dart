@@ -1,7 +1,6 @@
 String addNewInventoryMutation = '''
-mutation AddNewInventory(\$name:String, \$description:String, \$originalPrice:Float, \$sellingPrice:Float,\$category:String,\$inStock:Float,\$imageUrl:String ){
-  addNewInventory(name:\$name,description:\$description,originalPrice:\$originalPrice,sellingPrice:\$sellingPrice,category:\$category,inStock:\$inStock,
-  imageUrl:\$imageUrl){
+mutation AddNewInventory(\$name:String, \$description:String, \$originalPrice: Float, \$sellingPrice:Float, \$category:String, \$inStock:Float, \$imageUrl:String, \$length:Float, \$breadth:Float, \$height:Float){
+  addNewInventory(name:\$name, description:\$description, originalPrice:\$originalPrice, sellingPrice:\$sellingPrice, category:\$category, inStock:\$inStock, imageUrl: \$imageUrl, length: \$length, breadth: \$breadth, height:\$height){
     error{
       path
       message
@@ -14,9 +13,9 @@ mutation AddNewInventory(\$name:String, \$description:String, \$originalPrice:Fl
 ''';
 
 String updateInventoryMutation = '''
-mutation UpdateInventory(\$inventoryId:String,\$name:String,\$description:String,\$originalPrice:Float,\$sellingPrice:Float,\$category:String,\$inStock:Float,\$imageUrl:String ){
+mutation UpdateInventory(\$inventoryId:String,\$name:String,\$description:String,\$originalPrice:Float,\$sellingPrice:Float,\$category:String,\$inStock:Float,\$imageUrl:String, \$length:Float, \$breadth:Float, \$height:Flaot){
   updateInventory(inventoryId:\$inventoryId, name:\$name,description:\$description,originalPrice:\$originalPrice,sellingPrice:\$sellingPrice,category:\$category,inStock:\$inStock,
-  imageUrl:\$imageUrl){
+  imageUrl:\$imageUrl, length:\$length, breadth:\$breadth, height:\$height){
     error{
       path
       message

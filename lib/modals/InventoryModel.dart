@@ -14,8 +14,11 @@ class Inventory {
   final User vendor;
   final String averageRating;
   final int unAnswered;
+  final double length;
+  final double breadth;
+  final double height;
 
-  Inventory({
+  Inventory( {
     this.id,
     this.name,
     this.originalPrice,
@@ -27,9 +30,23 @@ class Inventory {
     this.vendor,
     this.averageRating,
     this.unAnswered,
+    this.length, this.breadth, this.height,
   });
 
   factory Inventory.fromJson(Map json) {
+    double length;
+    double breadth;
+    double height;
+    if(json['length'] != null){
+      length = json['length'].toDouble();
+    }
+    if(json['breadth'] != null){
+      breadth = json['breadth'].toDouble();
+    }
+    if(json['height'] != null){
+      height = json['height'].toDouble();
+    }
+
     return Inventory(
       id: json['id'],
       name: json['name'],
@@ -40,7 +57,10 @@ class Inventory {
       inStock: json['inStock'].toDouble(),
       imageUrls: jsonDecode(json['imageUrl']),
       averageRating: json['averageRating'],
-      unAnswered: json['unAnswered']
+      unAnswered: json['unAnswered'],
+      length: length,
+      breadth: breadth,
+      height: height,
     );
   }
 }

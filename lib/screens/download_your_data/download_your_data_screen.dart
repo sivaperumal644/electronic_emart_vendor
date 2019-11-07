@@ -194,7 +194,6 @@ class _DownloadYourDataScreenState extends State<DownloadYourDataScreen> {
     
     String url =
         'http://cezhop.herokuapp.com/downloadCSV?vendorId=$vendorId&startDate=$startDate&endDate=$endDate';
-        print(url);
     if (await canLaunch(url)) {
       setState(() {
         isButtonClicked = false;
