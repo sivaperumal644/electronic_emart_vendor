@@ -13,15 +13,11 @@ mutation AddNewInventory(\$name:String, \$description:String, \$originalPrice: F
 ''';
 
 String updateInventoryMutation = '''
-mutation UpdateInventory(\$inventoryId:String,\$name:String,\$description:String,\$originalPrice:Float,\$sellingPrice:Float,\$category:String,\$inStock:Float,\$imageUrl:String, \$length:Float, \$breadth:Float, \$height:Flaot){
-  updateInventory(inventoryId:\$inventoryId, name:\$name,description:\$description,originalPrice:\$originalPrice,sellingPrice:\$sellingPrice,category:\$category,inStock:\$inStock,
-  imageUrl:\$imageUrl, length:\$length, breadth:\$breadth, height:\$height){
+mutation UpdateInventory(\$inventoryId:String, \$name:String, \$originalPrice:Float, \$sellingPrice:Float, \$description:String, \$category:String, \$inStock:Float, \$imageUrl:String, \$length:Float, \$breadth:Float, \$height:Float){
+  updateInventory(inventoryId:\$inventoryId, name:\$name, originalPrice:\$originalPrice, sellingPrice:\$sellingPrice, description:\$description, category:\$category, inStock:\$inStock, imageUrl:\$imageUrl, length:\$length, breadth:\$breadth, height:\$height){
     error{
       path
       message
-    }
-    inventory{
-      id
     }
   }
 }
@@ -54,7 +50,8 @@ query GetReviews(\$inventoryId: String){
       customer{
         id
         name
-      }  
+      }
+      images  
     }
     error{
       path

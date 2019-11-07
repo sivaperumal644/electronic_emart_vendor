@@ -1,3 +1,4 @@
+import 'package:electronic_emart_vendor/components/review_image_component.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
@@ -6,11 +7,13 @@ class InventoryReview extends StatelessWidget {
   final double rating;
   final String review;
   final String reviewer;
+  final List images;
 
   const InventoryReview({
     this.rating,
     this.review,
     this.reviewer,
+    this.images,
   });
   @override
   Widget build(BuildContext context) {
@@ -51,7 +54,7 @@ class InventoryReview extends StatelessWidget {
           Container(height: 16),
           Align(
             alignment: Alignment.centerLeft,
-                      child: Text(
+            child: Text(
               review,
               style: TextStyle(
                 fontWeight: FontWeight.bold,
@@ -60,6 +63,8 @@ class InventoryReview extends StatelessWidget {
             ),
           ),
           Container(height: 16),
+          ReviewImageComponent(images: images),
+          Container(height: 12),
           Text(
             reviewer,
             style: TextStyle(fontSize: 12, color: PRIMARY_COLOR),

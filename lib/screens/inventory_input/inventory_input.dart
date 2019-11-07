@@ -74,6 +74,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       lengthController = TextEditingController();
       breadthController = TextEditingController();
       heightController = TextEditingController();
+      amountYouWillReceive = 0.0;
       selectedChips = "";
       inventoryImageUrls = [];
     } else {
@@ -92,6 +93,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           TextEditingController(text: widget.inventory.breadth.toString());
       heightController =
           TextEditingController(text: widget.inventory.height.toString());
+      amountYouWillReceive = widget.inventory.sellingPrice -
+          ((11 / 100) * widget.inventory.sellingPrice);
       if (!itemList.contains(widget.inventory.category)) {
         itemList.insert(itemList.length - 1, widget.inventory.category);
       }
@@ -275,31 +278,25 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           priceFields(),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    'The amount you will recieve after the 11% deduction of commission will be',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: GREY_COLOR,
-                      fontSize: 20,
-                    ),
-                  ),
+            child: RichText(
+              text: TextSpan(
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: GREY_COLOR,
+                  fontSize: 20,
                 ),
-                Text(
-                  'Rs. $amountYouWillReceive',
-                  style: TextStyle(
-                      color: ORANGE_COLOR,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24),
-                  textAlign: TextAlign.center,
-                )
-              ],
+                children: <TextSpan>[
+                  TextSpan(
+                      text:
+                          'The amount you will recieve after the 11% deduction of commission will be '),
+                  TextSpan(
+                      text: 'Rs. $amountYouWillReceive',
+                      style: TextStyle(color: ORANGE_COLOR, fontSize: 24))
+                ],
+              ),
             ),
           ),
-          headerText('Item physics'),
+          headerText('Item Dimension'),
           Container(
             margin: EdgeInsets.only(left: 24.0, right: 24.0, bottom: 20.0),
             child: CustomTextField(
@@ -506,6 +503,9 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           "description": descriptionController.text,
           "inStock": double.parse(quantityController.text),
           "imageUrl": jsonEncode(inventoryImageUrls),
+          "length": double.parse(lengthController.text),
+          "breadth": double.parse(breadthController.text),
+          "height": double.parse(heightController.text),
           "address": {
             "addressLine": appState.getVendorAddressLine,
             "city": appState.getVendorCity,
@@ -683,9 +683,16 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         return cache;
       },
       onCompleted: (dynamic resultData) {
+        print(resultData['updateInventory']['error']);
         if (resultData != null &&
             resultData['updateInventory']['error'] == null) {
-          Navigator.pop(context);
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => NavigateScreens(selectedIndex: 1),
+            ),
+            (val) => false,
+          );
         }
       },
     );

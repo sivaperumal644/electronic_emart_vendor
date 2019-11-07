@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'User.dart';
 
 class Review {
@@ -6,6 +8,7 @@ class Review {
   final double rating;
   final String text;
   final User customer;
+  final List images;
 
   Review({
     this.id,
@@ -13,15 +16,21 @@ class Review {
     this.rating,
     this.text,
     this.customer,
+    this.images,
   });
 
   factory Review.fromJson(Map json) {
+    List images;
+    if (json['images'] != null) {
+      images = jsonDecode(json['images']);
+    }
     return Review(
       id: json['id'],
       // date: json['date'],
       rating: json['rating'].toDouble(),
       text: json['text'],
-       customer: User.fromJson(json['customer']),
+      customer: User.fromJson(json['customer']),
+      images: images,
     );
   }
 }

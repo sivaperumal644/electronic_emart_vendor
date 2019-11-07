@@ -308,10 +308,10 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
       physics: BouncingScrollPhysics(),
       itemBuilder: (context, index) {
         return InventoryReview(
-          rating: reviews[index].rating,
-          review: reviews[index].text,
-          reviewer: reviews[index].customer.name,
-        );
+            rating: reviews[index].rating,
+            review: reviews[index].text,
+            reviewer: reviews[index].customer.name,
+            images: reviews[index].images);
       },
     );
   }
@@ -352,6 +352,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
 
   Widget getQAQueryComponent() {
     final appState = Provider.of<AppState>(context);
+    print(widget.inventory.id);
     return Query(
       options: QueryOptions(
         document: getQAQuery,
