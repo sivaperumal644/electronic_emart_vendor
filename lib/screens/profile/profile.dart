@@ -98,15 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
         Container(padding: EdgeInsets.only(top: 3)),
-        InkWell(
-          onTap: () {
-            launch("tel://6380222901");
-          },
-          child: SettingsOption(
-            title: 'Help Line',
-            color: BLACK_COLOR,
-          ),
-        ),
+        getAdminInfo(),
         Container(padding: EdgeInsets.only(top: 3)),
         InkWell(
           onTap: () async {
@@ -139,6 +131,58 @@ class _ProfileScreenState extends State<ProfileScreen> {
         )
       ],
     );
+  }
+
+  Widget helpLineButton(phoneNumber1, phoneNumber2, phoneNumber3) {
+    return InkWell(
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                contentPadding: EdgeInsets.all(0),
+                title: Text(
+                  'Choose a number',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(height: 12),
+                    phoneNumberRow(phoneNumber1),
+                    phoneNumberRow(phoneNumber2),
+                    phoneNumberRow(phoneNumber3),
+                    Container(height: 12),
+                  ],
+                ),
+              );
+            });
+        //launch("tel://6380222901");
+      },
+      child: SettingsOption(
+        title: 'Help Line',
+        color: BLACK_COLOR,
+      ),
+    );
+  }
+
+  Widget phoneNumberRow(String number) {
+    if (number != null)
+      return Container(
+        margin: EdgeInsets.symmetric(vertical: 12),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            Text(number),
+            Icon(Icons.call),
+          ],
+        ),
+      );
+    else
+      return Container();
   }
 
   Widget amountToPayWidget(String amountToPay) {
@@ -211,6 +255,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
           textWidget(phoneNumber, TextAlign.start, PRIMARY_COLOR, 16),
         ],
       ),
+    );
+  }
+
+  Widget getAdminInfo() {
+    return Query(
+      options: QueryOptions(
+        document: getVendorInfoQuery,
+        pollInterval: 1,
+      ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        if (result.hasErrors)
+          return Center(child: Text("Oops something went wrong"));
+        if (result.data != null &&
+            result.data['getVendorInfo']['user'] != null) {
+          final user = User.fromJson(result.data['getVendorInfo']['user']);
+          return helpLineButton(
+              user.phoneNumber, user.alternativePhone1, user.alternativePhone2);
+        }
+        return Container();
+      },
     );
   }
 

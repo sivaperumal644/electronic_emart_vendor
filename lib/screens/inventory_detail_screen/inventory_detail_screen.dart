@@ -352,7 +352,6 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
 
   Widget getQAQueryComponent() {
     final appState = Provider.of<AppState>(context);
-    print(widget.inventory.id);
     return Query(
       options: QueryOptions(
         document: getQAQuery,

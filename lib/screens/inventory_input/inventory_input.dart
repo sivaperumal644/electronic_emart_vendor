@@ -435,7 +435,6 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     return PrimaryButtonWidget(
       buttonText: 'Add Item',
       onPressed: () {
-        print(appState.getJwtToken);
         setState(() {
           isAddOrEditClicked = true;
         });
@@ -683,7 +682,6 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         return cache;
       },
       onCompleted: (dynamic resultData) {
-        print(resultData['updateInventory']['error']);
         if (resultData != null &&
             resultData['updateInventory']['error'] == null) {
           Navigator.pushAndRemoveUntil(

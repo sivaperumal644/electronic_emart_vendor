@@ -23,6 +23,8 @@ query GetVendorInfo{
       id
       name
       phoneNumber
+      alternativePhone1
+      alternativePhone2
       address
       email
       storeName

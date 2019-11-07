@@ -24,11 +24,8 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
       "-" +
       DateTime.now().month.toString() +
       "-01";
-  String endDate = DateTime.now().year.toString() +
-      "-" +
-      DateTime.now().month.toString() +
-      "-" +
-      DateTime.now().day.toString();
+
+  String endDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
