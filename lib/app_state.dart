@@ -42,6 +42,16 @@ class AppState with ChangeNotifier {
     return result;
   }
 
+  Future<QueryResult> changePasswordMutation(String phoneNumber, String newPassword) async {
+    final result = await client.mutate(
+      MutationOptions(
+        document: updateVendorAccountMutation,
+        variables: {'phoneNumber': phoneNumber, 'password': newPassword, 'otpToken':'something'},
+      ),
+    );
+    return result;
+  }
+
   Future getFromMemory() async {
     final pref = await SharedPreferences.getInstance();
     final token = pref.getString("token") ?? "";

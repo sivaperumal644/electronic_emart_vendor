@@ -6,7 +6,9 @@ import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/constants/strings.dart';
 import 'package:electronic_emart_vendor/modals/User.dart';
+import 'package:electronic_emart_vendor/screens/forgot_password_screen/forgot_password_screen.dart';
 import 'package:electronic_emart_vendor/screens/login/login_graphql.dart';
+import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
 import 'package:electronic_emart_vendor/screens/registration/registration.dart';
 import 'package:electronic_emart_vendor/screens/welcome/welcome.dart';
 import 'package:flutter/cupertino.dart';
@@ -97,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: const EdgeInsets.only(left: 24.0, right: 24.0, top: 24.0),
             child: CustomTextField(
               hintText: "Password",
               obscureText: true,
@@ -105,6 +107,33 @@ class _LoginScreenState extends State<LoginScreen> {
                 inputFields['password'] = val;
               },
             ),
+          ),
+          Row(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.only(left: 24, top: 6, bottom: 4),
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(8),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ForgotPasswordScreen(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(5),
+                    child: Text(
+                      'Forgot password?',
+                      style: TextStyle(
+                        color: PALE_RED_COLOR,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
           vendorLoginMutationComponent(),
           registerContainer(),
@@ -179,12 +208,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                TertiaryButton(
-                  text: 'Contact Us',
-                  onPressed: () {
-                    launch("tel:7339195584");
-                  },
-                ),
+                getAdminInfo(),
                 PrimaryButtonWidget(
                   buttonText: 'Register',
                   onPressed: () {
@@ -205,6 +229,60 @@ class _LoginScreenState extends State<LoginScreen> {
         ],
       ),
     );
+  }
+
+  Widget contactButton(phoneNumber1, phoneNumber2, phoneNumber3) {
+    return TertiaryButton(
+      text: 'Contact Us',
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              contentPadding: EdgeInsets.all(0),
+              title: Text(
+                'Choose a number',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(height: 12),
+                  phoneNumberRow(phoneNumber1),
+                  phoneNumberRow(phoneNumber2),
+                  phoneNumberRow(phoneNumber3),
+                  Container(height: 12),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Widget phoneNumberRow(String number) {
+    if (number != null)
+      return InkWell(
+        onTap: () {
+          launch("tel://$number");
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(number),
+              Icon(Icons.call),
+            ],
+          ),
+        ),
+      );
+    else
+      return Container();
   }
 
   Widget nameAndLogoWidget() {
@@ -337,6 +415,27 @@ class _LoginScreenState extends State<LoginScreen> {
             MaterialPageRoute(builder: (context) => WelcomeScreen()),
           );
         }
+      },
+    );
+  }
+
+  Widget getAdminInfo() {
+    return Query(
+      options: QueryOptions(
+        document: getVendorInfoQuery,
+        fetchPolicy: FetchPolicy.noCache,
+        pollInterval: 1,
+      ),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        if (result.hasErrors)
+          return Center(child: Text("Oops something went wrong"));
+        if (result.data != null &&
+            result.data['getVendorInfo']['user'] != null) {
+          final user = User.fromJson(result.data['getVendorInfo']['user']);
+          return contactButton(
+              user.phoneNumber, user.alternativePhone1, user.alternativePhone2);
+        }
+        return Container();
       },
     );
   }

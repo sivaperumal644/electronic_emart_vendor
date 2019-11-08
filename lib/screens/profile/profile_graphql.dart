@@ -1,6 +1,6 @@
 String updateVendorAccountMutation = '''
-mutation UpdateVendorAccount(\$storeName:String, \$phoneNumber:String, \$email:String, \$pancardPhotoUrls:String, \$shopPhotoUrl:String, \$vendorId:String, \$address: AddressType, \$bankAccountName:String, \$bankAccountNumber:String, \$bankAccountIFSC: String, \$vendorGSTNumber: String){
-  updateVendorAccount(storeName:\$storeName, phoneNumber:\$phoneNumber, email:\$email, pancardPhotoUrls:\$pancardPhotoUrls, shopPhotoUrl:\$shopPhotoUrl, vendorId:\$vendorId, address:\$address, bankAccountName:\$bankAccountName, bankAccountNumber:\$bankAccountNumber, bankAccountIFSC: \$bankAccountIFSC, vendorGSTNumber:\$vendorGSTNumber){
+mutation UpdateVendorAccount(\$storeName:String, \$phoneNumber:String, \$password:String, \$email:String, \$pancardPhotoUrls:String, \$shopPhotoUrl:String, \$vendorId:String, \$address: AddressType, \$bankAccountName:String, \$bankAccountNumber:String, \$bankAccountIFSC: String, \$vendorGSTNumber: String, \$paytmName: String, \$paytmNumber: String, \$otpToken: String){
+  updateVendorAccount(storeName:\$storeName, phoneNumber:\$phoneNumber, password: \$password, email:\$email, pancardPhotoUrls:\$pancardPhotoUrls, shopPhotoUrl:\$shopPhotoUrl, vendorId:\$vendorId, address:\$address, bankAccountName:\$bankAccountName, bankAccountNumber:\$bankAccountNumber, bankAccountIFSC: \$bankAccountIFSC, vendorGSTNumber:\$vendorGSTNumber, paytmName:\$paytmName, paytmNumber:\$paytmNumber, otpToken:\$otpToken){
     error{
       path
       message
