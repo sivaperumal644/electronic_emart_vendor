@@ -322,6 +322,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
       options: QueryOptions(
         document: getReviewsQuery,
         variables: {'inventoryId': widget.inventory.id},
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',
@@ -355,6 +356,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
     return Query(
       options: QueryOptions(
         document: getQAQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',

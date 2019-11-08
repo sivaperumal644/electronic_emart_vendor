@@ -176,13 +176,13 @@ class _OrderListWidgetState extends State<OrderListWidget> {
                   Text(
                     'Rs. ' + widget.orders.totalPrice.toString(),
                     style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: PRIMARY_COLOR),
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: PRIMARY_COLOR,
+                    ),
                   )
                 ],
               ),
-              Text(widget.orders.datePlaced.toString()),
               Text(
                 cartItemNames,
                 style: TextStyle(fontSize: 16),

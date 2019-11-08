@@ -205,6 +205,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     return Query(
       options: QueryOptions(
         document: getVendorInventoryQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',
@@ -265,6 +266,7 @@ class _InventoryScreenState extends State<InventoryScreen> {
     return Query(
       options: QueryOptions(
         document: getVendorInventoryQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',

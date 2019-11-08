@@ -255,6 +255,7 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
     return Query(
       options: QueryOptions(
         document: orderStatsQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',

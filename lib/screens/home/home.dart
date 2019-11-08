@@ -182,6 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Query(
       options: QueryOptions(
         document: getVendorOrdersQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',
@@ -233,6 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Query(
       options: QueryOptions(
         document: getVendorInventoryQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',
@@ -289,6 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Query(
       options: QueryOptions(
         document: getVendorInfoQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',

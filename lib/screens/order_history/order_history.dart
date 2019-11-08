@@ -151,6 +151,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
     return Query(
       options: QueryOptions(
         document: getVendorOrdersQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',

@@ -112,6 +112,7 @@ class _OfferPosterScreenState extends State<OfferPosterScreen> {
     return Query(
       options: QueryOptions(
         document: getOfferPosterQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',

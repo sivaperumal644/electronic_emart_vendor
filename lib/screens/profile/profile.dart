@@ -137,29 +137,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return InkWell(
       onTap: () {
         showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                contentPadding: EdgeInsets.all(0),
-                title: Text(
-                  'Choose a number',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              contentPadding: EdgeInsets.all(0),
+              title: Text(
+                'Choose a number',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
                 ),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Container(height: 12),
-                    phoneNumberRow(phoneNumber1),
-                    phoneNumberRow(phoneNumber2),
-                    phoneNumberRow(phoneNumber3),
-                    Container(height: 12),
-                  ],
-                ),
-              );
-            });
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Container(height: 12),
+                  phoneNumberRow(phoneNumber1),
+                  phoneNumberRow(phoneNumber2),
+                  phoneNumberRow(phoneNumber3),
+                  Container(height: 12),
+                ],
+              ),
+            );
+          },
+        );
         //launch("tel://6380222901");
       },
       child: SettingsOption(
@@ -171,14 +172,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget phoneNumberRow(String number) {
     if (number != null)
-      return Container(
-        margin: EdgeInsets.symmetric(vertical: 12),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Text(number),
-            Icon(Icons.call),
-          ],
+      return InkWell(
+        onTap: () {
+          launch("tel://$number");
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text(number),
+              Icon(Icons.call),
+            ],
+          ),
         ),
       );
     else
@@ -188,15 +194,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget amountToPayWidget(String amountToPay) {
     return Container(
       decoration: BoxDecoration(
-          color: WHITE_COLOR,
-          border: Border.all(color: PRIMARY_COLOR),
-          borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: PRIMARY_COLOR,
-              blurRadius: 5.0,
-            )
-          ]),
+        color: WHITE_COLOR,
+        border: Border.all(color: PRIMARY_COLOR),
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: PRIMARY_COLOR,
+            blurRadius: 5.0,
+          )
+        ],
+      ),
       margin: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
       padding: EdgeInsets.all(20),
       child: Row(
@@ -262,6 +269,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Query(
       options: QueryOptions(
         document: getVendorInfoQuery,
+        fetchPolicy: FetchPolicy.noCache,
         pollInterval: 1,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
@@ -283,6 +291,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Query(
       options: QueryOptions(
         document: getVendorInfoQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',

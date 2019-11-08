@@ -92,6 +92,7 @@ class _OutOfStockScreenState extends State<OutOfStockScreen> {
     return Query(
       options: QueryOptions(
         document: getVendorInventoryQuery,
+        fetchPolicy: FetchPolicy.noCache,
         context: {
           'headers': <String, String>{
             'Authorization': 'Bearer ${appState.getJwtToken}',
