@@ -1,7 +1,9 @@
+import 'package:electronic_emart_vendor/components/FirebaseNotificationsHandler.dart';
 import 'package:electronic_emart_vendor/components/material_display_connection_status_overlay_widget_dart.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
 import 'package:electronic_emart_vendor/screens/nav_screens.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
@@ -36,11 +38,14 @@ class _MyAppState extends State<MyApp> {
     final HttpLink httpLink =
         HttpLink(uri: 'http://cezhop.herokuapp.com/graphql');
 
+    var graphQlClient = GraphQLClient(
+      cache: InMemoryCache(),
+      link: httpLink as Link,
+    );
+    FirebaseNotificationsHandler(graphQLClient: graphQlClient);
+
     ValueNotifier<GraphQLClient> client = ValueNotifier(
-      GraphQLClient(
-        cache: InMemoryCache(),
-        link: httpLink as Link,
-      ),
+      graphQlClient,
     );
 
     return GraphQLProvider(
