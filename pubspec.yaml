@@ -66,6 +66,12 @@ flutter:
     - assets/images/place_holder.png
     - assets/images/flutter_logo.png
     - assets/images/app_logo.png
+    - assets/images/onBoardingScreen01.png
+    - assets/images/onBoardingScreen02.png
+    - assets/images/onBoardingScreen03.png
+    - assets/images/onBoardingScreen04.png
+    
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

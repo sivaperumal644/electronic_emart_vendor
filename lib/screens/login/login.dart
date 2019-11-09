@@ -8,6 +8,7 @@ import 'package:electronic_emart_vendor/constants/strings.dart';
 import 'package:electronic_emart_vendor/modals/User.dart';
 import 'package:electronic_emart_vendor/screens/forgot_password_screen/forgot_password_screen.dart';
 import 'package:electronic_emart_vendor/screens/login/login_graphql.dart';
+import 'package:electronic_emart_vendor/screens/on_boarding_screen/on_boarding_screen.dart';
 import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
 import 'package:electronic_emart_vendor/screens/registration/registration.dart';
 import 'package:electronic_emart_vendor/screens/welcome/welcome.dart';
@@ -412,7 +413,9 @@ class _LoginScreenState extends State<LoginScreen> {
         if (errorText == "") {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => WelcomeScreen()),
+            MaterialPageRoute(
+              builder: (context) => OnBoardingScreen(),
+            ),
           );
         }
       },
