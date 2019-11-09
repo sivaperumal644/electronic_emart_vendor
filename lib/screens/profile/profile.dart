@@ -133,40 +133,53 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget helpLineButton(phoneNumber1, phoneNumber2, phoneNumber3) {
-    return InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              contentPadding: EdgeInsets.all(0),
-              title: Text(
-                'Choose a number',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Container(height: 12),
-                  phoneNumberRow(phoneNumber1),
-                  phoneNumberRow(phoneNumber2),
-                  phoneNumberRow(phoneNumber3),
-                  Container(height: 12),
-                ],
-              ),
+  Widget helpLineAndMailButton(email, phoneNumber1, phoneNumber2, phoneNumber3) {
+    return Column(
+      children: <Widget>[
+        InkWell(
+          onTap: () {
+            launchURL(email, 'Regarding Be Shoppi Vendor App', 'Write here');
+          },
+          child: SettingsOption(
+            title: 'Mail your queries',
+            color: BLACK_COLOR,
+          ),
+        ),
+        Container(padding: EdgeInsets.only(top: 3)),
+        InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  contentPadding: EdgeInsets.all(0),
+                  title: Text(
+                    'Choose a number',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Container(height: 12),
+                      phoneNumberRow(phoneNumber1),
+                      phoneNumberRow(phoneNumber2),
+                      phoneNumberRow(phoneNumber3),
+                      Container(height: 12),
+                    ],
+                  ),
+                );
+              },
             );
           },
-        );
-        //launch("tel://6380222901");
-      },
-      child: SettingsOption(
-        title: 'Help Line',
-        color: BLACK_COLOR,
-      ),
+          child: SettingsOption(
+            title: 'Help Line',
+            color: BLACK_COLOR,
+          ),
+        ),
+      ],
     );
   }
 
@@ -244,6 +257,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  launchURL(String toMailId, String subject, String body) async {
+    var url = 'mailto:$toMailId?subject=$subject&body=$body';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   Widget addressContainer(
       String storeName, String addressLine, String city, String phoneNumber) {
     return Container(
@@ -278,8 +300,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (result.data != null &&
             result.data['getVendorInfo']['user'] != null) {
           final user = User.fromJson(result.data['getVendorInfo']['user']);
-          return helpLineButton(
-              user.phoneNumber, user.alternativePhone1, user.alternativePhone2);
+          return helpLineAndMailButton(user.email, user.phoneNumber,
+              user.alternativePhone1, user.alternativePhone2);
         }
         return Container();
       },
