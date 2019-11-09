@@ -39,6 +39,7 @@ dependencies:
   smooth_star_rating: ^1.0.3
   carousel_pro: ^1.0.0
   path_provider: ^1.4.0
+  firebase_messaging: ^5.1.8
 
 
 dev_dependencies:
