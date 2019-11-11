@@ -56,8 +56,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     "vendorGSTNumber": "",
     'landMark': "",
     "pinCode": "",
-    "paytmName":"",
-    "paytmNumber":""
+    "paytmName": "",
+    "paytmNumber": ""
   };
 
   TextEditingController phoneNumberController,
@@ -99,7 +99,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     landMarkController = TextEditingController(text: inputFields['landMark']);
     pinCodeController = TextEditingController(text: inputFields['pinCode']);
     paytmNameController = TextEditingController(text: inputFields['paytmName']);
-    paytmNumberController = TextEditingController(text: inputFields['paytmNumber']);
+    paytmNumberController =
+        TextEditingController(text: inputFields['paytmNumber']);
   }
 
   @override
@@ -116,14 +117,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             color: PRIMARY_COLOR.withOpacity(0.5),
           ),
           pageView(),
-          validateVendorArgumentsMutation(),
+          canPickUpMutationComponent(),
         ],
       ),
     );
   }
 
-  Widget bottomBarButtons(
-      RunMutation runMutationCreate, RunMutation runMutationValidate) {
+  Widget bottomBarButtons(RunMutation runMutationCreate,
+      RunMutation runMutationValidate, RunMutation canPickUpRunMutation) {
     final snackbar = SnackBar(
       content: Text(phoneError
           ? 'Enter a valid number with 10 digits'
@@ -184,8 +185,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       inputFields['bankAccountNumber'],
                                   'vendorGSTNumber':
                                       inputFields['vendorGSTNumber'],
-                                      'paytmName':inputFields['paytmName'],
-                                      'paytmNumber':inputFields['paytmNumber'],
+                                  'paytmName': inputFields['paytmName'],
+                                  'paytmNumber': inputFields['paytmNumber'],
                                 });
                               },
                             ),
@@ -241,10 +242,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             inputFields['pinCode'] == "") {
                           Scaffold.of(context).showSnackBar(snackbar);
                         } else {
-                          pageController.nextPage(
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.fastLinearToSlowEaseIn,
-                          );
+                          setState(() {
+                            isRegisterButtonClicked = true;
+                          });
+                          canPickUpRunMutation(
+                              {'pincode': inputFields['pinCode']});
                         }
                       } else if (currentPage == 2) {
                         setState(() {
@@ -252,7 +254,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         });
                         if (inputFields['bankAccountName'] == "" ||
                             inputFields['bankAccountIFSC'] == "" ||
-                            inputFields['bankAccountNumber'] == "" || inputFields['paytmName'] == "" || inputFields['paytmNumber'] == "") {
+                            inputFields['bankAccountNumber'] == "" ||
+                            inputFields['paytmName'] == "" ||
+                            inputFields['paytmNumber'] == "") {
                           setState(() {
                             isRegisterButtonClicked = false;
                           });
@@ -321,7 +325,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             keyboardType:
                 storeDetails ? TextInputType.text : TextInputType.number,
             hintText: storeDetails ? 'Name' : 'Phone Number',
-            counterText: storeDetails ? null : 'An OTP will be sent to this number. Please keep it ready.  ' ,
+            counterText: storeDetails
+                ? null
+                : 'An OTP will be sent to this number. Please keep it ready.  ',
             maxLength: storeDetails ? null : 10,
             obscureText: false,
             controller:
@@ -633,12 +639,47 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Widget createVendorMutationComponent(RunMutation runMutationValidate) {
+  Widget canPickUpMutationComponent() {
+    return Mutation(
+      options: MutationOptions(document: canPickUpMutation),
+      builder: (runMutation, result) {
+        return validateVendorArgumentsMutation(runMutation);
+      },
+      onCompleted: (dynamic resultData) {
+        setState(() {
+          isRegisterButtonClicked = false;
+        });
+        if (resultData['canPickUp'] == true) {
+          pageController.nextPage(
+            duration: Duration(milliseconds: 300),
+            curve: Curves.fastLinearToSlowEaseIn,
+          );
+        } else {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return DialogStyle(
+                titleMessage: "Out of service",
+                contentMessage:
+                    "We are not available to pick up in the address you have mentioned, if you have some other branch please create account with that address. You cannot create your account with this address.",
+                isRegister: false,
+              );
+            },
+          );
+        }
+      },
+    );
+  }
+
+  Widget createVendorMutationComponent(
+      RunMutation runMutationValidate, RunMutation canPickUpRunMutation) {
     final appState = Provider.of<AppState>(context);
     return Mutation(
       options: MutationOptions(document: createVendorMutation),
       builder: (runMutation, result) {
-        return bottomBarButtons(runMutation, runMutationValidate);
+        return bottomBarButtons(
+            runMutation, runMutationValidate, canPickUpRunMutation);
       },
       onCompleted: (dynamic resultdata) {
         if (resultdata != null && resultdata['createVendor']['error'] != null) {
@@ -661,11 +702,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  Widget validateVendorArgumentsMutation() {
+  Widget validateVendorArgumentsMutation(RunMutation canPickUpRunMutation) {
     return Mutation(
       options: MutationOptions(document: validateVendorArguments),
       builder: (runMutation, result) {
-        return createVendorMutationComponent(runMutation);
+        return createVendorMutationComponent(runMutation, canPickUpRunMutation);
       },
       onCompleted: (dynamic resultData) {
         setState(() {

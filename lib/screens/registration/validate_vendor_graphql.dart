@@ -8,3 +8,9 @@ mutation ValidateVendorArguments(\$phoneNumber:String, \$email:String, \$bankAcc
   }
 }
 ''';
+
+String canPickUpMutation = '''
+mutation CanPickUp(\$pincode:String){
+  canPickUp(pinCode:\$pincode)
+}
+''';
