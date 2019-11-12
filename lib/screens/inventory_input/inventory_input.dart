@@ -279,21 +279,33 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           headerText('Pricing'),
           priceFields(),
           Container(
+            margin: EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 10),
+            child: Text(
+              'An addition of Rs. 45 will be added to the products above 1500 as delivery charges to the customer.',
+              style: TextStyle(color: GREY_COLOR),
+            ),
+          ),
+          Container(
             margin: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             child: RichText(
               text: TextSpan(
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
                   color: GREY_COLOR,
-                  fontSize: 20,
+                  fontSize: 16,
                 ),
                 children: <TextSpan>[
                   TextSpan(
-                      text:
-                          'The amount you will recieve after the 11% deduction of commission will be '),
+                    text:
+                        'The amount you will recieve after the 11% deduction as commission will be ',
+                  ),
                   TextSpan(
-                      text: 'Rs. $amountYouWillReceive',
-                      style: TextStyle(color: ORANGE_COLOR, fontSize: 24))
+                    text: 'Rs. $amountYouWillReceive',
+                    style: TextStyle(
+                      color: Colors.orange,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )
                 ],
               ),
             ),
@@ -455,15 +467,16 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             isAddOrEditClicked = false;
           });
           showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return DialogStyle(
-                    titleMessage: 'Required fields are empty',
-                    contentMessage:
-                        'Please fill all the fields to add your inventory.',
-                    isRegister: false);
-              });
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return DialogStyle(
+                  titleMessage: 'Required fields are empty',
+                  contentMessage:
+                      'Please fill all the fields to add your inventory.',
+                  isRegister: false);
+            },
+          );
         } else
           runMutation(
             {
