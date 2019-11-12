@@ -17,14 +17,15 @@ class OrderDetails extends StatefulWidget {
 class _OrderDetailsState extends State<OrderDetails> {
   @override
   Widget build(BuildContext context) {
-    String statusTitle =
-        StringResolver.getTextForOrderStatus(status: widget.order.cartItems[0].itemStatus);
-    String statusMessage =
-        StringResolver.getMessageForOrderStatus(status: widget.order.cartItems[0].itemStatus);
+    String statusTitle = StringResolver.getTextForOrderStatus(
+        status: widget.order.cartItems[0].itemStatus);
+    String statusMessage = StringResolver.getMessageForOrderStatus(
+        status: widget.order.cartItems[0].itemStatus);
     List<Color> colors = [];
     Color statusMessageColor = PRIMARY_COLOR;
 
-    if (widget.cartItemInput[0].itemStatus == OrderStatuses.PLACED_BY_CUSTOMER) {
+    if (widget.cartItemInput[0].itemStatus ==
+        OrderStatuses.PLACED_BY_CUSTOMER) {
       setState(() {
         colors = [
           PRIMARY_COLOR,
@@ -34,8 +35,12 @@ class _OrderDetailsState extends State<OrderDetails> {
         ];
       });
     }
-    if (widget.cartItemInput[0].itemStatus == OrderStatuses.CANCELLED_BY_CUSTOMER ||
-        widget.order.status == OrderStatuses.CANCELLED_BY_STORE) {
+    if (widget.cartItemInput[0].itemStatus ==
+            OrderStatuses.CANCELLED_BY_CUSTOMER ||
+        widget.cartItemInput[0].itemStatus ==
+            OrderStatuses.CANCELLED_BY_STORE ||
+        widget.cartItemInput[0].itemStatus ==
+            OrderStatuses.TRANSACTION_FAILED) {
       setState(() {
         colors = [
           PALE_RED_COLOR,
@@ -57,7 +62,7 @@ class _OrderDetailsState extends State<OrderDetails> {
       });
     }
 
-    if (widget.cartItemInput[0].itemStatus== OrderStatuses.PICKED_UP) {
+    if (widget.cartItemInput[0].itemStatus == OrderStatuses.PICKED_UP) {
       setState(() {
         colors = [
           PRIMARY_COLOR,
@@ -67,7 +72,8 @@ class _OrderDetailsState extends State<OrderDetails> {
         ];
       });
     }
-    if (widget.cartItemInput[0].itemStatus == OrderStatuses.DELIVERED_AND_PAID) {
+    if (widget.cartItemInput[0].itemStatus ==
+        OrderStatuses.DELIVERED_AND_PAID) {
       setState(() {
         colors = [PRIMARY_COLOR, PRIMARY_COLOR, PRIMARY_COLOR, PRIMARY_COLOR];
       });
@@ -227,7 +233,7 @@ class _OrderDetailsState extends State<OrderDetails> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Container(
-                  width: MediaQuery.of(context).size.width/1.6,
+                  width: MediaQuery.of(context).size.width / 1.6,
                   child: Text(
                     cartItemInputDetails.inventory.name,
                     style: TextStyle(
@@ -238,7 +244,8 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ),
                 ),
                 Text(
-                  'Rs. ' + cartItemInputDetails.inventory.sellingPrice.toString(),
+                  'Rs. ' +
+                      cartItemInputDetails.inventory.sellingPrice.toString(),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

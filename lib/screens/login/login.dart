@@ -11,7 +11,6 @@ import 'package:electronic_emart_vendor/screens/login/login_graphql.dart';
 import 'package:electronic_emart_vendor/screens/on_boarding_screen/on_boarding_screen.dart';
 import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
 import 'package:electronic_emart_vendor/screens/registration/registration.dart';
-import 'package:electronic_emart_vendor/screens/welcome/welcome.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';

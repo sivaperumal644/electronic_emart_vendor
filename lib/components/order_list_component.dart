@@ -75,6 +75,21 @@ class _OrderListWidgetState extends State<OrderListWidget> {
       });
     }
 
+    if (widget.cartItemInput[0].itemStatus ==
+        OrderStatuses.TRANSACTION_FAILED) {
+      setState(() {
+        colors = [
+          PALE_RED_COLOR,
+          PALE_RED_COLOR,
+          PALE_RED_COLOR,
+          PALE_RED_COLOR
+        ];
+        orderStatusColor = PALE_RED_COLOR;
+        orderStatus = 'Order Transaction failed';
+        orderProcessingMessage = 'Order Cancelled';
+      });
+    }
+
     if (widget.cartItemInput[0].itemStatus == OrderStatuses.RECEIVED_BY_STORE) {
       setState(() {
         colors = [

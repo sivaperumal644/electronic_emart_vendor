@@ -43,6 +43,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
   bool isRemoveButtonClicked = false;
   String newCategory = "";
   double amountYouWillReceive = 0.0;
+  double exactSellingPrice = 0.0;
+  double exactOriginalPrice = 0.0;
   List<String> itemList = [
     "Mobile Phones",
     "Headphones",
@@ -467,8 +469,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             {
               "name": nameController.text,
               "category": selectedChips,
-              "originalPrice": double.parse(originalPriceController.text),
-              "sellingPrice": double.parse(sellingPriceController.text),
+              "originalPrice": exactOriginalPrice,
+              "sellingPrice": exactSellingPrice,
               "description": descriptionController.text,
               "inStock": double.parse(quantityController.text),
               "imageUrl": jsonEncode(inventoryImageUrls),
@@ -497,8 +499,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           "inventoryId": widget.inventory.id,
           "name": nameController.text,
           "category": selectedChips,
-          "originalPrice": double.parse(originalPriceController.text),
-          "sellingPrice": double.parse(sellingPriceController.text),
+          "originalPrice": exactOriginalPrice,
+          "sellingPrice": exactSellingPrice,
           "description": descriptionController.text,
           "inStock": double.parse(quantityController.text),
           "imageUrl": jsonEncode(inventoryImageUrls),
@@ -532,6 +534,9 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                   obscureText: false,
                   onChanged: (val) {
                     inputFields['originalPrice'] = val;
+                    double.parse(val) < 1500
+                        ? exactOriginalPrice = double.parse(val)
+                        : exactOriginalPrice = double.parse(val) + 45;
                   },
                 ),
               ),
@@ -545,6 +550,9 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                   obscureText: false,
                   onChanged: (val) {
                     inputFields['sellingPrice'] = val;
+                    double.parse(val) < 1500
+                        ? exactSellingPrice = double.parse(val)
+                        : exactSellingPrice = double.parse(val) + 45;
                     setState(() {
                       amountYouWillReceive =
                           double.parse(inputFields['sellingPrice']) -
@@ -563,7 +571,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
-                "Rs. " + originalPriceController.text,
+                "Rs. " + exactOriginalPrice.toString(),
                 style: TextStyle(
                   decoration: TextDecoration.lineThrough,
                   fontSize: 12,
@@ -571,7 +579,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 ),
               ),
               Text(
-                "Rs. " + sellingPriceController.text,
+                "Rs. " + exactSellingPrice.toString(),
                 style: TextStyle(
                   fontSize: 16,
                   color: PRIMARY_COLOR,
