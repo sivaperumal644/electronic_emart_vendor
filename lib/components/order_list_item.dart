@@ -111,7 +111,7 @@ class OrderListItem extends StatelessWidget {
           ),
         ),
         Text(
-          'Rs. 3,45,670',
+          '₹ 3,45,670',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.bold,

@@ -33,7 +33,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             TertiaryButton(
-              text: 'skip',
+              text: 'Skip',
               onPressed: () {
                 Navigator.push(
                   context,
@@ -42,7 +42,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               },
             ),
             PrimaryButtonWidget(
-              buttonText: 'next',
+              buttonText: 'Next',
               onPressed: () {
                 if (currentPage == 0) {
                   pageController.nextPage(

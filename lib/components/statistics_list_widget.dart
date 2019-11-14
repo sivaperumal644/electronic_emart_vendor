@@ -54,7 +54,7 @@ class StatisticsListWidget extends StatelessWidget {
             ),
           ),
           Text(
-            'Rs. 50,000',
+            '₹ 50,000',
             style: TextStyle(
               fontSize: 14,
               color: PRIMARY_COLOR,

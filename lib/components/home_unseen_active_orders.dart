@@ -24,8 +24,9 @@ class _HomeUnSeenActiveOrdersState extends State<HomeUnSeenActiveOrders> {
     final cartItemLength = widget.cartItemInput.length;
     String cartItemNames;
     if (cartItemLength == 2)
-      cartItemNames =
-          widget.cartItemInput[0].inventory.name + ', ' + widget.cartItemInput[1].inventory.name;
+      cartItemNames = widget.cartItemInput[0].inventory.name +
+          ', ' +
+          widget.cartItemInput[1].inventory.name;
     else if (cartItemLength == 1)
       cartItemNames = widget.cartItemInput[0].inventory.name;
     else
@@ -71,7 +72,7 @@ class _HomeUnSeenActiveOrdersState extends State<HomeUnSeenActiveOrders> {
                     ),
                   ),
                   Text(
-                    'Rs. ${widget.orders.totalPrice}',
+                    '₹ ${widget.orders.totalPrice}',
                     style: TextStyle(
                       fontSize: 16,
                       color: PRIMARY_COLOR,
@@ -126,11 +127,14 @@ class _HomeUnSeenActiveOrdersState extends State<HomeUnSeenActiveOrders> {
                       color: PRIMARY_COLOR,
                     ),
                   ),
-                  Text(
-                    'Waiting processing and pickup',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
+                  Expanded(
+                    child: Text(
+                      'Waiting processing and pickup',
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
                     ),
                   )
                 ],

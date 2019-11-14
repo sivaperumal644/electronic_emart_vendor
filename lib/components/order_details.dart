@@ -244,8 +244,7 @@ class _OrderDetailsState extends State<OrderDetails> {
                   ),
                 ),
                 Text(
-                  'Rs. ' +
-                      cartItemInputDetails.inventory.sellingPrice.toString(),
+                  '₹ ' + cartItemInputDetails.inventory.sellingPrice.toString(),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -273,7 +272,7 @@ class _OrderDetailsState extends State<OrderDetails> {
           ),
         ),
         Text(
-          'Rs. ' + widget.order.totalPrice.toString(),
+          '₹ ' + widget.order.totalPrice.toString(),
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,

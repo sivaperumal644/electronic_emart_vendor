@@ -22,8 +22,9 @@ class _HomeSeenActiveOrdersState extends State<HomeSeenActiveOrders> {
     final cartItemLength = widget.cartItemInput.length;
     String cartItemNames;
     if (cartItemLength == 2)
-      cartItemNames =
-          widget.cartItemInput[0].inventory.name + ', ' + widget.cartItemInput[1].inventory.name;
+      cartItemNames = widget.cartItemInput[0].inventory.name +
+          ', ' +
+          widget.cartItemInput[1].inventory.name;
     else if (cartItemLength == 1)
       cartItemNames = widget.cartItemInput[0].inventory.name;
     else
@@ -68,14 +69,14 @@ class _HomeSeenActiveOrdersState extends State<HomeSeenActiveOrders> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     Text(
-                      'Order ID. BS'+widget.orders.orderNo,
+                      'Order ID. BS' + widget.orders.orderNo,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      'Rs. '+widget.orders.totalPrice.toString(),
+                      '₹ ' + widget.orders.totalPrice.toString(),
                       style: TextStyle(
                         fontSize: 16,
                         color: PRIMARY_COLOR,

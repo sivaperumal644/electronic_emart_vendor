@@ -34,7 +34,7 @@ class _InvetoryListItemState extends State<InvetoryListItem> {
         isEmpty = false;
       });
     }
-    
+
     return InkWell(
       onTap: widget.onTap,
       borderRadius: BorderRadius.circular(12),
@@ -152,7 +152,7 @@ class _InvetoryListItemState extends State<InvetoryListItem> {
           tag: widget.inventoryItem.id,
           child: Image.network(
             widget.inventoryItem.imageUrls[0],
-            fit: BoxFit.fill,
+            fit: BoxFit.contain,
             height: 80,
             width: 80,
           ),
@@ -183,7 +183,7 @@ class _InvetoryListItemState extends State<InvetoryListItem> {
     return Row(
       children: <Widget>[
         Text(
-          'Rs. ${widget.inventoryItem.originalPrice}',
+          '₹ ${widget.inventoryItem.originalPrice}',
           style: TextStyle(
             decoration: TextDecoration.lineThrough,
             color: PRIMARY_COLOR.withOpacity(0.5),
@@ -192,7 +192,7 @@ class _InvetoryListItemState extends State<InvetoryListItem> {
         ),
         Container(margin: EdgeInsets.only(left: 8.0)),
         Text(
-          'Rs. ${widget.inventoryItem.sellingPrice}',
+          '₹ ${widget.inventoryItem.sellingPrice}',
           style: TextStyle(
             color: PRIMARY_COLOR,
             fontSize: 16,

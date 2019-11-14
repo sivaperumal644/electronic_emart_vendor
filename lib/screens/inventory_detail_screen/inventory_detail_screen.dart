@@ -101,7 +101,7 @@ class _InventortDetailScreenState extends State<InventortDetailScreen> {
                 .map(
                   (f) => Image.network(
                     f,
-                    fit: BoxFit.fill,
+                    fit: BoxFit.contain,
                   ),
                 )
                 .toList(),

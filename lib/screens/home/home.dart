@@ -306,7 +306,7 @@ class _HomeScreenState extends State<HomeScreen> {
         if (result.data != null &&
             result.data['getVendorInfo']['user'] != null) {
           final user = User.fromJson(result.data['getVendorInfo']['user']);
-          return AmountToBePaid(amountToPay: user.amountToPay);
+          return AmountToBePaid(amountToPay: double.parse(user.amountToPay));
         }
         return Container();
       },

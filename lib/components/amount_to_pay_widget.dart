@@ -35,7 +35,7 @@ class AmountToBePaid extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                'Rs. ' + (amountToPay - (11 / 100 * amountToPay)).toString(),
+                '₹ ' + (amountToPay - (11 / 100 * amountToPay)).toString(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     color: PRIMARY_COLOR,

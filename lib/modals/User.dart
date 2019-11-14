@@ -15,7 +15,7 @@ class User {
   final Map addressType;
   final String paytmName;
   final String paytmNumber;
-  final double amountToPay;
+  final String amountToPay;
 
   User({
     this.id,
@@ -37,14 +37,14 @@ class User {
 
   factory User.fromJson(Map json) {
     Map address;
-    double amountToPay;
+    String amountToPay;
     String alternativePhone1;
     String alternativePhone2;
     if (json['address'] != null) {
       address = jsonDecode(json['address']);
     }
     if (json['amountToPay'] != null) {
-      amountToPay = json['amountToPay'].toDouble();
+      amountToPay = json['amountToPay'];
     }
     if (json['alternativePhone1'] != null) {
       alternativePhone1 = json['alternativePhone1'];

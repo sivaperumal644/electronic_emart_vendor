@@ -108,7 +108,7 @@ flutter:
     - family: IBMPlexMono
       fonts:
       - asset: assets/fonts/IBMPlexMono-Bold.ttf
-      - asset: assets/fonts/IBMPlexMono-Regular.ttf
+      - asset: assets/fonts/IBMPlexMono-Regular.ttf   
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages

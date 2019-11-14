@@ -13,7 +13,7 @@ import 'app_state.dart';
 
 main() {
   SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(statusBarColor: PRIMARY_COLOR),
+    SystemUiOverlayStyle(statusBarColor: GREY_COLOR),
   );
   runApp(MyApp());
 }

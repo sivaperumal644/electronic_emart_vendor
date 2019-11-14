@@ -721,9 +721,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   barrierDismissible: false,
                   builder: (BuildContext context) {
                     return DialogStyle(
-                      titleMessage: 'The phone number already exist',
+                      titleMessage: 'The phone number already exists',
                       contentMessage:
-                          'The phone number you have entered already exist. Please use another phone number for registration.',
+                          'The phone number you have entered already exists. Please use another phone number for registration.',
                       isRegister: false,
                     );
                   });
@@ -733,9 +733,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   barrierDismissible: false,
                   builder: (BuildContext context) {
                     return DialogStyle(
-                      titleMessage: 'The email already exist',
+                      titleMessage: 'The email already exists',
                       contentMessage:
-                          'The Email you have entered already exist. Please use another email for registration.',
+                          'The Email you have entered already exists. Please use another email for registration.',
                       isRegister: false,
                     );
                   });
@@ -754,7 +754,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     return DialogStyle(
                       titleMessage: 'The IFSC entered exists',
                       contentMessage:
-                          'The Account IFSC you have entered already exist. Please use different account details for registration.',
+                          'The Account IFSC you have entered already exists. Please use different account details for registration.',
                       isRegister: false,
                     );
                   });
@@ -767,7 +767,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     return DialogStyle(
                       titleMessage: 'The Account number entered exists',
                       contentMessage:
-                          'The Account number you have entered already exist. Please use different account details for registration.',
+                          'The Account number you have entered already exists. Please use different account details for registration.',
                       isRegister: false,
                     );
                   });

@@ -239,22 +239,25 @@ class _LoginScreenState extends State<LoginScreen> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              contentPadding: EdgeInsets.all(0),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(24)),
+              contentPadding: EdgeInsets.symmetric(vertical: 8),
               title: Text(
                 'Choose a number',
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  color: PRIMARY_COLOR,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Container(height: 12),
+                  Container(height: 6),
                   phoneNumberRow(phoneNumber1),
                   phoneNumberRow(phoneNumber2),
                   phoneNumberRow(phoneNumber3),
-                  Container(height: 12),
                 ],
               ),
             );
@@ -271,11 +274,17 @@ class _LoginScreenState extends State<LoginScreen> {
           launch("tel://$number");
         },
         child: Container(
-          margin: EdgeInsets.symmetric(vertical: 12),
+          margin: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              Text(number),
+              Text(
+                number,
+                style: TextStyle(
+                  color: BLACK_COLOR,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
               Icon(Icons.call),
             ],
           ),

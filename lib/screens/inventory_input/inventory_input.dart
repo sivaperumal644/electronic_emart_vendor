@@ -50,7 +50,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
     "Headphones",
     "Laptops",
     "Accessories",
-    "other +"
+    "Other +"
   ];
 
   Map inputFields = {
@@ -281,7 +281,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
           Container(
             margin: EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 10),
             child: Text(
-              'An addition of Rs. 45 will be added to the products above 1500 as delivery charges to the customer.',
+              'An addition of ₹ 45 will be added to the products above ₹ 1500 as delivery charges to the customer.',
               style: TextStyle(color: GREY_COLOR),
             ),
           ),
@@ -296,10 +296,10 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 children: <TextSpan>[
                   TextSpan(
                     text:
-                        'The amount you will recieve after the 11% deduction as commission will be ',
+                        'The amount you will receive after the 11% deduction as commission will be ',
                   ),
                   TextSpan(
-                    text: 'Rs. $amountYouWillReceive',
+                    text: '₹ $amountYouWillReceive',
                     style: TextStyle(
                       color: Colors.orange,
                       fontSize: 20,
@@ -538,44 +538,66 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
         children: <Widget>[
           Column(
             children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width / 2,
-                child: CustomTextField(
-                  hintText: 'Original Price (MRP)',
-                  keyboardType: TextInputType.number,
-                  controller: originalPriceController,
-                  obscureText: false,
-                  onChanged: (val) {
-                    inputFields['originalPrice'] = val;
-                    double.parse(val) < 1500
-                        ? exactOriginalPrice = double.parse(val)
-                        : exactOriginalPrice = double.parse(val) + 45;
-                  },
-                ),
+              Row(
+                children: <Widget>[
+                  Text(
+                    '₹ ',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: CustomTextField(
+                      hintText: 'Original Price (MRP)',
+                      keyboardType: TextInputType.number,
+                      controller: originalPriceController,
+                      obscureText: false,
+                      onChanged: (val) {
+                        inputFields['originalPrice'] = val;
+                        double.parse(val) < 1500
+                            ? exactOriginalPrice = double.parse(val)
+                            : exactOriginalPrice = double.parse(val) + 45;
+                      },
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                padding: EdgeInsets.only(top: 20),
-                width: MediaQuery.of(context).size.width / 2,
-                child: CustomTextField(
-                  hintText: 'Selling Price (for sale)',
-                  keyboardType: TextInputType.number,
-                  controller: sellingPriceController,
-                  obscureText: false,
-                  onChanged: (val) {
-                    inputFields['sellingPrice'] = val;
-                    double.parse(val) < 1500
-                        ? exactSellingPrice = double.parse(val)
-                        : exactSellingPrice = double.parse(val) + 45;
-                    setState(() {
-                      amountYouWillReceive =
-                          double.parse(inputFields['sellingPrice']) -
-                              ((11 / 100) *
-                                  double.parse(
-                                    inputFields['sellingPrice'],
-                                  ));
-                    });
-                  },
-                ),
+              Container(height: 20),
+              Row(
+                children: <Widget>[
+                  Text(
+                    '₹ ',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Container(
+                    width: MediaQuery.of(context).size.width / 2,
+                    child: CustomTextField(
+                      hintText: 'Selling Price (for sale)',
+                      keyboardType: TextInputType.number,
+                      controller: sellingPriceController,
+                      obscureText: false,
+                      onChanged: (val) {
+                        inputFields['sellingPrice'] = val;
+                        double.parse(val) < 1500
+                            ? exactSellingPrice = double.parse(val)
+                            : exactSellingPrice = double.parse(val) + 45;
+                        setState(() {
+                          amountYouWillReceive =
+                              double.parse(inputFields['sellingPrice']) -
+                                  ((11 / 100) *
+                                      double.parse(
+                                        inputFields['sellingPrice'],
+                                      ));
+                        });
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -584,7 +606,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               Text(
-                "Rs. " + exactOriginalPrice.toString(),
+                "₹ " + exactOriginalPrice.toString(),
                 style: TextStyle(
                   decoration: TextDecoration.lineThrough,
                   fontSize: 12,
@@ -592,7 +614,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                 ),
               ),
               Text(
-                "Rs. " + exactSellingPrice.toString(),
+                "₹ " + exactSellingPrice.toString(),
                 style: TextStyle(
                   fontSize: 16,
                   color: PRIMARY_COLOR,

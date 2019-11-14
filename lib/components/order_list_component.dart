@@ -189,7 +189,7 @@ class _OrderListWidgetState extends State<OrderListWidget> {
                     ),
                   ),
                   Text(
-                    'Rs. ' + widget.orders.totalPrice.toString(),
+                    '₹ ' + widget.orders.totalPrice.toString(),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -223,15 +223,17 @@ class _OrderListWidgetState extends State<OrderListWidget> {
                             ),
                           )
                         : Container(),
-                    Container(
-                      width: MediaQuery.of(context).size.width / 2.3,
-                      child: Text(
-                        orderStatus,
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                          color: orderStatusColor,
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                    Expanded(
+                      child: Container(
+                        width: MediaQuery.of(context).size.width / 2.3,
+                        child: Text(
+                          orderStatus,
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            color: orderStatusColor,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -248,11 +250,14 @@ class _OrderListWidgetState extends State<OrderListWidget> {
                         fontWeight: FontWeight.bold,
                         color: PRIMARY_COLOR),
                   ),
-                  Text(
-                    orderProcessingMessage,
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
+                  Expanded(
+                    child: Text(
+                      orderProcessingMessage,
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ],
