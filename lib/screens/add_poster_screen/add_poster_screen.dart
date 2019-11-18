@@ -151,26 +151,27 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
           isRed: true,
           onPressed: () {
             showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) {
-                  return DialogStyle(
-                    titleMessage: 'Delete Poster?',
-                    contentMessage:
-                        'Are you sure you want to delete this poster.',
-                    isDelete: true,
-                    isRegister: true,
-                    deleteOnPressed: () {
-                      setState(() {
-                        isDeleteButtonClicked = true;
-                      });
-                      Navigator.pop(context);
-                      runMutation({
-                        'posterId': widget.poster.id,
-                      });
-                    },
-                  );
-                });
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return DialogStyle(
+                  titleMessage: 'Delete Poster?',
+                  contentMessage:
+                      'Are you sure you want to delete this poster.',
+                  isDelete: true,
+                  isRegister: true,
+                  deleteOnPressed: () {
+                    setState(() {
+                      isDeleteButtonClicked = true;
+                    });
+                    Navigator.pop(context);
+                    runMutation({
+                      'posterId': widget.poster.id,
+                    });
+                  },
+                );
+              },
+            );
           },
         ),
       ],
@@ -226,7 +227,10 @@ class _AddPosterScreenState extends State<AddPosterScreen> {
             ],
           ),
           isButtonClicked
-              ? CupertinoActivityIndicator()
+              ? Container(
+                  margin: EdgeInsets.only(right: 32),
+                  child: CupertinoActivityIndicator(),
+                )
               : addPosterMutationComponent(),
         ],
       ),

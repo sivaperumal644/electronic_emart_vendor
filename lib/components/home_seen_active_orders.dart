@@ -75,12 +75,27 @@ class _HomeSeenActiveOrdersState extends State<HomeSeenActiveOrders> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Text(
-                      '₹ ' + widget.orders.totalPrice.toString(),
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: PRIMARY_COLOR,
-                        fontWeight: FontWeight.bold,
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: PRIMARY_COLOR,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: '₹ ',
+                            style: TextStyle(
+                              fontFamily: 'Roboto',
+                              color: PRIMARY_COLOR,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          TextSpan(
+                            text: widget.orders.totalPrice.toString(),
+                          )
+                        ],
                       ),
                     ),
                   ],

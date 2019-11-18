@@ -188,14 +188,29 @@ class _OrderListWidgetState extends State<OrderListWidget> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
-                    '₹ ' + widget.orders.totalPrice.toString(),
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: PRIMARY_COLOR,
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: PRIMARY_COLOR,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: '₹ ',
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                            color: PRIMARY_COLOR,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        TextSpan(
+                          text: widget.orders.totalPrice.toString(),
+                        )
+                      ],
                     ),
-                  )
+                  ),
                 ],
               ),
               Text(

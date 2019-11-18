@@ -182,21 +182,51 @@ class _InvetoryListItemState extends State<InvetoryListItem> {
   Widget priceTextRow() {
     return Row(
       children: <Widget>[
-        Text(
-          '₹ ${widget.inventoryItem.originalPrice}',
-          style: TextStyle(
-            decoration: TextDecoration.lineThrough,
-            color: PRIMARY_COLOR.withOpacity(0.5),
-            fontSize: 16,
+        RichText(
+          text: TextSpan(
+            style: TextStyle(
+              decoration: TextDecoration.lineThrough,
+              color: PRIMARY_COLOR.withOpacity(0.5),
+              fontSize: 16,
+            ),
+            children: <TextSpan>[
+              TextSpan(
+                text: '₹ ',
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  color: PRIMARY_COLOR.withOpacity(0.5),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: '${widget.inventoryItem.originalPrice}',
+              )
+            ],
           ),
         ),
         Container(margin: EdgeInsets.only(left: 8.0)),
-        Text(
-          '₹ ${widget.inventoryItem.sellingPrice}',
-          style: TextStyle(
-            color: PRIMARY_COLOR,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+        RichText(
+          text: TextSpan(
+            style: TextStyle(
+              color: PRIMARY_COLOR,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            children: <TextSpan>[
+              TextSpan(
+                text: '₹ ',
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  color: PRIMARY_COLOR,
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: '${widget.inventoryItem.sellingPrice}',
+              )
+            ],
           ),
         ),
       ],

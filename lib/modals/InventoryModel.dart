@@ -38,20 +38,20 @@ class Inventory {
     double breadth;
     double height;
     if(json['length'] != null){
-      length = json['length'].toDouble();
+      length = double.parse(json['length'].toString());
     }
     if(json['breadth'] != null){
-      breadth = json['breadth'].toDouble();
+      breadth = double.parse(json['breadth'].toString());
     }
     if(json['height'] != null){
-      height = json['height'].toDouble();
+      height = double.parse(json['height'].toString());
     }
 
     return Inventory(
       id: json['id'],
       name: json['name'],
-      originalPrice: json['originalPrice'].toDouble(),
-      sellingPrice: json['sellingPrice'].toDouble(),
+      originalPrice: double.parse(json['originalPrice'].toString()),
+      sellingPrice: double.parse(json['sellingPrice'].toString()),
       description: json['description'],
       category: json['category'],
       inStock: json['inStock'].toDouble(),

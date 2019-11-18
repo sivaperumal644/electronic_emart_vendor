@@ -30,6 +30,7 @@ query GetVendorOrders{
         }
         itemStatus
       } 
+      cancelledReason
       status
       datePlaced
       updatedDate

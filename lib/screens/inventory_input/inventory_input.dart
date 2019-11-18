@@ -77,6 +77,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       breadthController = TextEditingController();
       heightController = TextEditingController();
       amountYouWillReceive = 0.0;
+      exactSellingPrice = 0.0;
+      exactOriginalPrice = 0.0;
       selectedChips = "";
       inventoryImageUrls = [];
     } else {
@@ -100,6 +102,8 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
       if (!itemList.contains(widget.inventory.category)) {
         itemList.insert(itemList.length - 1, widget.inventory.category);
       }
+      exactSellingPrice = widget.inventory.sellingPrice;
+      exactOriginalPrice = widget.inventory.originalPrice;
       selectedChips = widget.inventory.category;
       inventoryImageUrls = widget.inventory.imageUrls;
     }
@@ -543,6 +547,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                   Text(
                     '₹ ',
                     style: TextStyle(
+                      fontFamily: 'Roboto',
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -570,6 +575,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                   Text(
                     '₹ ',
                     style: TextStyle(
+                      fontFamily: 'Roboto',
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
@@ -605,19 +611,49 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
-              Text(
-                "₹ " + exactOriginalPrice.toString(),
-                style: TextStyle(
-                  decoration: TextDecoration.lineThrough,
-                  fontSize: 12,
-                  color: PALE_RED_COLOR,
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    decoration: TextDecoration.lineThrough,
+                    fontSize: 12,
+                    color: PALE_RED_COLOR,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '₹ ',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: PALE_RED_COLOR,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: exactOriginalPrice.toString(),
+                    )
+                  ],
                 ),
               ),
-              Text(
-                "₹ " + exactSellingPrice.toString(),
-                style: TextStyle(
-                  fontSize: 16,
-                  color: PRIMARY_COLOR,
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: PRIMARY_COLOR,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '₹ ',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: PRIMARY_COLOR,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: exactSellingPrice.toString(),
+                    )
+                  ],
                 ),
               ),
               Container(

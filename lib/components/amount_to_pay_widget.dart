@@ -34,13 +34,28 @@ class AmountToBePaid extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Text(
-                '₹ ' + (amountToPay - (11 / 100 * amountToPay)).toString(),
-                textAlign: TextAlign.center,
-                style: TextStyle(
+              child: RichText(
+                text: TextSpan(
+                  style: TextStyle(
                     color: PRIMARY_COLOR,
                     fontSize: 18,
-                    fontWeight: FontWeight.bold),
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text: '₹ ',
+                      style: TextStyle(
+                        fontFamily: 'Roboto',
+                        color: PRIMARY_COLOR,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: (amountToPay - (11 / 100 * amountToPay)).toString(),
+                    )
+                  ],
+                ),
               ),
             ),
           ],

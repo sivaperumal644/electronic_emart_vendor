@@ -171,26 +171,29 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
         },
       ),
       builder: (runMutation, result) {
+        print(result.errors);
+        print(result.data);
         return changeStatusButton(runMutation);
       },
       onCompleted: (dynamic resultData) {
         if (resultData['changeOrderStatus']['error'] == null) {
-          Navigator.pop(context);
+        Navigator.pop(context);
         } else {
           setState(() {
             isChangeButtonClicked = false;
           });
           showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (BuildContext context) {
-                return DialogStyle(
-                  titleMessage: 'Could not change status',
-                  contentMessage:
-                      'Could not change the status, Check your internet connection and try again.',
-                  isRegister: false,
-                );
-              });
+            context: context,
+            barrierDismissible: true,
+            builder: (BuildContext context) {
+              return DialogStyle(
+                titleMessage: 'Could not change status',
+                contentMessage:
+                    'Could not change the status, Check your internet connection and try again.',
+                isRegister: false,
+              );
+            },
+          );
         }
       },
     );
@@ -218,16 +221,17 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
             isChangeButtonClicked = false;
           });
           showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (BuildContext context) {
-                return DialogStyle(
-                  titleMessage: 'Could not reject order',
-                  contentMessage:
-                      'Could not reject the order, Check your internet connection and try again.',
-                  isRegister: false,
-                );
-              });
+            context: context,
+            barrierDismissible: true,
+            builder: (BuildContext context) {
+              return DialogStyle(
+                titleMessage: 'Could not reject order',
+                contentMessage:
+                    'Could not reject the order, Check your internet connection and try again.',
+                isRegister: false,
+              );
+            },
+          );
         }
       },
     );

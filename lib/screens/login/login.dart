@@ -1,4 +1,5 @@
 import 'package:electronic_emart_vendor/app_state.dart';
+import 'package:electronic_emart_vendor/components/FirebaseNotificationsHandler.dart';
 import 'package:electronic_emart_vendor/components/dialog_style.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/tertiary_button.dart';
@@ -419,6 +420,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         }
         if (errorText == "") {
+          handleNotify();
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
@@ -428,6 +430,19 @@ class _LoginScreenState extends State<LoginScreen> {
         }
       },
     );
+  }
+
+  handleNotify() {
+    final appState = Provider.of<AppState>(context);
+    final HttpLink httpLink = HttpLink(
+      uri: 'http://cezhop.herokuapp.com/graphql',
+    );
+    var graphQlClient = GraphQLClient(
+      cache: InMemoryCache(),
+      link: httpLink as Link,
+    );
+    FirebaseNotificationsHandler(
+        graphQLClient: graphQlClient, jwtToken: appState.jwtToken);
   }
 
   Widget getAdminInfo() {

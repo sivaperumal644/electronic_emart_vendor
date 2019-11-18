@@ -65,8 +65,8 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
         ),
         dividerLine(),
         Container(height: 16),
-        incomeTextWidget('TOTAL INCOME', 0.35, 16.0),
-        incomeTextWidget('₹ ${income.toString()}', 1.0, 36.0),
+        incomeTextWidget('TOTAL INCOME', 0.35, 16.0, ''),
+        incomeTextWidget('${income.toString()}', 1.0, 36.0, '₹ '),
         Container(
           margin: EdgeInsets.only(left: 24.0),
           child: headerText('${orders.toString()} orders', TextAlign.start),
@@ -223,17 +223,31 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
     );
   }
 
-  Widget incomeTextWidget(String text, double opacity, double size) {
+  Widget incomeTextWidget(
+      String text, double opacity, double size, String symbol) {
     return Container(
       margin: EdgeInsets.only(left: 24.0),
-      child: Text(
-        text,
-        textAlign: TextAlign.start,
-        style: TextStyle(
-          color: PRIMARY_COLOR.withOpacity(opacity),
-          fontSize: size,
-          fontWeight: FontWeight.bold,
-        ),
+      child: Row(
+        children: <Widget>[
+          Text(
+            symbol,
+            style: TextStyle(
+              fontFamily: 'Roboto',
+              color: PRIMARY_COLOR.withOpacity(opacity),
+              fontSize: size,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Text(
+            text,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              color: PRIMARY_COLOR.withOpacity(opacity),
+              fontSize: size,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
     );
   }

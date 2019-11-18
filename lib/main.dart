@@ -1,4 +1,3 @@
-import 'package:electronic_emart_vendor/components/FirebaseNotificationsHandler.dart';
 import 'package:electronic_emart_vendor/components/material_display_connection_status_overlay_widget_dart.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
@@ -41,7 +40,6 @@ class _MyAppState extends State<MyApp> {
       cache: InMemoryCache(),
       link: httpLink as Link,
     );
-    FirebaseNotificationsHandler(graphQLClient: graphQlClient);
 
     ValueNotifier<GraphQLClient> client = ValueNotifier(
       graphQlClient,

@@ -135,9 +135,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         builder: (buildContext) => PrimaryButtonWidget(
           buttonText: "Continue",
           onPressed: () {
-            print(phoneNumber.length);
-            print(newPassword);
-            print(confirmNewPassword);
             if (phoneNumber == '' ||
                 newPassword == '' ||
                 confirmNewPassword == '') {

@@ -133,6 +133,34 @@ class _OrderDetailsState extends State<OrderDetails> {
             ),
           ),
         ),
+        widget.order.cancelledReason != null
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Text(
+                      'CANCELLED REASON',
+                      style: TextStyle(
+                        color: PALE_RED_COLOR,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Text(
+                      widget.order.cancelledReason,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: BLACK_COLOR,
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            : Container(),
         Padding(
           padding: const EdgeInsets.only(top: 42.0),
           child: Text(
@@ -243,14 +271,30 @@ class _OrderDetailsState extends State<OrderDetails> {
                     ),
                   ),
                 ),
-                Text(
-                  '₹ ' + cartItemInputDetails.inventory.sellingPrice.toString(),
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: PRIMARY_COLOR,
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: PRIMARY_COLOR,
+                    ),
+                    children: <TextSpan>[
+                      TextSpan(
+                        text: '₹ ',
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: PRIMARY_COLOR,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      TextSpan(
+                        text: cartItemInputDetails.inventory.sellingPrice
+                            .toString(),
+                      )
+                    ],
                   ),
-                )
+                ),
               ],
             ),
           )
@@ -266,19 +310,34 @@ class _OrderDetailsState extends State<OrderDetails> {
         Text(
           'Order ID. BS' + widget.order.orderNo,
           style: TextStyle(
-            color: BLACK_COLOR,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          '₹ ' + widget.order.totalPrice.toString(),
-          style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
             color: PRIMARY_COLOR,
           ),
-        )
+        ),
+        RichText(
+          text: TextSpan(
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: PRIMARY_COLOR,
+            ),
+            children: <TextSpan>[
+              TextSpan(
+                text: '₹ ',
+                style: TextStyle(
+                  fontFamily: 'Roboto',
+                  color: PRIMARY_COLOR,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: widget.order.totalPrice.toString().toString(),
+              )
+            ],
+          ),
+        ),
       ],
     );
   }
