@@ -319,7 +319,7 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                'be shoppi',
+                'Be Seller ',
                 style: TextStyle(
                   fontSize: 36,
                   color: WHITE_COLOR,

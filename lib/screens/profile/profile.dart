@@ -142,13 +142,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Container(height: 16),
-                        Image.asset(
-                          'assets/images/app_logo.png',
-                          width: 150,
-                          height: 150,
+                        Container(
+                          margin: EdgeInsets.only(bottom: 16),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: PRIMARY_COLOR,
+                              width: 1,
+                            ),
+                          ),
+                          child: Image.asset(
+                            'assets/images/app_logo.png',
+                            width: 150,
+                            height: 150,
+                          ),
                         ),
                         Text(
-                          '© BeShoppi 2019',
+                          '© Be Seller 2019',
                           style: TextStyle(
                             color: BLACK_COLOR,
                             fontSize: 16,
