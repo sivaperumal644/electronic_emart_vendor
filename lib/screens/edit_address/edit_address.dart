@@ -3,7 +3,6 @@ import 'package:electronic_emart_vendor/components/dialog_style.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
-import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
 import 'package:electronic_emart_vendor/screens/registration/validate_vendor_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,5 +1,4 @@
 import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
-import 'package:electronic_emart_vendor/screens/registration/validate_vendor_graphql.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';

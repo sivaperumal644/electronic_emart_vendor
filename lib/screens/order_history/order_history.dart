@@ -157,7 +157,7 @@ class _OrderExpandedScreenState extends State<OrderExpandedScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 1,
+        pollInterval: 10,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.loading) return Center(child: CupertinoActivityIndicator());

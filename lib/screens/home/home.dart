@@ -188,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 1,
+        pollInterval: 20,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.loading) return Center(child: CupertinoActivityIndicator());
@@ -240,7 +240,7 @@ class _HomeScreenState extends State<HomeScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 1,
+        pollInterval: 20,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.data == null ||
@@ -297,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 3,
+        pollInterval: 20,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.loading) return Center(child: CupertinoActivityIndicator());

@@ -98,7 +98,7 @@ class _OutOfStockScreenState extends State<OutOfStockScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 1,
+        pollInterval: 20,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.data != null &&

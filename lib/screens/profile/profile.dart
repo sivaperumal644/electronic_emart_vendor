@@ -7,6 +7,7 @@ import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/modals/User.dart';
 import 'package:electronic_emart_vendor/screens/change_bank_details/change_bank_details.dart';
 import 'package:electronic_emart_vendor/screens/change_number/change_number.dart';
+import 'package:electronic_emart_vendor/screens/change_paytm_details/change_paytm_details.dart';
 import 'package:electronic_emart_vendor/screens/edit_address/edit_address.dart';
 import 'package:electronic_emart_vendor/screens/edit_name/edit_name.dart';
 import 'package:electronic_emart_vendor/screens/login/login.dart';
@@ -77,6 +78,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           onTap: () {
             Navigator.push(
               context,
+              MaterialPageRoute(
+                builder: (context) => ChangePaytmDetails(),
+              ),
+            );
+          },
+          child: SettingsOption(
+            title: 'Edit Paytm details',
+            color: BLACK_COLOR,
+          ),
+        ),
+        Container(padding: EdgeInsets.only(top: 3)),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
               MaterialPageRoute(builder: (context) => ChangeNumber()),
             );
           },
@@ -101,23 +117,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         Container(padding: EdgeInsets.only(top: 3)),
         getAdminInfo(),
         Container(padding: EdgeInsets.only(top: 3)),
-        // InkWell(
-        //   onTap: () async {
-        //     final prefs = await SharedPreferences.getInstance();
-        //     await prefs.clear();
-
-        //     Navigator.pushReplacement(
-        //       context,
-        //       MaterialPageRoute(
-        //         builder: (context) => LoginScreen(),
-        //       ),
-        //     );
-        //   },
-        //   child: SettingsOption(
-        //     title: 'Log Out',
-        //     color: BLACK_COLOR,
-        //   ),
-        // ),
         notifyMutationComponent(),
         Container(padding: EdgeInsets.only(top: 3)),
         InkWell(
@@ -360,7 +359,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       options: QueryOptions(
         document: getVendorInfoQuery,
         fetchPolicy: FetchPolicy.noCache,
-        pollInterval: 1,
+        pollInterval: 20,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.hasErrors)
@@ -390,7 +389,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 3,
+        pollInterval: 8,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.loading) return Center(child: CupertinoActivityIndicator());
@@ -417,37 +416,38 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget notifyMutationComponent() {
     final appState = Provider.of<AppState>(context);
     return Mutation(
-        options: MutationOptions(
-          document: fcmIntegerateToken,
-          context: {
-            'headers': <String, String>{
-              'Authorization': 'Bearer ${appState.jwtToken}',
-            },
+      options: MutationOptions(
+        document: fcmIntegerateToken,
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer ${appState.jwtToken}',
           },
-        ),
-        builder: (
-          RunMutation runMutation,
-          QueryResult result,
-        ) {
-          return InkWell(
-            onTap: () async {
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.clear();
-              runMutation({"fcmToken": null});
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()));
-            },
-            child: SettingsOption(
-              title: 'Log Out',
-              color: BLACK_COLOR,
-            ),
-          );
         },
-        update: (Cache cache, QueryResult result) {
-          return cache;
-        },
-        onCompleted: (dynamic resultData) async {
-          print(resultData);
-        });
+      ),
+      builder: (
+        RunMutation runMutation,
+        QueryResult result,
+      ) {
+        return InkWell(
+          onTap: () async {
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.clear();
+            runMutation({"fcmToken": null});
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => LoginScreen()));
+          },
+          child: SettingsOption(
+            title: 'Log Out',
+            color: BLACK_COLOR,
+          ),
+        );
+      },
+      update: (Cache cache, QueryResult result) {
+        return cache;
+      },
+      onCompleted: (dynamic resultData) async {
+        print(resultData);
+      },
+    );
   }
 }

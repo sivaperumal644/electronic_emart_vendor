@@ -118,7 +118,7 @@ class _OfferPosterScreenState extends State<OfferPosterScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 1,
+        pollInterval: 20,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.loading)

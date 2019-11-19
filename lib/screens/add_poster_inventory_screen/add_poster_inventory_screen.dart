@@ -164,7 +164,7 @@ class _AddPosterInventoryScreenState extends State<AddPosterInventoryScreen> {
             'Authorization': 'Bearer ${appState.getJwtToken}',
           },
         },
-        pollInterval: 1,
+        pollInterval: 20,
       ),
       builder: (QueryResult result, {VoidCallback refetch}) {
         if (result.loading) return Center(child: CupertinoActivityIndicator());
