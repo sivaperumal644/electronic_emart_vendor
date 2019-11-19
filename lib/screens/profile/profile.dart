@@ -33,7 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget mainList(String storeName, String phoneNumber, String addressLine,
-      String city, double amountToPay) {
+      String city, String landmark, String pincode, double amountToPay) {
     return ListView(
       physics: BouncingScrollPhysics(),
       children: <Widget>[
@@ -58,7 +58,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ],
         ),
         AmountToBePaid(amountToPay: amountToPay),
-        addressContainer(storeName, addressLine, city, phoneNumber),
+        addressContainer(
+            storeName, addressLine, city, phoneNumber, landmark, pincode),
         InkWell(
           onTap: () {
             Navigator.push(
@@ -331,8 +332,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  Widget addressContainer(
-      String storeName, String addressLine, String city, String phoneNumber) {
+  Widget addressContainer(String storeName, String addressLine, String city,
+      String phoneNumber, String landmark, String pincode) {
     return Container(
       padding: EdgeInsets.all(24),
       margin: EdgeInsets.all(20),
@@ -345,7 +346,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Container(margin: EdgeInsets.only(top: 20)),
           textWidget(storeName, TextAlign.start, BLACK_COLOR, 16),
           textWidget(addressLine, TextAlign.start, BLACK_COLOR, 16),
+          textWidget(landmark, TextAlign.start, BLACK_COLOR, 16),
           textWidget(city, TextAlign.start, BLACK_COLOR, 16),
+          textWidget(pincode, TextAlign.start, BLACK_COLOR, 16),
           textWidget(phoneNumber, TextAlign.start, PRIMARY_COLOR, 16),
         ],
       ),
@@ -365,8 +368,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (result.data != null &&
             result.data['getVendorInfo']['user'] != null) {
           final user = User.fromJson(result.data['getVendorInfo']['user']);
-          return helpLineAndMailButton(user.email, user.phoneNumber,
-              user.alternativePhone1, user.alternativePhone2);
+          return helpLineAndMailButton(
+              user.email,
+              user.addressType['phoneNumber'],
+              user.alternativePhone1,
+              user.alternativePhone2);
         }
         return Container();
       },
@@ -398,6 +404,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             user.phoneNumber,
             user.addressType['addressLine'],
             user.addressType['city'],
+            user.addressType['landmark'],
+            user.addressType['pinCode'],
             double.parse(user.amountToPay),
           );
         }

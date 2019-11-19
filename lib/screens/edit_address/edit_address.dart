@@ -1,8 +1,10 @@
 import 'package:electronic_emart_vendor/app_state.dart';
+import 'package:electronic_emart_vendor/components/dialog_style.dart';
 import 'package:electronic_emart_vendor/components/primary_button.dart';
 import 'package:electronic_emart_vendor/components/text_field.dart';
 import 'package:electronic_emart_vendor/constants/colors.dart';
 import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
+import 'package:electronic_emart_vendor/screens/registration/validate_vendor_graphql.dart';
 import 'package:feather_icons_flutter/feather_icons_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,8 @@ class EditAddress extends StatefulWidget {
 class _EditAddressState extends State<EditAddress> {
   String addressText = "";
   String cityText = "";
+  String landmarkText = "";
+  String pincodeText = "";
   bool isButtonClicked = false;
 
   @override
@@ -89,6 +93,14 @@ class _EditAddressState extends State<EditAddress> {
           ),
           SizedBox(height: 20),
           CustomTextField(
+            hintText: "Landmark",
+            obscureText: false,
+            onChanged: (val) {
+              landmarkText = val;
+            },
+          ),
+          SizedBox(height: 20),
+          CustomTextField(
             hintText: "City",
             obscureText: false,
             onChanged: (val) {
@@ -96,33 +108,48 @@ class _EditAddressState extends State<EditAddress> {
             },
           ),
           SizedBox(height: 20),
+          CustomTextField(
+            hintText: "Pincode",
+            obscureText: false,
+            onChanged: (val) {
+              pincodeText = val;
+            },
+          ),
+          SizedBox(height: 50),
           isButtonClicked
               ? CupertinoActivityIndicator()
-              : changeAddressMutationComponent(),
+              : canPickUpMutationComponent(),
         ],
       ),
     );
   }
 
   Widget saveChangesButton(RunMutation runMutation) {
-    final snackbar = SnackBar(
-      content: Text('Enter all the above fields'),
-    );
+    final snackbar = SnackBar(content: Text('Enter all the above fields'));
     return Container(
       width: MediaQuery.of(context).size.width,
       child: Builder(
         builder: (context) => PrimaryButtonWidget(
           buttonText: "Save Changes",
           onPressed: () {
-            if (addressText == "" || cityText == "") {
+            if (addressText == "" ||
+                cityText == "" ||
+                landmarkText == "" ||
+                pincodeText == "") {
               Scaffold.of(context).showSnackBar(snackbar);
             } else {
               setState(() {
                 isButtonClicked = true;
               });
-              runMutation({
-                'address': {'addressLine': addressText, 'city': cityText}
-              });
+              runMutation({'pincode': pincodeText});
+              // runMutation({
+              //   'address': {
+              //     'addressLine': addressText,
+              //     'city': cityText,
+              //     'landmark': landmarkText,
+              //     'pinCode': pincodeText,
+              //   }
+              // });
             }
           },
         ),
@@ -142,30 +169,36 @@ class _EditAddressState extends State<EditAddress> {
     );
   }
 
-  Widget changeAddressMutationComponent() {
+  Widget canPickUpMutationComponent() {
     final appState = Provider.of<AppState>(context);
     return Mutation(
-      options: MutationOptions(
-        document: updateVendorAccountMutation,
-        context: {
-          'headers': <String, String>{
-            'Authorization': 'Bearer ${appState.getJwtToken}',
-          },
-        },
-      ),
+      options: MutationOptions(document: canPickUpMutation),
       builder: (runMutation, result) {
         return saveChangesButton(runMutation);
       },
-      update: (Cache cache, QueryResult result) {
-        return cache;
-      },
-      onCompleted: (dynamic resultData) {
-        if (resultData != null &&
-            resultData['updateVendorAccount']['error'] == null) {
+      onCompleted: (dynamic resultData) async {
+        if (resultData['canPickUp'] == true) {
+          final result = await appState.changeAddressMutation(
+              addressText, landmarkText, cityText, pincodeText);
+          if (result.data['updateVendorAccount']['error'] == null) {
+            Navigator.pop(context);
+          }
+        } else {
           setState(() {
             isButtonClicked = false;
           });
-          Navigator.pop(context);
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (BuildContext context) {
+              return DialogStyle(
+                titleMessage: "Out of service",
+                contentMessage:
+                    "We are not available to pick up in the address you have mentioned, if you have some other branch please create account with that address. You cannot create your account with this address.",
+                isRegister: false,
+              );
+            },
+          );
         }
       },
     );

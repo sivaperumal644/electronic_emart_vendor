@@ -1,4 +1,5 @@
 import 'package:electronic_emart_vendor/screens/profile/profile_graphql.dart';
+import 'package:electronic_emart_vendor/screens/registration/validate_vendor_graphql.dart';
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,11 +43,39 @@ class AppState with ChangeNotifier {
     return result;
   }
 
-  Future<QueryResult> changePasswordMutation(String phoneNumber, String newPassword) async {
+  Future<QueryResult> changePasswordMutation(
+      String phoneNumber, String newPassword) async {
     final result = await client.mutate(
       MutationOptions(
         document: updateVendorAccountMutation,
-        variables: {'phoneNumber': phoneNumber, 'password': newPassword, 'otpToken':'something'},
+        variables: {
+          'phoneNumber': phoneNumber,
+          'password': newPassword,
+          'otpToken': 'something'
+        },
+      ),
+    );
+    return result;
+  }
+
+  Future<QueryResult> changeAddressMutation(
+      String addressLine, String landmark, String city, String pincode) async {
+    final result = await client.mutate(
+      MutationOptions(
+        document: updateVendorAccountMutation,
+        variables: {
+          'address': {
+            'addressLine': addressLine,
+            'city': city,
+            'landmark': landmark,
+            'pinCode': pincode,
+          }
+        },
+        context: {
+          'headers': <String, String>{
+            'Authorization': 'Bearer $jwtToken',
+          },
+        },
       ),
     );
     return result;
