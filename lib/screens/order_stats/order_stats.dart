@@ -295,6 +295,7 @@ class _OrderStatScreenState extends State<OrderStatScreen> {
             totalIncome = totalIncome + getOrderStatsList[i].totalAmount;
             totalOrders = totalOrders + getOrderStatsList[i].orderCount.toInt();
           }
+          totalIncome = totalIncome - (0.11*totalIncome);
           return orderStatsMainList(
               getOrderStatsList, totalIncome, totalOrders);
         }
