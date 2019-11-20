@@ -39,30 +39,6 @@ class RegistrationSent extends StatelessWidget {
                     'You will be contacted by the administrator shortly.',
                   ),
                   Container(margin: EdgeInsets.only(top: 120.0)),
-                  contentText('For any clarifications,'),
-                  Container(margin: EdgeInsets.only(top: 12.0)),
-                  contentText('You can call us at'),
-                  Text(
-                    '+91 995567434',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: PRIMARY_COLOR,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(margin: EdgeInsets.only(top: 16.0)),
-                  contentText('or email us at'),
-                  Text(
-                    'admin@appname.com',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: PRIMARY_COLOR,
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Container(margin: EdgeInsets.only(top: 16.0, bottom: 90.0)),
                   contentText(
                       'You can access this information anytime by selecting ‘Contact Us’ from the login screen.'),
                 ],

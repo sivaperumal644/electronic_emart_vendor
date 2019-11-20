@@ -57,7 +57,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     'landMark': "",
     "pinCode": "",
     "paytmName": "",
-    "paytmNumber": ""
+    "paytmNumber": "",
+    "addressPhoneNumber": "",
+    "alternatePhone1": "",
+    "alternatePhone2": ""
   };
 
   TextEditingController phoneNumberController,
@@ -74,7 +77,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       landMarkController,
       pinCodeController,
       paytmNameController,
-      paytmNumberController;
+      paytmNumberController,
+      addressPhoneNumber,
+      alternatePhoneNumber1,
+      alternatePhoneNumber2;
 
   @override
   void initState() {
@@ -101,6 +107,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     paytmNameController = TextEditingController(text: inputFields['paytmName']);
     paytmNumberController =
         TextEditingController(text: inputFields['paytmNumber']);
+    addressPhoneNumber =
+        TextEditingController(text: inputFields['addressPhoneNumber']);
+    alternatePhoneNumber1 =
+        TextEditingController(text: inputFields['alternatePhone1']);
+    alternatePhoneNumber2 =
+        TextEditingController(text: inputFields['alternatePhone2']);
   }
 
   @override
@@ -172,6 +184,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   'pancardPhotoUrls': panImagesUrl,
                                   'shopPhotoUrl': appState.getShopPhotoUrl,
                                   'address': {
+                                    'name': inputFields['storeName'],
+                                    'phoneNumber': inputFields['addressPhoneNumber'],
                                     'addressLine': inputFields['address'],
                                     'city': inputFields['city'],
                                     'landmark': inputFields['landMark'],
@@ -187,6 +201,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       inputFields['vendorGSTNumber'],
                                   'paytmName': inputFields['paytmName'],
                                   'paytmNumber': inputFields['paytmNumber'],
+                                  'alternativePhone1': inputFields['alternatePhone1'],
+                                  'alternativePhone2': inputFields['alternatePhone1'],
                                 });
                               },
                             ),
@@ -362,6 +378,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             ),
           ),
           Container(margin: EdgeInsets.only(top: 24.0)),
+          if (storeDetails)
+            CustomTextField(
+              hintText: 'Phone Number',
+              controller: addressPhoneNumber,
+              obscureText: false,
+              keyboardType: TextInputType.number,
+              onChanged: (val) {
+                setState(() {
+                  inputFields['addressPhoneNumber'] = val;
+                });
+              },
+            ),
+          Container(margin: EdgeInsets.only(top: 24.0)),
           CustomTextField(
             hintText: storeDetails ? 'Street/Locality' : 'Password',
             controller: storeDetails ? addressController : passwordController,
@@ -419,7 +448,33 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         });
                       },
                     ),
-                    Container(height: 32),
+                    Container(height: 24),
+                    if (storeDetails)
+                      CustomTextField(
+                        hintText: 'Alternate Phone Number 1',
+                        controller: alternatePhoneNumber1,
+                        obscureText: false,
+                        keyboardType: TextInputType.number,
+                        onChanged: (val) {
+                          setState(() {
+                            inputFields['alternatePhone1'] = val;
+                          });
+                        },
+                      ),
+                    Container(margin: EdgeInsets.only(top: 24.0)),
+                    if (storeDetails)
+                      CustomTextField(
+                        hintText: 'Alternate Phone Number 2',
+                        controller: alternatePhoneNumber2,
+                        obscureText: false,
+                        keyboardType: TextInputType.number,
+                        onChanged: (val) {
+                          setState(() {
+                            inputFields['alternatePhone2'] = val;
+                          });
+                        },
+                      ),
+                    Container(margin: EdgeInsets.only(top: 32.0)),
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
