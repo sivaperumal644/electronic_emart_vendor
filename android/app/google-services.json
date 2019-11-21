@@ -8,12 +8,49 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:302571742479:android:2d09a39dd133fe92d8ca7a",
+        "android_client_info": {
+          "package_name": "com.beshoppi.electronic_emart_vendor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "302571742479-ofbss49q232jdgbsqc5jemrodr4s1bob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCMCK3tzY0YVmKBQn6nTYvJOc0Uqg5sRhw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "302571742479-ofbss49q232jdgbsqc5jemrodr4s1bob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:302571742479:android:e42e9a634a9b039f",
         "android_client_info": {
           "package_name": "com.example.elec_mart_customer"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "302571742479-1qi3o7p6o970o1lg3fftishprlpqkh96.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.elec_mart_customer",
+            "certificate_hash": "c4f24cb50e2afdd06daba66bed300762f0aa545f"
+          }
+        },
         {
           "client_id": "302571742479-ofbss49q232jdgbsqc5jemrodr4s1bob.apps.googleusercontent.com",
           "client_type": 3
@@ -43,6 +80,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "302571742479-ntmn2b5d71oosq9iosi30kklrfsopr88.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.electronic_emart_vendor",
+            "certificate_hash": "43a746c9f5abbe32f216e697a941292ff80242b6"
+          }
+        },
         {
           "client_id": "302571742479-ofbss49q232jdgbsqc5jemrodr4s1bob.apps.googleusercontent.com",
           "client_type": 3

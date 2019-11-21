@@ -459,7 +459,10 @@ class _LoginScreenState extends State<LoginScreen> {
             result.data['getVendorInfo']['user'] != null) {
           final user = User.fromJson(result.data['getVendorInfo']['user']);
           return contactButton(
-              user.phoneNumber, user.alternativePhone1, user.alternativePhone2);
+            user.phoneNumber,
+            user.alternativePhone1,
+            user.alternativePhone2,
+          );
         }
         return Container();
       },

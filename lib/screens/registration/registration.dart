@@ -185,7 +185,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   'shopPhotoUrl': appState.getShopPhotoUrl,
                                   'address': {
                                     'name': inputFields['storeName'],
-                                    'phoneNumber': inputFields['addressPhoneNumber'],
+                                    'phoneNumber':
+                                        inputFields['addressPhoneNumber'],
                                     'addressLine': inputFields['address'],
                                     'city': inputFields['city'],
                                     'landmark': inputFields['landMark'],
@@ -201,8 +202,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       inputFields['vendorGSTNumber'],
                                   'paytmName': inputFields['paytmName'],
                                   'paytmNumber': inputFields['paytmNumber'],
-                                  'alternativePhone1': inputFields['alternatePhone1'],
-                                  'alternativePhone2': inputFields['alternatePhone1'],
+                                  'alternativePhone1':
+                                      inputFields['alternatePhone1'],
+                                  'alternativePhone2':
+                                      inputFields['alternatePhone1'],
                                 });
                               },
                             ),
@@ -252,11 +255,30 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         }
                       } else if (currentPage == 1) {
                         if (inputFields['storeName'] == "" ||
+                            inputFields['addressPhoneNumber'] == "" ||
                             inputFields['address'] == "" ||
                             inputFields['city'] == "" ||
                             inputFields['landMark'] == "" ||
-                            inputFields['pinCode'] == "") {
+                            inputFields['pinCode'] == "" ||
+                            inputFields['alternatePhone1'] == "" ||
+                            inputFields['alternatePhone2'] == "") {
                           Scaffold.of(context).showSnackBar(snackbar);
+                        } else if (inputFields['addressPhoneNumber'].length !=
+                                10 ||
+                            inputFields['alternatePhone1'].length != 10 ||
+                            inputFields['alternatePhone2'].length != 10) {
+                          showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) {
+                              return DialogStyle(
+                                titleMessage: 'Check Phone Numbers',
+                                contentMessage:
+                                    'Check all your Phone Numbers entered, some of them are not valid Phone Number',
+                                isRegister: false,
+                              );
+                            },
+                          );
                         } else {
                           setState(() {
                             isRegisterButtonClicked = true;
@@ -265,9 +287,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               {'pincode': inputFields['pinCode']});
                         }
                       } else if (currentPage == 2) {
-                        setState(() {
-                          isRegisterButtonClicked = true;
-                        });
                         if (inputFields['bankAccountName'] == "" ||
                             inputFields['bankAccountIFSC'] == "" ||
                             inputFields['bankAccountNumber'] == "" ||
@@ -277,7 +296,22 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             isRegisterButtonClicked = false;
                           });
                           Scaffold.of(context).showSnackBar(snackbar);
+                        } else if (inputFields['paytmNumber'].length != 10) {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (BuildContext context) {
+                                return DialogStyle(
+                                  titleMessage: 'Enter a valid Paytm Number',
+                                  contentMessage:
+                                      'Check the Paytm Number you have entered, Enter a valid Paytm Number.',
+                                  isRegister: false,
+                                );
+                              });
                         } else {
+                          setState(() {
+                            isRegisterButtonClicked = true;
+                          });
                           runMutationValidate({
                             "bankAccountIFSC": inputFields['bankAccountIFSC'],
                             "bankAccountNumber":
@@ -441,6 +475,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     CustomTextField(
                       hintText: 'pincode',
                       controller: pinCodeController,
+                      keyboardType: TextInputType.number,
                       obscureText: false,
                       onChanged: (val) {
                         setState(() {

@@ -1,4 +1,4 @@
-package com.example.electronic_emart_vendor;
+package com.beshoppi.electronic_emart_vendor;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

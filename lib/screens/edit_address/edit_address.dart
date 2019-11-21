@@ -20,6 +20,9 @@ class _EditAddressState extends State<EditAddress> {
   String cityText = "";
   String landmarkText = "";
   String pincodeText = "";
+  String phoneNumberText = "";
+  String alternatePhone1 = "";
+  String alternatePhone2 = "";
   bool isButtonClicked = false;
 
   @override
@@ -84,6 +87,15 @@ class _EditAddressState extends State<EditAddress> {
       child: Column(
         children: <Widget>[
           CustomTextField(
+            hintText: "Phone Number",
+            obscureText: false,
+            keyboardType: TextInputType.number,
+            onChanged: (val) {
+              phoneNumberText = val;
+            },
+          ),
+          SizedBox(height: 20),
+          CustomTextField(
             hintText: "Address",
             obscureText: false,
             onChanged: (val) {
@@ -110,8 +122,27 @@ class _EditAddressState extends State<EditAddress> {
           CustomTextField(
             hintText: "Pincode",
             obscureText: false,
+            keyboardType: TextInputType.number,
             onChanged: (val) {
               pincodeText = val;
+            },
+          ),
+          SizedBox(height: 20),
+          CustomTextField(
+            hintText: "Alternate Phone 1",
+            obscureText: false,
+            keyboardType: TextInputType.number,
+            onChanged: (val) {
+              alternatePhone1 = val;
+            },
+          ),
+          SizedBox(height: 20),
+          CustomTextField(
+            hintText: "Alternate Phone 2",
+            obscureText: false,
+            keyboardType: TextInputType.number,
+            onChanged: (val) {
+              alternatePhone2 = val;
             },
           ),
           SizedBox(height: 50),
@@ -134,21 +165,31 @@ class _EditAddressState extends State<EditAddress> {
             if (addressText == "" ||
                 cityText == "" ||
                 landmarkText == "" ||
-                pincodeText == "") {
+                pincodeText == "" ||
+                phoneNumberText == "" ||
+                alternatePhone1 == "" ||
+                alternatePhone2 == "") {
               Scaffold.of(context).showSnackBar(snackbar);
+            } else if (phoneNumberText.length != 10 ||
+                alternatePhone1.length != 10 ||
+                alternatePhone2.length != 10) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) {
+                  return DialogStyle(
+                    titleMessage: 'Check Phone Numbers',
+                    contentMessage:
+                        'Check all your Phone Numbers entered, some of them are not valid Phone Number',
+                    isRegister: false,
+                  );
+                },
+              );
             } else {
               setState(() {
                 isButtonClicked = true;
               });
               runMutation({'pincode': pincodeText});
-              // runMutation({
-              //   'address': {
-              //     'addressLine': addressText,
-              //     'city': cityText,
-              //     'landmark': landmarkText,
-              //     'pinCode': pincodeText,
-              //   }
-              // });
             }
           },
         ),
@@ -178,7 +219,18 @@ class _EditAddressState extends State<EditAddress> {
       onCompleted: (dynamic resultData) async {
         if (resultData['canPickUp'] == true) {
           final result = await appState.changeAddressMutation(
-              addressText, landmarkText, cityText, pincodeText);
+            addressText,
+            landmarkText,
+            cityText,
+            pincodeText,
+            phoneNumberText,
+            alternatePhone1,
+            alternatePhone2,
+          );
+          print(alternatePhone1);
+          print(alternatePhone2);
+          print(result.data);
+          print(result.errors);
           if (result.data['updateVendorAccount']['error'] == null) {
             Navigator.pop(context);
           }

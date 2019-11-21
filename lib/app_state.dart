@@ -58,17 +58,26 @@ class AppState with ChangeNotifier {
   }
 
   Future<QueryResult> changeAddressMutation(
-      String addressLine, String landmark, String city, String pincode) async {
+      String addressLine,
+      String landmark,
+      String city,
+      String pincode,
+      String phoneNumber,
+      String alternatePhone1,
+      String alternatePhone2) async {
     final result = await client.mutate(
       MutationOptions(
         document: updateVendorAccountMutation,
         variables: {
           'address': {
+            'phoneNumber': phoneNumber,
             'addressLine': addressLine,
             'city': city,
             'landmark': landmark,
             'pinCode': pincode,
-          }
+          },
+          'alternativePhone1': alternatePhone1,
+          'alternativePhone2': alternatePhone2,
         },
         context: {
           'headers': <String, String>{

@@ -377,11 +377,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         if (result.data != null &&
             result.data['getVendorInfo']['user'] != null) {
           final user = User.fromJson(result.data['getVendorInfo']['user']);
-          return helpLineAndMailButton(
-              user.email,
-              user.addressType['phoneNumber'],
-              user.alternativePhone1,
-              user.alternativePhone2);
+          return helpLineAndMailButton(user.email, user.phoneNumber,
+              user.alternativePhone1, user.alternativePhone2);
         }
         return Container();
       },
@@ -390,6 +387,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Widget getVendorInfo() {
     final appState = Provider.of<AppState>(context);
+    print(appState.getJwtToken);
     return Query(
       options: QueryOptions(
         document: getVendorInfoQuery,
