@@ -135,7 +135,7 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
               itemList: itemList,
               selectedChips: selectedChips,
               onChanged: (value) {
-                if (value != "other +") {
+                if (value != "Other +") {
                   setState(() {
                     selectedChips = value;
                   });
@@ -144,54 +144,55 @@ class _AddInventoryScreenState extends State<AddInventoryScreen> {
                     selectedChips = "";
                   });
                   showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(24)),
-                          title: Text(
-                            'Add a new category',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(24)),
+                        title: Text(
+                          'Add a new category',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: <Widget>[
+                            CustomTextField(
+                              hintText: 'Enter category',
+                              obscureText: false,
+                              onChanged: (val) {
+                                setState(() {
+                                  newCategory = val;
+                                });
+                              },
                             ),
-                          ),
-                          content: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              CustomTextField(
-                                hintText: 'Enter category',
-                                obscureText: false,
-                                onChanged: (val) {
-                                  setState(() {
-                                    newCategory = val;
-                                  });
-                                },
-                              ),
-                              Container(height: 8),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: <Widget>[
-                                  PrimaryButtonWidget(
-                                    buttonText: 'Add',
-                                    onPressed: newCategory.length == 0
-                                        ? null
-                                        : () {
-                                            setState(() {
-                                              itemList.insert(
-                                                itemList.length - 1,
-                                                newCategory,
-                                              );
-                                            });
-                                            Navigator.pop(context);
-                                          },
-                                  ),
-                                ],
-                              )
-                            ],
-                          ),
-                        );
-                      });
+                            Container(height: 8),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                PrimaryButtonWidget(
+                                  buttonText: 'Add',
+                                  onPressed: newCategory.length == 0
+                                      ? null
+                                      : () {
+                                          setState(() {
+                                            itemList.insert(
+                                              itemList.length - 1,
+                                              newCategory,
+                                            );
+                                          });
+                                          Navigator.pop(context);
+                                        },
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 }
               },
             ),

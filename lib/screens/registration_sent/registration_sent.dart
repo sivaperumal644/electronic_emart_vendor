@@ -40,7 +40,7 @@ class RegistrationSent extends StatelessWidget {
                   ),
                   Container(margin: EdgeInsets.only(top: 120.0)),
                   contentText(
-                      'You can access this information anytime by selecting ‘Contact Us’ from the login screen.'),
+                      'You can access contact information by selecting ‘Contact Us’ from the login screen.'),
                 ],
               ),
             ),
